@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress &middot; The Maths Notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+<script>window.SITE_ROOT='';</script>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sidebar" id="sidebar">
+    <a class="brandmark" href="index.html">
+      <div class="glyph">&#8721;</div>
+      <div><h1>The Maths Notebook</h1><p>Years 6 &ndash; 8 &middot; NZ</p></div>
+    </a>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Search a topic&hellip;" aria-label="Search topics">
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main class="main">
+    <div class="inner">
+      <h1 style="font-family:'Bricolage Grotesque';font-size:28px;margin:0 0 4px">Your Progress</h1>
+      <p class="hero p" style="margin-bottom:6px">Reading progress and practice history, saved only on this device.</p>
+
+      <div class="stat-grid" id="stat-grid"></div>
+
+      <div class="progress" style="margin-top:8px">
+        <div class="progress-top">
+          <span class="ttl">Reading progress</span>
+          <span class="stat" id="statEx"></span>
+          <span class="stat" id="statScore"></span>
+          <span class="stat" id="statTop"></span>
+          <div class="progress-actions">
+            <button class="btn" id="reviseBtn" title="Hide the ones you've answered, leaving only what's left">&#9873; Revise mode</button>
+            <button class="btn warn" id="resetBtn">&#8635; Reset all progress</button>
+          </div>
+        </div>
+        <div class="bar"><div class="fill" id="fill"></div></div>
+      </div>
+
+      <h3 style="font-family:'Bricolage Grotesque';margin:24px 0 8px">Badges</h3>
+      <div class="badge-grid" id="badge-grid"></div>
+
+      <h3 style="font-family:'Bricolage Grotesque';margin:24px 0 8px">Bookmarked Chapters</h3>
+      <div class="toc-grid" id="bookmark-grid"></div>
+      <p class="muted" id="bookmark-empty" style="color:var(--ink-soft);display:none">No bookmarks yet &mdash; use the &#9734; button on any chapter page.</p>
+    </div>
+  </main>
+</div>
+<button class="navtoggle" id="navtoggle" aria-label="Open topics menu">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+<div class="scrim" id="scrim"></div>
+<script src="js/toc-data.js"></script>
+<script src="js/progress-store.js"></script>
+<script src="js/nav.js"></script>
+<script>
+(function () {
+  var PS = window.ProgressStore;
+
+  function render() {
+    var stats = PS.globalStats();
+    document.getElementById('stat-grid').innerHTML = [
+      ['XP', stats.xp], ['Streak', stats.streak + ' day' + (stats.streak === 1 ? '' : 's')],
+      ['Chapters complete', stats.topicsDone + ' / ' + stats.totalTopics],
+      ['Questions answered', stats.answered + ' / ' + stats.total]
+    ].map(function (s) { return '<div class="stat-card"><div class="big">' + s[1] + '</div><div class="lbl">' + s[0] + '</div></div>'; }).join('');
+
+    document.getElementById('statEx').innerHTML = '<b>' + stats.answered + '</b> / ' + stats.total + ' answered';
+    document.getElementById('statScore').innerHTML = '<b class="ok">' + stats.correct + '</b> right &middot; <b class="no">' + stats.wrong + '</b> wrong';
+    document.getElementById('statTop').innerHTML = '<b>' + stats.topicsDone + '</b> / ' + stats.totalTopics + ' topics';
+    document.getElementById('fill').style.width = (stats.answered / stats.total * 100) + '%';
+
+    var earnedIds = PS.load().badges;
+    document.getElementById('badge-grid').innerHTML = PS.BADGES.map(function (b) {
+      var on = earnedIds.indexOf(b.id) !== -1;
+      return '<span class="badge-chip' + (on ? ' earned' : '') + '"><span class="ic">' + b.icon + '</span>' + b.name + '</span>';
+    }).join('');
+
+    var ids = PS.bookmarkedIds();
+    var allTopics = (window.TOC_STRANDS || []).flatMap(function (g) { return g.topics.map(function (t) { return Object.assign({}, t, { color: g.color }); }); });
+    var bookmarked = allTopics.filter(function (t) { return ids.indexOf(t.id) !== -1; });
+    document.getElementById('bookmark-empty').style.display = bookmarked.length ? 'none' : 'block';
+    document.getElementById('bookmark-grid').innerHTML = bookmarked.map(function (t) {
+      return '<a class="toc-card" href="topics/' + t.id + '.html"><span class="toc-num">&#9733;</span><span><span class="toc-name">' + t.name + '</span><br><span class="toc-year">' + t.year + '</span></span></a>';
+    }).join('');
+  }
+  render();
+
+  var reviseBtn = document.getElementById('reviseBtn');
+  var reviseOn = localStorage.getItem('mathsNotebook.reviseMode') === '1';
+  reviseBtn.classList.toggle('on', reviseOn);
+  reviseBtn.onclick = function () {
+    reviseOn = !reviseOn;
+    localStorage.setItem('mathsNotebook.reviseMode', reviseOn ? '1' : '0');
+    reviseBtn.classList.toggle('on', reviseOn);
+  };
+
+  var resetBtn = document.getElementById('resetBtn'), armed = false, armTimer = null;
+  resetBtn.onclick = function () {
+    if (!armed) {
+      armed = true; resetBtn.innerHTML = '&#9888; Click again to confirm'; resetBtn.classList.add('on');
+      armTimer = setTimeout(function () { armed = false; resetBtn.innerHTML = '&#8635; Reset all progress'; resetBtn.classList.remove('on'); }, 3000);
+      return;
+    }
+    clearTimeout(armTimer); armed = false; resetBtn.innerHTML = '&#8635; Reset all progress'; resetBtn.classList.remove('on');
+    PS.clearAllAnswers();
+    render();
+  };
+})();
+</script>
+</body>
+</html>

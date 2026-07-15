@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cover &middot; The Maths Notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+<script>window.SITE_ROOT="";</script>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sidebar" id="sidebar">
+    <a class="brandmark" href="index.html">
+      <div class="glyph">&#8721;</div>
+      <div><h1>The Maths Notebook</h1><p>Years 6 &ndash; 8 &middot; NZ</p></div>
+    </a>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Search a topic&hellip;" aria-label="Search topics">
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main class="main">
+    <div class="inner">
+<div class="cover">
+  <div class="glyph-big">&#8721;</div>
+  <p class="tag">Years 6&ndash;8 &middot; NZ Curriculum</p>
+  <h1>Understand the <mark>why</mark>, then master the <mark>how</mark>.</h1>
+  <p>A digital mathematics book covering the New Zealand Years 6&ndash;8 curriculum: 24 chapters across
+  Number, Algebra, Geometry, Measurement, and Statistics &amp; Probability &mdash; each with a full
+  explanation, worked examples, guided practice, and quick revision.</p>
+  <div class="cover-actions">
+    <a class="btn primary" href="contents.html">Start Reading</a>
+    <a class="btn" href="practice.html">Practice Book</a>
+    <a class="btn" href="progress.html">My Progress</a>
+  </div>
+  <div class="cover-links">
+    <a href="contents.html">Table of Contents</a>
+    <a href="about.html">About this book</a>
+  </div>
+</div>
+    </div>
+  </main>
+</div>
+<button class="navtoggle" id="navtoggle" aria-label="Open topics menu">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+<div class="scrim" id="scrim"></div>
+<script src="js/toc-data.js"></script>
+<script src="js/progress-store.js"></script>
+<script src="js/nav.js"></script>
+
+</body>
+</html>

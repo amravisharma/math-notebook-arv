@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probability &middot; The Maths Notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/styles.css">
+<script>window.SITE_ROOT="../";window.CURRENT_TOPIC_ID="probability";</script>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sidebar" id="sidebar">
+    <a class="brandmark" href="../index.html">
+      <div class="glyph">&#8721;</div>
+      <div><h1>The Maths Notebook</h1><p>Years 6 &ndash; 8 &middot; NZ</p></div>
+    </a>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Search a topic&hellip;" aria-label="Search topics">
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main class="main">
+    <div class="inner">
+<section class="topic" id="probability" style="--tcol:#B5405C">
+  <div class="topic-head">
+    <span class="topic-strand">Statistics & Probability</span>
+    <div class="topic-titles"><h3>Probability</h3><span class="year">Year 8</span></div>
+    <span class="topic-prog" data-tid="probability">0 / 30</span>
+    <button class="bookmark-btn" type="button">&#9734; Bookmark this chapter</button>
+  </div>
+  <div class="chapter-meta">
+    <div class="chapter-stat"><b>Chapter flow</b>Discover, explain, practise, reflect</div>
+    <div class="chapter-stat"><b>3 worked scenarios</b>Easy, medium and hard methods</div>
+    <div class="chapter-stat"><b>30 interactive questions</b>Guided to independent practice</div>
+    <div class="chapter-stat"><b>Assignment set</b>Fluency, reasoning, application</div>
+  </div>
+  <div class="hf-hook"><span class="hf-spark">&#10022;</span><span>Will it rain? Will the coin land heads? Probability puts a number between 0 and 1 on how likely something is — turning gut feeling into maths.</span></div>
+  <div class="hf-roadmap" aria-label="Chapter sections"><button class="hf-jump" type="button" data-target="goals"><span class="dot"></span><span>Goals</span></button><button class="hf-jump" type="button" data-target="discovery"><span class="dot"></span><span>Discover</span></button><button class="hf-jump" type="button" data-target="explain"><span class="dot"></span><span>Explanation</span></button><button class="hf-jump" type="button" data-target="vocab"><span class="dot"></span><span>Vocabulary</span></button><button class="hf-jump" type="button" data-target="examples"><span class="dot"></span><span>Examples</span></button><button class="hf-jump" type="button" data-target="practice"><span class="dot"></span><span>Practice</span></button><button class="hf-jump" type="button" data-target="assignment"><span class="dot"></span><span>Assignment</span></button><button class="hf-jump" type="button" data-target="retrieval"><span class="dot"></span><span>Retrieval</span></button></div>
+  <section class="hf-sec goals" data-section="goals"><div class="hf-tag">&#127919; By the end you can</div><ul class="hf-goals"><li>Place events on a 0-to-1 probability scale</li><li>Find the probability of a simple event</li><li>Write a probability as a fraction, decimal or percentage</li></ul></section>
+  <section class="hf-sec prereq" data-section="prereq"><div class="hf-tag">&#9989; Before you start</div><ul class="hf-list"><li>Fractions and their decimal/percentage forms</li><li>Counting outcomes</li></ul></section>
+  <section class="hf-sec discovery" data-section="discovery"><div class="hf-tag">&#128302; Discover &mdash; predict first</div><p>A bag has 3 red and 1 blue marble. Grab one without looking. Out of the 4 equally likely picks, how many are red — and what fraction is that?</p><button class="hf-reveal">Reveal</button><div class="hf-hidden"><p>3 of 4, so P(red) = 3/4 = 0.75. Probability = favourable outcomes ÷ total outcomes.</p></div></section>
+  <section class="hf-sec explain" data-section="explain"><div class="hf-tag">&#128214; Read the chapter</div><p class="hf-sub">Probability measures how likely an event is, from 0 (impossible) to 1 (certain). For equally likely outcomes it's favourable ÷ total.</p><div class="lesson">
+<p>Probability rates how likely an event is, from <span class="hl">0 (impossible) to 1 (certain)</span>. The foundation is the <span class="term">sample space</span>: the full list of equally likely outcomes.</p>
+<div class="kbox"><span class="kbox-tag">Core formulas</span><span class="formula">P(event) = favourable ÷ total<br>P(not A) = 1 − P(A)</span></div>
+<p>For combined events, listing the whole <span class="circle">sample space</span> keeps you honest (two coins give HH, HT, TH, TT — four outcomes, not three). <span class="hl teal">Complementary counting</span> — finding the chance of "not happening" and subtracting from 1 — often turns an "at least one" problem into an easy one.</p></div><div class="why"><b>Why list all outcomes?</b> Probability compares outcomes you want against every outcome possible. For combined events, a sample space keeps you honest.</div><div class="watchout"><span class="wtag">&#9888; Watch out</span>Favourable ÷ total only works when outcomes are <b>equally likely</b>. For &ldquo;at least one&rdquo;, complementary counting is usually easier.</div></section>
+  <section class="hf-sec vocab" data-section="vocab"><div class="hf-tag">&#128218; Key words</div><dl class="hf-vocab"><div class="vrow"><dt>probability</dt><dd>how likely an event is, from 0 to 1</dd></div><div class="vrow"><dt>outcome</dt><dd>one possible result</dd></div><div class="vrow"><dt>event</dt><dd>the result you're interested in</dd></div><div class="vrow"><dt>favourable outcome</dt><dd>an outcome that counts as success</dd></div></dl></section>
+  <section class="hf-sec worked" data-section="examples"><div class="hf-tag">&#9998; Worked examples across scenarios</div>
+        <p class="hf-sub">Read these like a teacher modelling the method: one basic case, one mixed case, and one harder transfer case.</p>
+        <div class="example-grid"><article class="we-card easy">
+          <div class="we-card-head"><span class="level">Easy</span><span>Core skill</span></div>
+          <div class="we-q">A fair die is rolled. Find P(4) and P(even).</div>
+          <ol class="steps"><li>One 4 in six faces → 1/6.</li><li>Evens are 2,4,6 → 3/6 = 1/2.</li></ol>
+          <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/6 and 1/2</span></span></div>
+        </article><article class="we-card medium">
+          <div class="we-card-head"><span class="level">Medium</span><span>Mixed method</span></div>
+          <div class="we-q">A bag has <span class="m">3 red, 2 blue, 5 green</span>. Find P(red).</div>
+          <ol class="steps"><li>Total = 3 + 2 + 5 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">3</span><span class="d">10</span></span> = <span class="frac"><span class="n">3</span><span class="d">10</span></span>.</li></ol>
+          <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">3</span><span class="d">10</span></span></span></div>
+        </article><article class="we-card hard">
+          <div class="we-card-head"><span class="level">Hard</span><span>Challenge scenario</span></div>
+          <div class="we-q">Two coins are tossed. Find P(exactly one head) and P(at least one head).</div>
+          <ol class="steps"><li>Sample space: HH, HT, TH, TT.</li><li>One head: 2/4 = 1/2; at least one: 3/4.</li></ol>
+          <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/2 and 3/4</span></span></div>
+        </article></div></section>
+  <section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs"><button class="tab on" data-lv="Easy">Easy<span class="n">10</span></button><button class="tab " data-lv="Medium">Medium<span class="n">10</span></button><button class="tab " data-lv="Hard">Hard<span class="n">10</span></button></div><div class="pane on" data-lv="Easy"><div class="ex" data-key="probability|easy|0" data-tid="probability">
+          <div class="ex-top"><span class="num">1</span><div class="q">A fair die is rolled. Find P(4) and P(even).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>One 4 in six faces → 1/6.</li><li>Evens are 2,4,6 → 3/6 = 1/2.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/6 and 1/2</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|1" data-tid="probability">
+          <div class="ex-top"><span class="num">2</span><div class="q">A fair die is rolled. Find P(rolling more than 4).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>More than 4 means 5 or 6 → 2 outcomes.</li><li>2/6 = 1/3.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/3</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|2" data-tid="probability">
+          <div class="ex-top"><span class="num">3</span><div class="q">A coin is flipped. Find P(heads).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Two equally likely outcomes.</li><li>1 of 2 = 1/2.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/2</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|3" data-tid="probability">
+          <div class="ex-top"><span class="num">4</span><div class="q">A die is rolled. Find P(rolling a 7).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>No face shows 7.</li><li>Impossible → probability 0.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">0</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|4" data-tid="probability">
+          <div class="ex-top"><span class="num">5</span><div class="q">A die is rolled. Find P(a number less than 7).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Every face is under 7.</li><li>Certain → probability 1.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|5" data-tid="probability">
+          <div class="ex-top"><span class="num">6</span><div class="q">A die is rolled. Find P(odd number).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Odds are 1,3,5 → 3 outcomes.</li><li>3/6 = 1/2.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/2</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|6" data-tid="probability">
+          <div class="ex-top"><span class="num">7</span><div class="q">A spinner has 4 equal colours. P(landing on red)?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>One red of four equal sections.</li><li>1/4.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/4</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|7" data-tid="probability">
+          <div class="ex-top"><span class="num">8</span><div class="q">A die is rolled. Find P(a 3 or a 5).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Two favourable outcomes.</li><li>2/6 = 1/3.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/3</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|8" data-tid="probability">
+          <div class="ex-top"><span class="num">9</span><div class="q">A bag has 5 identical balls, 1 marked. P(drawing the marked one)?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>1 favourable of 5.</li><li>1/5.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/5</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|easy|9" data-tid="probability">
+          <div class="ex-top"><span class="num">10</span><div class="q">A die is rolled. P(a multiple of 3)?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Multiples of 3: 3 and 6.</li><li>2/6 = 1/3.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/3</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div></div><div class="pane " data-lv="Medium"><div class="ex" data-key="probability|medium|0" data-tid="probability">
+          <div class="ex-top"><span class="num">1</span><div class="q">A bag has <span class="m">3 red, 2 blue, 5 green</span>. Find P(red).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 3 + 2 + 5 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">3</span><span class="d">10</span></span> = <span class="frac"><span class="n">3</span><span class="d">10</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">3</span><span class="d">10</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|1" data-tid="probability">
+          <div class="ex-top"><span class="num">2</span><div class="q">A bag has <span class="m">4 red, 1 blue, 5 green</span>. Find P(blue).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 4 + 1 + 5 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">1</span><span class="d">10</span></span> = <span class="frac"><span class="n">1</span><span class="d">10</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">1</span><span class="d">10</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|2" data-tid="probability">
+          <div class="ex-top"><span class="num">3</span><div class="q">A bag has <span class="m">2 red, 3 blue, 5 green</span>. Find P(green).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 2 + 3 + 5 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">5</span><span class="d">10</span></span> = <span class="frac"><span class="n">1</span><span class="d">2</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">1</span><span class="d">2</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|3" data-tid="probability">
+          <div class="ex-top"><span class="num">4</span><div class="q">A bag has <span class="m">6 red, 2 blue, 2 green</span>. Find P(red).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 6 + 2 + 2 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">6</span><span class="d">10</span></span> = <span class="frac"><span class="n">3</span><span class="d">5</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">3</span><span class="d">5</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|4" data-tid="probability">
+          <div class="ex-top"><span class="num">5</span><div class="q">A bag has <span class="m">1 red, 4 blue, 5 green</span>. Find P(red).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 1 + 4 + 5 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">1</span><span class="d">10</span></span> = <span class="frac"><span class="n">1</span><span class="d">10</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">1</span><span class="d">10</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|5" data-tid="probability">
+          <div class="ex-top"><span class="num">6</span><div class="q">A bag has <span class="m">3 red, 3 blue, 4 green</span>. Find P(red).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 3 + 3 + 4 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">3</span><span class="d">10</span></span> = <span class="frac"><span class="n">3</span><span class="d">10</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">3</span><span class="d">10</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|6" data-tid="probability">
+          <div class="ex-top"><span class="num">7</span><div class="q">A bag has <span class="m">5 red, 2 blue, 3 green</span>. Find P(blue).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 5 + 2 + 3 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">2</span><span class="d">10</span></span> = <span class="frac"><span class="n">1</span><span class="d">5</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">1</span><span class="d">5</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|7" data-tid="probability">
+          <div class="ex-top"><span class="num">8</span><div class="q">A bag has <span class="m">2 red, 2 blue, 6 green</span>. Find P(green).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 2 + 2 + 6 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">6</span><span class="d">10</span></span> = <span class="frac"><span class="n">3</span><span class="d">5</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">3</span><span class="d">5</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|8" data-tid="probability">
+          <div class="ex-top"><span class="num">9</span><div class="q">A bag has <span class="m">4 red, 4 blue, 2 green</span>. Find P(red).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 4 + 4 + 2 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">4</span><span class="d">10</span></span> = <span class="frac"><span class="n">2</span><span class="d">5</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">2</span><span class="d">5</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|medium|9" data-tid="probability">
+          <div class="ex-top"><span class="num">10</span><div class="q">A bag has <span class="m">1 red, 1 blue, 8 green</span>. Find P(blue).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Total = 1 + 1 + 8 = <span class="m">10</span>.</li><li>P = <span class="frac"><span class="n">1</span><span class="d">10</span></span> = <span class="frac"><span class="n">1</span><span class="d">10</span></span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="frac"><span class="n">1</span><span class="d">10</span></span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div></div><div class="pane " data-lv="Hard"><div class="ex" data-key="probability|hard|0" data-tid="probability">
+          <div class="ex-top"><span class="num">1</span><div class="q">Two coins are tossed. Find P(exactly one head) and P(at least one head).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Sample space: HH, HT, TH, TT.</li><li>One head: 2/4 = 1/2; at least one: 3/4.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/2 and 3/4</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|1" data-tid="probability">
+          <div class="ex-top"><span class="num">2</span><div class="q">A bag has <span class="m">3 red, 2 blue, 5 green</span>. Find P(not green).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Not green = red + blue = 5 of 10.</li><li>5/10 = 1/2.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/2</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|2" data-tid="probability">
+          <div class="ex-top"><span class="num">3</span><div class="q">Two dice are rolled. Find P(total of 7).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>36 outcomes; sixes making 7: (1,6)…(6,1) = 6 ways.</li><li>6/36 = 1/6.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/6</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|3" data-tid="probability">
+          <div class="ex-top"><span class="num">4</span><div class="q">A spinner: P(win) = 1/5. In 40 spins, expected wins?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Expected = probability × trials.</li><li>1/5 × 40 = 8.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">8</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|4" data-tid="probability">
+          <div class="ex-top"><span class="num">5</span><div class="q">P(rain) = 0.3. What is P(no rain)?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Probabilities of an event and its complement add to 1.</li><li>1 − 0.3 = 0.7.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">0.7</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|5" data-tid="probability">
+          <div class="ex-top"><span class="num">6</span><div class="q">A card is drawn from a bag numbered 1–20. P(a multiple of 5)?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Multiples of 5: 5, 10, 15, 20 → 4 of 20.</li><li>4/20 = 1/5.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/5</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|6" data-tid="probability">
+          <div class="ex-top"><span class="num">7</span><div class="q">Two dice are rolled. Find P(both show the same number).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Doubles: (1,1)…(6,6) = 6 ways of 36.</li><li>6/36 = 1/6.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/6</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|7" data-tid="probability">
+          <div class="ex-top"><span class="num">8</span><div class="q">A bag has <span class="m">4 red, 6 blue</span>. P(red) as a percentage?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>4 of 10 = 4/10.</li><li>= 40%.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">40%</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|8" data-tid="probability">
+          <div class="ex-top"><span class="num">9</span><div class="q">An experiment: 200 spins gave 50 reds. Estimate P(red).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Experimental P = 50 ÷ 200.</li><li>= 1/4.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">1/4</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div><div class="ex" data-key="probability|hard|9" data-tid="probability">
+          <div class="ex-top"><span class="num">10</span><div class="q">A coin is tossed 3 times. How many possible outcomes?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Count the favourable outcomes and the total number of equally likely outcomes, then write the probability as a fraction and simplify. For combined events, list the whole sample space.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each toss has 2 options: 2 × 2 × 2.</li><li>= 8 outcomes.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">8</span></span></div>
+            <div class="checktip"><b>Check it:</b> Every probability must be between 0 and 1, and the chances of all outcomes should add up to 1.</div>
+          </div>
+        </div></div></section>
+  <section class="hf-sec assignment" data-section="assignment"><div class="hf-tag">&#128221; Assignment work</div>
+      <p class="hf-sub">Do these on paper after the guided practice. They mix fluency, reasoning, application, challenge and reflection question types.</p>
+      <div class="assignment-grid"><div class="assignment-part"><h4>Part A - Fluency</h4><ol><li>A fair die is rolled. Find P(rolling more than 4).</li><li>A coin is flipped. Find P(heads).</li><li>A die is rolled. Find P(rolling a 7).</li><li>A die is rolled. Find P(a number less than 7).</li></ol></div><div class="assignment-part"><h4>Part B - Method and reasoning</h4><ol><li>A bag has <span class="m">4 red, 1 blue, 5 green</span>. Find P(blue).</li><li>A bag has <span class="m">2 red, 3 blue, 5 green</span>. Find P(green).</li><li>A bag has <span class="m">6 red, 2 blue, 2 green</span>. Find P(red).</li></ol></div><div class="assignment-part"><h4>Part C - Application and challenge</h4><ol><li>A bag has <span class="m">3 red, 2 blue, 5 green</span>. Find P(not green).</li><li>Two dice are rolled. Find P(total of 7).</li><li>A spinner: P(win) = 1/5. In 40 spins, expected wins?</li></ol></div><div class="assignment-part"><h4>Part D - Explain and create</h4><ul><li>Write a short paragraph explaining the main idea of Probability in your own words.</li><li>Create one new Probability question, solve it, and show the checking step.</li><li>Describe one mistake a student might make and how to fix it.</li></ul></div></div></section>
+  <section class="hf-sec mistake" data-section="misconception"><div class="hf-tag">&#128373;&#65039; Mistake detective</div><p class="hf-sub">Diagnose the misconception, then reveal the cause and intervention.</p><div class="mis-q">A fair die shows a 5 with probability <span class="bad">5/6</span>.</div><button class="hf-reveal">Reveal diagnosis</button><div class="hf-hidden"><div class="mis-grid"><div class="mis-item"><span>Cause</span><p>They used the number on the face instead of counting outcomes.</p></div><div class="mis-item"><span>Diagnostic question</span><p>What rule or representation would show why this answer cannot be right?</p></div><div class="mis-item"><span>Intervention</span><p>There is 1 way to roll a 5 out of 6 faces, so P(5) = 1/6.</p></div></div></div></section>
+  <section class="hf-sec realworld" data-section="realworld"><div class="hf-tag">&#127757; In the real world</div><p>Weather forecasts, insurance, game design and medical risk are all expressed as probabilities.</p></section>
+  <section class="hf-sec reflect" data-section="reflect"><div class="hf-tag">&#129504; Reflect</div><ul class="hf-check"><li><label><input type="checkbox"> <span>I know probability runs from 0 to 1</span></label></li><li><label><input type="checkbox"> <span>I count favourable over total outcomes</span></label></li><li><label><input type="checkbox"> <span>I can write a probability as a fraction, decimal or percent</span></label></li></ul></section>
+  <section class="hf-sec retrieval" data-section="retrieval"><div class="hf-tag">&#9889; Quick recall</div><p class="hf-sub">Answer in your head, then reveal.</p><ol class="hf-retr"><li><span class="rq">P(heads) on a fair coin?</span> <button class="hf-reveal mini">Show</button><span class="hf-hidden ra">1/2</span></li><li><span class="rq">P(rolling a 3) on a die?</span> <button class="hf-reveal mini">Show</button><span class="hf-hidden ra">1/6</span></li><li><span class="rq">Probability of a certain event?</span> <button class="hf-reveal mini">Show</button><span class="hf-hidden ra">1</span></li></ol></section>
+  <section class="hf-sec summary" data-section="summary"><div class="hf-tag">&#127793; In a nutshell</div><ul class="hf-sum"><li>Probability runs 0 (impossible) to 1 (certain)</li><li>P = favourable ÷ total outcomes</li><li>Can be written as a fraction, decimal or percentage</li></ul></section>
+  <div class="hf-next"><a class="hf-navlink prev" href="statistics.html"><span class="dir">&larr; Previous</span><span class="nm">Data & Averages</span></a><span></span></div>
+</section>
+    </div>
+  </main>
+</div>
+<button class="navtoggle" id="navtoggle" aria-label="Open topics menu">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+<div class="scrim" id="scrim"></div>
+<script src="../js/toc-data.js"></script>
+<script src="../js/progress-store.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/topic-interactions.js"></script>
+<script>window.TOPIC_CHECK=Object.assign(window.TOPIC_CHECK||{}, {"probability|easy|0":["1/6 and 1/2"],"probability|easy|1":["1/3"],"probability|easy|2":["1/2"],"probability|easy|3":["0"],"probability|easy|4":["1"],"probability|easy|5":["1/2"],"probability|easy|6":["1/4"],"probability|easy|7":["1/3"],"probability|easy|8":["1/5"],"probability|easy|9":["1/3"],"probability|medium|0":["310"],"probability|medium|1":["110"],"probability|medium|2":["12"],"probability|medium|3":["35"],"probability|medium|4":["110"],"probability|medium|5":["310"],"probability|medium|6":["15"],"probability|medium|7":["35"],"probability|medium|8":["25"],"probability|medium|9":["110"],"probability|hard|0":["1/2 and 3/4"],"probability|hard|1":["1/2"],"probability|hard|2":["1/6"],"probability|hard|3":["8"],"probability|hard|4":["0.7"],"probability|hard|5":["1/5"],"probability|hard|6":["1/6"],"probability|hard|7":["40%"],"probability|hard|8":["1/4"],"probability|hard|9":["8"]});</script>
+</body>
+</html>

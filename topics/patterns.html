@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patterns & Sequences &middot; The Maths Notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/styles.css">
+<script>window.SITE_ROOT="../";window.CURRENT_TOPIC_ID="patterns";</script>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sidebar" id="sidebar">
+    <a class="brandmark" href="../index.html">
+      <div class="glyph">&#8721;</div>
+      <div><h1>The Maths Notebook</h1><p>Years 6 &ndash; 8 &middot; NZ</p></div>
+    </a>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Search a topic&hellip;" aria-label="Search topics">
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main class="main">
+    <div class="inner">
+<section class="topic" id="patterns" style="--tcol:#7A3FB0">
+  <div class="topic-head">
+    <span class="topic-strand">Algebra</span>
+    <div class="topic-titles"><h3>Patterns & Sequences</h3><span class="year">Year 7</span></div>
+    <span class="topic-prog" data-tid="patterns">0 / 30</span>
+    <button class="bookmark-btn" type="button">&#9734; Bookmark this chapter</button>
+  </div>
+  <div class="chapter-meta">
+    <div class="chapter-stat"><b>Chapter flow</b>Discover, explain, practise, reflect</div>
+    <div class="chapter-stat"><b>3 worked scenarios</b>Easy, medium and hard methods</div>
+    <div class="chapter-stat"><b>30 interactive questions</b>Guided to independent practice</div>
+    <div class="chapter-stat"><b>Assignment set</b>Fluency, reasoning, application</div>
+  </div>
+  <div class="hf-hook"><span class="hf-spark">&#10022;</span><span>1, 4, 7, 10… what's the 100th number? Listing them all would take forever. Spot the rule and you can leap straight to any term — the doorway to algebra.</span></div>
+  <div class="hf-roadmap" aria-label="Chapter sections"><button class="hf-jump" type="button" data-target="goals"><span class="dot"></span><span>Goals</span></button><button class="hf-jump" type="button" data-target="discovery"><span class="dot"></span><span>Discover</span></button><button class="hf-jump" type="button" data-target="explain"><span class="dot"></span><span>Explanation</span></button><button class="hf-jump" type="button" data-target="vocab"><span class="dot"></span><span>Vocabulary</span></button><button class="hf-jump" type="button" data-target="examples"><span class="dot"></span><span>Examples</span></button><button class="hf-jump" type="button" data-target="practice"><span class="dot"></span><span>Practice</span></button><button class="hf-jump" type="button" data-target="assignment"><span class="dot"></span><span>Assignment</span></button><button class="hf-jump" type="button" data-target="retrieval"><span class="dot"></span><span>Retrieval</span></button></div>
+  <section class="hf-sec goals" data-section="goals"><div class="hf-tag">&#127919; By the end you can</div><ul class="hf-goals"><li>Describe a sequence's rule in words</li><li>Find the next terms of a pattern</li><li>Use a rule to jump to a later term</li></ul></section>
+  <section class="hf-sec prereq" data-section="prereq"><div class="hf-tag">&#9989; Before you start</div><ul class="hf-list"><li>Adding, subtracting and multiplying whole numbers</li><li>Times tables</li></ul></section>
+  <section class="hf-sec discovery" data-section="discovery"><div class="hf-tag">&#128302; Discover &mdash; predict first</div><p>Look at 3, 7, 11, 15… What jumps from one term to the next? What would the 10th term be?</p><button class="hf-reveal">Reveal</button><div class="hf-hidden"><p>Each term is 4 more than the last. Starting at 3, the 10th term is 3 + 9×4 = 39. The constant jump is the key to the rule.</p></div></section>
+  <section class="hf-sec explain" data-section="explain"><div class="hf-tag">&#128214; Read the chapter</div><p class="hf-sub">A sequence is an ordered list following a rule. Spotting the rule predicts any term without listing them all — the doorway to algebra.</p><div class="lesson">
+<p>A <span class="term">sequence</span> is an ordered list built by a rule; each entry is a <span class="hl">term</span> and its position is n. There are two kinds of rule, and telling them apart is the key idea.</p>
+<div class="kbox"><span class="kbox-tag">Two rules</span><span class="formula">term-to-term: add the common difference<br>position-to-term: nth term = d × n + adjust</span></div>
+<p>The <span class="circle">position-to-term</span> rule is the powerful one — it jumps straight to the 100th term without listing the rest. The common difference becomes the coefficient of n, and a constant shifts it to fit term 1. Not all patterns are linear: square and <span class="hl teal">triangular</span> numbers grow by a changing amount.</p></div><div class="why"><b>Why a rule like 3n + 2?</b> If a sequence rises by 3, its rule has 3n; the '+2' shifts every term to match the real first value. Always test on term 1.</div><div class="watchout"><span class="wtag">&#9888; Watch out</span>The &ldquo;add the difference&rdquo; rule only gives the <em>next</em> term. To jump to the 50th term you need the position-to-term (nth-term) rule.</div></section>
+  <section class="hf-sec vocab" data-section="vocab"><div class="hf-tag">&#128218; Key words</div><dl class="hf-vocab"><div class="vrow"><dt>sequence</dt><dd>an ordered list of numbers following a rule</dd></div><div class="vrow"><dt>term</dt><dd>one number in a sequence</dd></div><div class="vrow"><dt>term-to-term rule</dt><dd>how to get the next term from the one before</dd></div><div class="vrow"><dt>position rule</dt><dd>a formula for the nth term</dd></div></dl></section>
+  <section class="hf-sec worked" data-section="examples"><div class="hf-tag">&#9998; Worked examples across scenarios</div>
+        <p class="hf-sub">Read these like a teacher modelling the method: one basic case, one mixed case, and one harder transfer case.</p>
+        <div class="example-grid"><article class="we-card easy">
+          <div class="we-card-head"><span class="level">Easy</span><span>Core skill</span></div>
+          <div class="we-q">Write the next two terms: <span class="m">3, 6, 9, 12</span>, …</div>
+          <ol class="steps"><li>Each term goes up by <span class="m">3</span>.</li><li><span class="m">12+3=15</span>, then <span class="m">18</span>.</li></ol>
+          <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">15, 18</span></span></div>
+        </article><article class="we-card medium">
+          <div class="we-card-head"><span class="level">Medium</span><span>Mixed method</span></div>
+          <div class="we-q">Find the rule and the 10th term of <span class="m">5, 8, 11, 14</span>, …</div>
+          <ol class="steps"><li>Step is <span class="m">3</span>, so the rule has <span class="m">3n</span>.</li><li>Adjust to fit term 1 → <span class="m">3n + 2</span>. 10th: <span class="m">3×10+2=32</span>.</li></ol>
+          <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 3n + 2; 10th = 32</span></span></div>
+        </article><article class="we-card hard">
+          <div class="we-card-head"><span class="level">Hard</span><span>Challenge scenario</span></div>
+          <div class="we-q">Matchstick squares: 1→4, 2→7, 3→10 sticks. Rule and sticks for 20 squares?</div>
+          <ol class="steps"><li>Each new square adds 3 → rule 3n + something.</li><li>Fits term 1 with +1: 3n + 1. For 20: 3×20 + 1 = 61.</li></ol>
+          <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">3n + 1; 61 sticks</span></span></div>
+        </article></div></section>
+  <section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs"><button class="tab on" data-lv="Easy">Easy<span class="n">10</span></button><button class="tab " data-lv="Medium">Medium<span class="n">10</span></button><button class="tab " data-lv="Hard">Hard<span class="n">10</span></button></div><div class="pane on" data-lv="Easy"><div class="ex" data-key="patterns|easy|0" data-tid="patterns">
+          <div class="ex-top"><span class="num">1</span><div class="q">Write the next two terms: <span class="m">3, 6, 9, 12</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">3</span>.</li><li><span class="m">12+3=15</span>, then <span class="m">18</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">15, 18</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|1" data-tid="patterns">
+          <div class="ex-top"><span class="num">2</span><div class="q">Write the next two terms: <span class="m">5, 10, 15, 20</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">5</span>.</li><li><span class="m">20+5=25</span>, then <span class="m">30</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">25, 30</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|2" data-tid="patterns">
+          <div class="ex-top"><span class="num">3</span><div class="q">Write the next two terms: <span class="m">2, 4, 6, 8</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">2</span>.</li><li><span class="m">8+2=10</span>, then <span class="m">12</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">10, 12</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|3" data-tid="patterns">
+          <div class="ex-top"><span class="num">4</span><div class="q">Write the next two terms: <span class="m">10, 20, 30, 40</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">10</span>.</li><li><span class="m">40+10=50</span>, then <span class="m">60</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">50, 60</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|4" data-tid="patterns">
+          <div class="ex-top"><span class="num">5</span><div class="q">Write the next two terms: <span class="m">7, 14, 21, 28</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">7</span>.</li><li><span class="m">28+7=35</span>, then <span class="m">42</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">35, 42</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|5" data-tid="patterns">
+          <div class="ex-top"><span class="num">6</span><div class="q">Write the next two terms: <span class="m">4, 8, 12, 16</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">4</span>.</li><li><span class="m">16+4=20</span>, then <span class="m">24</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">20, 24</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|6" data-tid="patterns">
+          <div class="ex-top"><span class="num">7</span><div class="q">Write the next two terms: <span class="m">6, 12, 18, 24</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">6</span>.</li><li><span class="m">24+6=30</span>, then <span class="m">36</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">30, 36</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|7" data-tid="patterns">
+          <div class="ex-top"><span class="num">8</span><div class="q">Write the next two terms: <span class="m">9, 18, 27, 36</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">9</span>.</li><li><span class="m">36+9=45</span>, then <span class="m">54</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">45, 54</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|8" data-tid="patterns">
+          <div class="ex-top"><span class="num">9</span><div class="q">Write the next two terms: <span class="m">1, 3, 5, 7</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">2</span>.</li><li><span class="m">7+2=9</span>, then <span class="m">11</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">9, 11</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|easy|9" data-tid="patterns">
+          <div class="ex-top"><span class="num">10</span><div class="q">Write the next two terms: <span class="m">8, 16, 24, 32</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each term goes up by <span class="m">8</span>.</li><li><span class="m">32+8=40</span>, then <span class="m">48</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">40, 48</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div></div><div class="pane " data-lv="Medium"><div class="ex" data-key="patterns|medium|0" data-tid="patterns">
+          <div class="ex-top"><span class="num">1</span><div class="q">Find the rule and the 10th term of <span class="m">5, 8, 11, 14</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">3</span>, so the rule has <span class="m">3n</span>.</li><li>Adjust to fit term 1 → <span class="m">3n + 2</span>. 10th: <span class="m">3×10+2=32</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 3n + 2; 10th = 32</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|1" data-tid="patterns">
+          <div class="ex-top"><span class="num">2</span><div class="q">Find the rule and the 10th term of <span class="m">2, 6, 10, 14</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">4</span>, so the rule has <span class="m">4n</span>.</li><li>Adjust to fit term 1 → <span class="m">4n − 2</span>. 10th: <span class="m">4×10−2=38</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 4n − 2; 10th = 38</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|2" data-tid="patterns">
+          <div class="ex-top"><span class="num">3</span><div class="q">Find the rule and the 10th term of <span class="m">7, 12, 17, 22</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">5</span>, so the rule has <span class="m">5n</span>.</li><li>Adjust to fit term 1 → <span class="m">5n + 2</span>. 10th: <span class="m">5×10+2=52</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 5n + 2; 10th = 52</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|3" data-tid="patterns">
+          <div class="ex-top"><span class="num">4</span><div class="q">Find the rule and the 10th term of <span class="m">1, 7, 13, 19</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">6</span>, so the rule has <span class="m">6n</span>.</li><li>Adjust to fit term 1 → <span class="m">6n − 5</span>. 10th: <span class="m">6×10−5=55</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 6n − 5; 10th = 55</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|4" data-tid="patterns">
+          <div class="ex-top"><span class="num">5</span><div class="q">Find the rule and the 10th term of <span class="m">4, 6, 8, 10</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">2</span>, so the rule has <span class="m">2n</span>.</li><li>Adjust to fit term 1 → <span class="m">2n + 2</span>. 10th: <span class="m">2×10+2=22</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 2n + 2; 10th = 22</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|5" data-tid="patterns">
+          <div class="ex-top"><span class="num">6</span><div class="q">Find the rule and the 10th term of <span class="m">3, 10, 17, 24</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">7</span>, so the rule has <span class="m">7n</span>.</li><li>Adjust to fit term 1 → <span class="m">7n − 4</span>. 10th: <span class="m">7×10−4=66</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 7n − 4; 10th = 66</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|6" data-tid="patterns">
+          <div class="ex-top"><span class="num">7</span><div class="q">Find the rule and the 10th term of <span class="m">10, 13, 16, 19</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">3</span>, so the rule has <span class="m">3n</span>.</li><li>Adjust to fit term 1 → <span class="m">3n + 7</span>. 10th: <span class="m">3×10+7=37</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 3n + 7; 10th = 37</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|7" data-tid="patterns">
+          <div class="ex-top"><span class="num">8</span><div class="q">Find the rule and the 10th term of <span class="m">6, 10, 14, 18</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">4</span>, so the rule has <span class="m">4n</span>.</li><li>Adjust to fit term 1 → <span class="m">4n + 2</span>. 10th: <span class="m">4×10+2=42</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 4n + 2; 10th = 42</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|8" data-tid="patterns">
+          <div class="ex-top"><span class="num">9</span><div class="q">Find the rule and the 10th term of <span class="m">0, 5, 10, 15</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">5</span>, so the rule has <span class="m">5n</span>.</li><li>Adjust to fit term 1 → <span class="m">5n − 5</span>. 10th: <span class="m">5×10−5=45</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 5n − 5; 10th = 45</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|medium|9" data-tid="patterns">
+          <div class="ex-top"><span class="num">10</span><div class="q">Find the rule and the 10th term of <span class="m">8, 10, 12, 14</span>, …</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step is <span class="m">2</span>, so the rule has <span class="m">2n</span>.</li><li>Adjust to fit term 1 → <span class="m">2n + 6</span>. 10th: <span class="m">2×10+6=26</span>.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">Rule 2n + 6; 10th = 26</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div></div><div class="pane " data-lv="Hard"><div class="ex" data-key="patterns|hard|0" data-tid="patterns">
+          <div class="ex-top"><span class="num">1</span><div class="q">Matchstick squares: 1→4, 2→7, 3→10 sticks. Rule and sticks for 20 squares?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Each new square adds 3 → rule 3n + something.</li><li>Fits term 1 with +1: 3n + 1. For 20: 3×20 + 1 = 61.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">3n + 1; 61 sticks</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|1" data-tid="patterns">
+          <div class="ex-top"><span class="num">2</span><div class="q">Triangle pattern: 1→3, 2→5, 3→7 sticks. How many for the 15th?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step 2 → rule 2n + 1.</li><li>2×15 + 1 = 31.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">31</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|2" data-tid="patterns">
+          <div class="ex-top"><span class="num">3</span><div class="q">Sequence <span class="m">2, 6, 12, 20, 30, …</span> — find the next term.</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Differences grow: 4, 6, 8, 10 → next gap 12.</li><li>30 + 12 = 42.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">42</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|3" data-tid="patterns">
+          <div class="ex-top"><span class="num">4</span><div class="q">Which term of <span class="m">4, 7, 10, 13, …</span> equals <span class="m">49</span>?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Rule 3n + 1. Set 3n + 1 = 49.</li><li>3n = 48 → n = 16.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">16th</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|4" data-tid="patterns">
+          <div class="ex-top"><span class="num">5</span><div class="q">Rule is <span class="m">n² + 1</span>. Find the first three terms.</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Substitute n = 1, 2, 3.</li><li>1²+1=2, 2²+1=5, 3²+1=10.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">2, 5, 10</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|5" data-tid="patterns">
+          <div class="ex-top"><span class="num">6</span><div class="q">A pattern of dots: 1, 3, 6, 10, … (triangular). Next two?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Add one more each time: +5, +6.</li><li>10 + 5 = 15, 15 + 6 = 21.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">15, 21</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|6" data-tid="patterns">
+          <div class="ex-top"><span class="num">7</span><div class="q">Find the 8th term of <span class="m">100, 92, 84, 76, …</span>.</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step −8 → rule 108 − 8n.</li><li>108 − 8×8 = 44.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">44</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|7" data-tid="patterns">
+          <div class="ex-top"><span class="num">8</span><div class="q">Rule <span class="m">5n − 2</span>. Which term is <span class="m">38</span>?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Set 5n − 2 = 38 → 5n = 40.</li><li>n = 8.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">8th</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|8" data-tid="patterns">
+          <div class="ex-top"><span class="num">9</span><div class="q">Seats per row: 6, 9, 12, … Rule and seats in row 12?</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>Step 3, rule 3n + 3.</li><li>Row 12: 3×12 + 3 = 39.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">3n + 3; 39</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div><div class="ex" data-key="patterns|hard|9" data-tid="patterns">
+          <div class="ex-top"><span class="num">10</span><div class="q">Find the 20th term of <span class="m">1, 4, 9, 16, …</span> (square numbers).</div></div>
+          
+          <div class="attempt">
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            <button class="markbtn">&#10003; Mark answer</button>
+            <button class="reveal locked">&#128274; Show solution</button>
+          </div>
+          <div class="sol">
+            <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
+            <div class="lead">Approach</div>
+            <p class="approach">Find the common difference between terms — that's the number in front of n. Then adjust with a constant so the rule gives the correct first term, and test it on a term you know.</p>
+            <div class="lead">Working, step by step</div>
+            <ol class="steps"><li>The nth term is n².</li><li>20² = 400.</li></ol>
+            <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">400</span></span></div>
+            <div class="checktip"><b>Check it:</b> Substitute n = 1 and n = 2 into your rule — they should reproduce the first two terms.</div>
+          </div>
+        </div></div></section>
+  <section class="hf-sec assignment" data-section="assignment"><div class="hf-tag">&#128221; Assignment work</div>
+      <p class="hf-sub">Do these on paper after the guided practice. They mix fluency, reasoning, application, challenge and reflection question types.</p>
+      <div class="assignment-grid"><div class="assignment-part"><h4>Part A - Fluency</h4><ol><li>Write the next two terms: <span class="m">5, 10, 15, 20</span>, …</li><li>Write the next two terms: <span class="m">2, 4, 6, 8</span>, …</li><li>Write the next two terms: <span class="m">10, 20, 30, 40</span>, …</li><li>Write the next two terms: <span class="m">7, 14, 21, 28</span>, …</li></ol></div><div class="assignment-part"><h4>Part B - Method and reasoning</h4><ol><li>Find the rule and the 10th term of <span class="m">2, 6, 10, 14</span>, …</li><li>Find the rule and the 10th term of <span class="m">7, 12, 17, 22</span>, …</li><li>Find the rule and the 10th term of <span class="m">1, 7, 13, 19</span>, …</li></ol></div><div class="assignment-part"><h4>Part C - Application and challenge</h4><ol><li>Triangle pattern: 1→3, 2→5, 3→7 sticks. How many for the 15th?</li><li>Sequence <span class="m">2, 6, 12, 20, 30, …</span> — find the next term.</li><li>Which term of <span class="m">4, 7, 10, 13, …</span> equals <span class="m">49</span>?</li></ol></div><div class="assignment-part"><h4>Part D - Explain and create</h4><ul><li>Write a short paragraph explaining the main idea of Patterns & Sequences in your own words.</li><li>Create one new Patterns & Sequences question, solve it, and show the checking step.</li><li>Describe one mistake a student might make and how to fix it.</li></ul></div></div></section>
+  <section class="hf-sec mistake" data-section="misconception"><div class="hf-tag">&#128373;&#65039; Mistake detective</div><p class="hf-sub">Diagnose the misconception, then reveal the cause and intervention.</p><div class="mis-q">For 2, 4, 6, 8… they said the rule is <span class="bad">× 2</span>.</div><button class="hf-reveal">Reveal diagnosis</button><div class="hf-hidden"><div class="mis-grid"><div class="mis-item"><span>Cause</span><p>× 2 would give 2, 4, 8, 16. Check the rule against every gap, not just the first.</p></div><div class="mis-item"><span>Diagnostic question</span><p>What rule or representation would show why this answer cannot be right?</p></div><div class="mis-item"><span>Intervention</span><p>The gaps are all +2, so the rule is 'add 2', giving 2, 4, 6, 8, 10.</p></div></div></div></section>
+  <section class="hf-sec realworld" data-section="realworld"><div class="hf-tag">&#127757; In the real world</div><p>Theatre seating rows, loan repayments and pixel patterns in graphics are all sequences with a rule you can predict.</p></section>
+  <section class="hf-sec reflect" data-section="reflect"><div class="hf-tag">&#129504; Reflect</div><ul class="hf-check"><li><label><input type="checkbox"> <span>I check my rule on more than one gap</span></label></li><li><label><input type="checkbox"> <span>I can find the next term in a sequence</span></label></li><li><label><input type="checkbox"> <span>I can describe a pattern in words</span></label></li></ul></section>
+  <section class="hf-sec retrieval" data-section="retrieval"><div class="hf-tag">&#9889; Quick recall</div><p class="hf-sub">Answer in your head, then reveal.</p><ol class="hf-retr"><li><span class="rq">Next term: 5, 10, 15, __?</span> <button class="hf-reveal mini">Show</button><span class="hf-hidden ra">20</span></li><li><span class="rq">Rule for 2, 5, 8, 11?</span> <button class="hf-reveal mini">Show</button><span class="hf-hidden ra">add 3</span></li><li><span class="rq">10th term of 1, 3, 5, 7…?</span> <button class="hf-reveal mini">Show</button><span class="hf-hidden ra">19</span></li></ol></section>
+  <section class="hf-sec summary" data-section="summary"><div class="hf-tag">&#127793; In a nutshell</div><ul class="hf-sum"><li>A sequence follows a fixed rule</li><li>Find the constant jump between terms</li><li>A position rule jumps straight to any term</li></ul></section>
+  <div class="hf-next"><a class="hf-navlink prev" href="powers.html"><span class="dir">&larr; Previous</span><span class="nm">Powers, Roots & Scientific Notation</span></a><a class="hf-navlink next" href="expressions.html"><span class="dir">Next &rarr;</span><span class="nm">Algebraic Expressions</span></a></div>
+</section>
+    </div>
+  </main>
+</div>
+<button class="navtoggle" id="navtoggle" aria-label="Open topics menu">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+<div class="scrim" id="scrim"></div>
+<script src="../js/toc-data.js"></script>
+<script src="../js/progress-store.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/topic-interactions.js"></script>
+<script>window.TOPIC_CHECK=Object.assign(window.TOPIC_CHECK||{}, {"patterns|easy|0":["15, 18"],"patterns|easy|1":["25, 30"],"patterns|easy|2":["10, 12"],"patterns|easy|3":["50, 60"],"patterns|easy|4":["35, 42"],"patterns|easy|5":["20, 24"],"patterns|easy|6":["30, 36"],"patterns|easy|7":["45, 54"],"patterns|easy|8":["9, 11"],"patterns|easy|9":["40, 48"],"patterns|medium|0":["Rule 3n + 2; 10th = 32"],"patterns|medium|1":["Rule 4n − 2; 10th = 38"],"patterns|medium|2":["Rule 5n + 2; 10th = 52"],"patterns|medium|3":["Rule 6n − 5; 10th = 55"],"patterns|medium|4":["Rule 2n + 2; 10th = 22"],"patterns|medium|5":["Rule 7n − 4; 10th = 66"],"patterns|medium|6":["Rule 3n + 7; 10th = 37"],"patterns|medium|7":["Rule 4n + 2; 10th = 42"],"patterns|medium|8":["Rule 5n − 5; 10th = 45"],"patterns|medium|9":["Rule 2n + 6; 10th = 26"],"patterns|hard|0":["3n + 1; 61 sticks"],"patterns|hard|1":["31"],"patterns|hard|2":["42"],"patterns|hard|3":["16th"],"patterns|hard|4":["2, 5, 10"],"patterns|hard|5":["15, 21"],"patterns|hard|6":["44"],"patterns|hard|7":["8th"],"patterns|hard|8":["3n + 3; 39"],"patterns|hard|9":["400"]});</script>
+</body>
+</html>

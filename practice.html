@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Book &middot; The Maths Notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+<script>window.SITE_ROOT='';</script>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sidebar" id="sidebar">
+    <a class="brandmark" href="index.html">
+      <div class="glyph">&#8721;</div>
+      <div><h1>The Maths Notebook</h1><p>Years 6 &ndash; 8 &middot; NZ</p></div>
+    </a>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Search a topic&hellip;" aria-label="Search topics">
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main class="main">
+    <div class="inner">
+      <h1 style="font-family:'Bricolage Grotesque';font-size:28px;margin:0 0 4px">Practice Book</h1>
+      <p class="hero p" style="margin-bottom:6px">Quick-fire fluency practice, separate from the chapters. Questions are generated fresh every time.</p>
+
+      <div class="practice-menu">
+        <div class="practice-tile">
+          <h4>Multiplication Tables</h4>
+          <p>Tables 2&ndash;25.</p>
+          <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px">
+            <select id="table-pick" style="font:inherit;padding:6px;border-radius:8px;border:1.5px solid var(--line)"></select>
+          </label>
+          <div class="mode-row">
+            <button class="btn" data-area="tables" data-mode="learn" data-pick="1">Learn this table</button>
+            <button class="btn" data-area="tables" data-mode="practice">Random Practice</button>
+            <button class="btn" data-area="tables" data-mode="timed">Timed Practice</button>
+          </div>
+        </div>
+        <div class="practice-tile">
+          <h4>Squares</h4>
+          <p>Squares 1&sup2;&ndash;30&sup2; and reverse (square roots).</p>
+          <div class="mode-row">
+            <button class="btn" data-area="squares" data-mode="learn">Learn Squares</button>
+            <button class="btn" data-area="squares" data-mode="practice">Random Practice</button>
+            <button class="btn" data-area="squares" data-mode="timed">Timed Practice</button>
+          </div>
+        </div>
+        <div class="practice-tile">
+          <h4>Mental Maths</h4>
+          <p>Mixed addition, subtraction, multiplication, division, percentages.</p>
+          <div class="mode-row">
+            <button class="btn" data-area="mental" data-mode="practice">Random Practice</button>
+            <button class="btn" data-area="mental" data-mode="timed">Timed Practice</button>
+          </div>
+        </div>
+        <div class="practice-tile">
+          <h4>Mixed Practice</h4>
+          <p>A blend of tables, squares and mental maths in one session.</p>
+          <div class="mode-row">
+            <button class="btn" data-area="mixed" data-mode="practice">Start</button>
+          </div>
+        </div>
+        <div class="practice-tile">
+          <h4>Weak Area Practice</h4>
+          <p>Extra reps on whichever area has the most wrong answers so far.</p>
+          <div class="mode-row">
+            <button class="btn" id="weak-btn">Start</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="pq-stage" class="pq-stage" style="display:none"></div>
+    </div>
+  </main>
+</div>
+<button class="navtoggle" id="navtoggle" aria-label="Open topics menu">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+<div class="scrim" id="scrim"></div>
+<script src="js/toc-data.js"></script>
+<script src="js/progress-store.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/practice-book.js"></script>
+<script>
+(function () {
+  var pick = document.getElementById('table-pick');
+  for (var n = 2; n <= 25; n++) { var o = document.createElement('option'); o.value = n; o.textContent = n + ' times table'; pick.appendChild(o); }
+
+  var stage = document.getElementById('pq-stage');
+  function showStage() { stage.style.display = 'block'; stage.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
+
+  document.querySelectorAll('.practice-menu [data-area]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var area = btn.dataset.area, mode = btn.dataset.mode;
+      var opts = {};
+      if (area === 'tables' && btn.dataset.pick) opts.table = Number(pick.value);
+      if (area === 'mixed') { area = 'mental'; opts.gymArea = 'mixed'; opts.kind = null; }
+      window.PracticeBook.start(area, mode, opts);
+      showStage();
+    });
+  });
+
+  document.getElementById('weak-btn').addEventListener('click', function () {
+    var s = window.ProgressStore.load();
+    var areas = ['tables', 'squares', 'mental'];
+    var worst = areas.reduce(function (best, a) {
+      var g = s.gym[a] || { attempts: 0, correct: 0 };
+      var wrong = g.attempts - g.correct;
+      var bg = s.gym[best] || { attempts: 0, correct: 0 };
+      return wrong > (bg.attempts - bg.correct) ? a : best;
+    }, 'tables');
+    window.PracticeBook.start(worst, 'practice', { gymArea: worst });
+    showStage();
+  });
+})();
+</script>
+</body>
+</html>
