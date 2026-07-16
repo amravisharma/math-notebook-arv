@@ -1,5 +1,6 @@
 /* js/practice-book.js
-   Question generators + quiz runners for the Practice Book (multiplication tables 2-25, squares,
+   Question generators + quiz runners for the Practice Book (multiplication tables 2-20, multiplier
+   1-10, squares,
    mental maths) — separate from the chapter-level GEN engine, since these aren't tied to any one
    curriculum topic.
 
@@ -27,7 +28,7 @@
   // --- question generators ---
 
   function tableQ(table) {
-    var a = table || ri(2, 25), b = ri(1, 12);
+    var a = table || ri(2, 20), b = ri(1, 10);
     return { area: 'tables', prompt: a + ' &times; ' + b, answer: a * b, hint: (a * (b - 1)) + ' + ' + a };
   }
   // Squares practice only ever tests the square itself (n²) — no square-root/reverse questions.
@@ -65,11 +66,11 @@
   function uniqueTableFacts(n, table) {
     var pairs = [];
     if (table) {
-      pairs = shuffle(Array.from({ length: 12 }, function (_, i) { return i + 1; })).slice(0, n).map(function (b) { return [table, b]; });
+      pairs = shuffle(Array.from({ length: 10 }, function (_, i) { return i + 1; })).slice(0, n).map(function (b) { return [table, b]; });
     } else {
       var seen = {}, guard = 0;
       while (pairs.length < n && guard++ < 500) {
-        var a = ri(2, 25), b = ri(1, 12), key = a + 'x' + b;
+        var a = ri(2, 20), b = ri(1, 10), key = a + 'x' + b;
         if (seen[key]) continue;
         seen[key] = true; pairs.push([a, b]);
       }
@@ -85,7 +86,7 @@
       title = 'Squares 1&sup2; to 30&sup2;';
     } else {
       var table = opts.table;
-      items = Array.from({ length: 12 }, function (_, i) { var b = i + 1; return { left: table + ' &times; ' + b, right: '= ' + (table * b) }; });
+      items = Array.from({ length: 10 }, function (_, i) { var b = i + 1; return { left: table + ' &times; ' + b, right: '= ' + (table * b) }; });
       title = table + ' times table';
     }
     stage.innerHTML =
@@ -176,6 +177,86 @@
       stage.appendChild(summary);
       document.getElementById('ws-finish').disabled = true;
       document.getElementById('ws-again').onclick = function () { renderWorksheet(area, modeKey, opts); };
+      document.getElementById('ws-menu').onclick = closeStage;
+      summary.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  // ============================================================
+  // Dodging (Squares, Tables): every fact of ONE table (or all 30 squares) shown at once, but in a
+  // shuffled, non-sequential order — unlike Learn (in order, answers shown) or Practice/Timed (a
+  // random subset mixed across all tables/squares). "Shuffle again" re-draws a fresh random order of
+  // the same full fact set for repeat drilling, without touching anything outside this worksheet.
+  // ============================================================
+
+  function renderDodging(area, opts) {
+    stage.classList.add('ws-mode');
+    opts = opts || {};
+    var questions = area === 'squares' ? uniqueSquares(30) : uniqueTableFacts(10, opts.table);
+    var title = area === 'squares' ? 'Squares &mdash; Dodging' : (opts.table + ' times table &mdash; Dodging');
+    var state = { answered: 0, correct: 0, total: questions.length };
+
+    stage.innerHTML =
+      '<div class="ws-head"><h3>' + title + '</h3>' +
+      '<span class="ws-score" id="ws-score">0 / ' + state.total + ' answered</span></div>' +
+      '<p class="muted" style="color:var(--ink-soft);margin:-8px 0 14px">All facts, shuffled out of order &mdash; a true test of recall, not counting.</p>' +
+      '<div class="ws-grid" id="ws-grid"></div>' +
+      '<div class="mode-row" style="margin-top:18px"><button class="btn primary" id="ws-finish">Finish</button><button class="btn" id="ws-shuffle">Shuffle again</button><button class="btn" id="ws-back">Back to menu</button></div>';
+
+    var grid = document.getElementById('ws-grid');
+    var scoreEl = document.getElementById('ws-score');
+
+    questions.forEach(function (q, i) {
+      var card = document.createElement('div');
+      card.className = 'ws-item';
+      card.innerHTML =
+        '<span class="ws-prompt">' + q.prompt + '</span>' +
+        '<input class="ws-input" type="number" inputmode="decimal" autocomplete="off" aria-label="Answer for ' + q.prompt.replace(/&[a-z]+;/g, ' ') + '">' +
+        '<span class="ws-mark" aria-live="polite"></span>';
+      grid.appendChild(card);
+
+      var input = card.querySelector('.ws-input'), mark = card.querySelector('.ws-mark');
+      var checked = false;
+      function check() {
+        if (checked || !input.value.trim()) return;
+        checked = true;
+        var v = parseFloat(input.value);
+        var ok = !isNaN(v) && Math.abs(v - q.answer) < 0.001;
+        input.readOnly = true;
+        card.classList.add(ok ? 'ok' : 'no');
+        mark.innerHTML = ok ? '&#10003;' : ('&#10007; ' + q.answer);
+        state.answered++; if (ok) state.correct++;
+        recordGymResult(q.area, ok);
+        scoreEl.textContent = state.correct + ' / ' + state.answered + ' answered (of ' + state.total + ')';
+        if (state.answered >= state.total) finishDodging();
+      }
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+      input.addEventListener('blur', check);
+    });
+
+    document.getElementById('ws-finish').onclick = finishDodging;
+    document.getElementById('ws-shuffle').onclick = function () { renderDodging(area, opts); };
+    document.getElementById('ws-back').onclick = closeStage;
+
+    function finishDodging() {
+      grid.querySelectorAll('.ws-item').forEach(function (card, i) {
+        var input = card.querySelector('.ws-input'), mark = card.querySelector('.ws-mark');
+        if (!input.readOnly) {
+          input.readOnly = true;
+          card.classList.add('skip');
+          mark.innerHTML = 'Answer: ' + questions[i].answer;
+        }
+      });
+      var pct = state.answered ? Math.round((state.correct / state.answered) * 100) : 0;
+      var summary = document.createElement('div');
+      summary.className = 'ws-summary';
+      summary.innerHTML = '<h3>Dodging complete</h3><div class="pq-score">' + state.correct + ' / ' + state.total + '</div>' +
+        '<p class="muted" style="color:var(--ink-soft)">' + pct + '% correct of the ' + state.answered + ' you answered</p>' +
+        '<div class="mode-row" style="justify-content:center"><button class="btn primary" id="ws-again">Shuffle again</button><button class="btn" id="ws-menu">Back to menu</button></div>';
+      stage.appendChild(summary);
+      document.getElementById('ws-finish').disabled = true;
+      document.getElementById('ws-shuffle').disabled = true;
+      document.getElementById('ws-again').onclick = function () { renderDodging(area, opts); };
       document.getElementById('ws-menu').onclick = closeStage;
       summary.scrollIntoView({ block: 'nearest' });
     }
@@ -282,6 +363,7 @@
   function start(area, modeKey, opts) {
     opts = opts || {};
     if ((area === 'squares' || area === 'tables') && modeKey === 'learn') { renderReferenceList(area, opts); return; }
+    if ((area === 'squares' || area === 'tables') && modeKey === 'dodging') { renderDodging(area, opts); return; }
     if (area === 'squares' || area === 'tables') { renderWorksheet(area, modeKey, opts); return; }
     startQuiz(area, modeKey, opts);
   }

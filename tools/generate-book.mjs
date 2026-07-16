@@ -121,15 +121,15 @@ function stripTags(html) { return String(html).replace(/<[^>]+>/g, '').trim(); }
 // read as one consistent visual language rather than a bolted-on addition. ---
 
 const STATIC_MODELS = {
-  operations: `<div class="cap">Order of operations</div>
+  operations: `<div class="cap">Order of operations &mdash; same level: work left to right</div>
     <svg class="viz" viewBox="0 0 260 150" width="260" role="img" aria-label="BEDMAS priority order, brackets first">
       <rect class="fig-shape" x="10" y="8" width="240" height="26" rx="7"/><text class="fig-txt" x="130" y="26" text-anchor="middle">Brackets</text>
       <line class="fig-arr" x1="130" y1="34" x2="130" y2="44" marker-end="url(#dArrow)"/>
       <rect class="fig-shape" x="30" y="46" width="200" height="26" rx="7"/><text class="fig-txt" x="130" y="64" text-anchor="middle">Exponents</text>
       <line class="fig-arr" x1="130" y1="72" x2="130" y2="82" marker-end="url(#dArrow)"/>
-      <rect class="fig-shape" x="50" y="84" width="160" height="26" rx="7"/><text class="fig-txt" x="130" y="102" text-anchor="middle">&times; and &divide; (left to right)</text>
+      <rect class="fig-shape" x="50" y="84" width="160" height="26" rx="7"/><text class="fig-txt" x="130" y="102" text-anchor="middle">&times; and &divide;</text>
       <line class="fig-arr" x1="130" y1="110" x2="130" y2="120" marker-end="url(#dArrow)"/>
-      <rect class="fig-shape" x="70" y="122" width="120" height="26" rx="7"/><text class="fig-txt" x="130" y="140" text-anchor="middle">+ and &minus; (left to right)</text>
+      <rect class="fig-shape" x="70" y="122" width="120" height="26" rx="7"/><text class="fig-txt" x="130" y="140" text-anchor="middle">+ and &minus;</text>
       <defs><marker id="dArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--ink-soft)"/></marker></defs>
     </svg>`,
 
@@ -179,14 +179,14 @@ const STATIC_MODELS = {
     </svg>`,
 
   expressions: `<div class="cap">Algebra tiles for 3x + 2</div>
-    <svg class="viz" viewBox="0 0 220 70" width="220" role="img" aria-label="Three long x tiles and two small unit tiles representing the expression 3x plus 2">
+    <svg class="viz" viewBox="0 0 270 70" width="270" role="img" aria-label="Three long x tiles and two small unit tiles representing the expression 3x plus 2">
       ${[0, 1, 2].map(i => `<rect class="fig-shape" x="${10 + i * 46}" y="10" width="38" height="18" rx="4"/><text class="fig-txt" x="${29 + i * 46}" y="24" text-anchor="middle" style="font-size:11px">x</text>`).join('')}
       ${[0, 1].map(i => `<rect class="fig-shape" x="${152 + i * 26}" y="10" width="18" height="18" rx="4"/><text class="fig-txt" x="${161 + i * 26}" y="24" text-anchor="middle" style="font-size:11px">1</text>`).join('')}
-      <text class="fig-txt soft" x="110" y="52" text-anchor="middle">3 lots of x, plus 2 units = 3x + 2</text>
+      <text class="fig-txt soft" x="135" y="52" text-anchor="middle">3 lots of x, plus 2 units = 3x + 2</text>
     </svg>`,
 
   equations: `<div class="cap">A balance scale: x + 4 = 10</div>
-    <svg class="viz" viewBox="0 0 240 130" width="240" role="img" aria-label="A balance scale, level, with x plus 4 on the left pan and 10 on the right pan">
+    <svg class="viz" viewBox="0 0 240 145" width="240" role="img" aria-label="A balance scale, level, with x plus 4 on the left pan and 10 on the right pan">
       <line class="fig-ax" x1="120" y1="20" x2="120" y2="55"/>
       <line class="fig-line" x1="30" y1="55" x2="210" y2="55"/>
       <line class="fig-line" x1="45" y1="55" x2="45" y2="80"/><line class="fig-line" x1="20" y1="80" x2="70" y2="80"/>
@@ -194,7 +194,8 @@ const STATIC_MODELS = {
       <circle class="fig-pt" cx="120" cy="18" r="4"/>
       <text class="fig-txt" x="45" y="100" text-anchor="middle">x + 4</text>
       <text class="fig-txt" x="195" y="100" text-anchor="middle">10</text>
-      <text class="fig-txt soft" x="120" y="120" text-anchor="middle">Balanced: whatever you do to one side, do to the other</text>
+      <text class="fig-txt soft" x="120" y="118" text-anchor="middle" style="font-size:11px">Balanced: whatever you do</text>
+      <text class="fig-txt soft" x="120" y="132" text-anchor="middle" style="font-size:11px">to one side, do to the other</text>
     </svg>`,
 
   inequalities: `<div class="cap">x &gt; 4 on a number line</div>
@@ -208,9 +209,10 @@ const STATIC_MODELS = {
     </svg>`,
 
   volume: `<div class="cap">2 &times; 3 &times; 2 cuboid, built layer by layer</div>
-    <svg class="viz" viewBox="0 0 200 140" width="200" role="img" aria-label="Two layers of a 3 by 2 grid of unit cubes stacked to show volume">
+    <svg class="viz" viewBox="0 0 200 150" width="200" role="img" aria-label="Two layers of a 3 by 2 grid of unit cubes stacked to show volume">
       ${[0, 1].map(layer => Array.from({ length: 6 }, (_, i) => { const c = i % 3, r = Math.floor(i / 3); const ox = 30 + c * 34 - layer * 6; const oy = 90 - r * 30 - layer * 34; return `<rect x="${ox}" y="${oy}" width="30" height="26" fill="rgba(59,76,168,.12)" stroke="var(--brand)"/>`; }).join('')).join('')}
-      <text class="fig-txt soft" x="100" y="128" text-anchor="middle">2 layers of 3&times;2 = 12 unit cubes</text>
+      <text class="fig-txt soft" x="100" y="130" text-anchor="middle">2 layers of 3&times;2</text>
+      <text class="fig-txt soft" x="100" y="144" text-anchor="middle">= 12 unit cubes</text>
     </svg>`,
 
   conversions: `<div class="cap">Metric ladder &mdash; each step is &times;10</div>
@@ -231,7 +233,7 @@ const STATIC_MODELS = {
     </svg>`,
 
   probability: `<div class="cap">Sample space for two coin tosses</div>
-    <svg class="viz" viewBox="0 0 190 190" width="190" role="img" aria-label="A two by two grid showing the four equally likely outcomes HH, HT, TH, TT for tossing two coins">
+    <svg class="viz" viewBox="-15 0 205 190" width="205" role="img" aria-label="A two by two grid showing the four equally likely outcomes HH, HT, TH, TT for tossing two coins">
       <line class="fig-ax" x1="55" y1="20" x2="55" y2="170"/><line class="fig-ax" x1="55" y1="20" x2="180" y2="20"/>
       <text class="fig-txt soft" x="90" y="12" text-anchor="middle">coin 2</text><text class="fig-txt soft" x="15" y="98" text-anchor="middle">coin 1</text>
       <text class="fig-txt" x="90" y="33" text-anchor="middle">H</text><text class="fig-txt" x="150" y="33" text-anchor="middle">T</text>
@@ -309,6 +311,14 @@ function applyContentFixes(CURRICULUM, CH) {
   const pyth = CH.pythagoras;
   if (pyth && pyth.hook && !pyth.hook.includes('fresh numbers')) {
     pyth.hook += ' (Reset your progress any time for a fresh set of numbers to practise on.)';
+  }
+
+  // Perimeter & Area: the original grid-diagram's caption sat only 4px below the grid's bottom edge
+  // (viewBox height 90, grid ends at y=82, caption baseline at y=86) — the caption's own text visibly
+  // overlapped the bottom row of the grid. Give it real clearance below the grid instead.
+  const pa = byId['perimeter-area'];
+  if (pa && pa.model && pa.model.includes('viewBox="0 0 170 90"')) {
+    pa.model = pa.model.replace('viewBox="0 0 170 90"', 'viewBox="0 0 170 100"').replace('<text x="85" y="86"', '<text x="85" y="96"');
   }
 }
 

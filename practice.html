@@ -31,7 +31,7 @@
       <div class="practice-menu">
         <div class="practice-tile">
           <h4>Multiplication Tables</h4>
-          <p>Tables 2&ndash;25. Learn shows the chosen table in full; Practice and Timed give a randomised worksheet across all tables, all at once.</p>
+          <p>Tables 2&ndash;20 (up to &times;10). Learn shows the chosen table in full; Practice and Timed give a randomised worksheet across all tables, all at once; Dodging shuffles just the chosen table's own facts out of order.</p>
           <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px">
             <select id="table-pick" style="font:inherit;padding:6px;border-radius:8px;border:1.5px solid var(--line)"></select>
           </label>
@@ -39,15 +39,17 @@
             <button class="btn" data-area="tables" data-mode="learn" data-pick="1">Learn this table</button>
             <button class="btn" data-area="tables" data-mode="practice">Random Practice</button>
             <button class="btn" data-area="tables" data-mode="timed">Timed Practice</button>
+            <button class="btn" data-area="tables" data-mode="dodging" data-pick="1">Dodge this table</button>
           </div>
         </div>
         <div class="practice-tile">
           <h4>Squares</h4>
-          <p>Squares 1&sup2;&ndash;30&sup2;. Learn shows the full list; Practice and Timed give a randomised worksheet you fill in all at once.</p>
+          <p>Squares 1&sup2;&ndash;30&sup2;. Learn shows the full list; Practice and Timed give a randomised worksheet you fill in all at once; Dodging shuffles all 30 squares out of order.</p>
           <div class="mode-row">
             <button class="btn" data-area="squares" data-mode="learn">Learn Squares</button>
             <button class="btn" data-area="squares" data-mode="practice">Random Practice</button>
             <button class="btn" data-area="squares" data-mode="timed">Timed Practice</button>
+            <button class="btn" data-area="squares" data-mode="dodging">Dodge Squares</button>
           </div>
         </div>
         <div class="practice-tile">
@@ -85,7 +87,7 @@
 <script>
 (function () {
   var pick = document.getElementById('table-pick');
-  for (var n = 2; n <= 25; n++) { var o = document.createElement('option'); o.value = n; o.textContent = n + ' times table'; pick.appendChild(o); }
+  for (var n = 2; n <= 20; n++) { var o = document.createElement('option'); o.value = n; o.textContent = n + ' times table'; pick.appendChild(o); }
 
   var stage = document.getElementById('pq-stage');
   function showStage() { stage.style.display = 'block'; stage.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
