@@ -116,6 +116,202 @@ const DYNAMIC_IDS = new Set(['graphs', 'angles', 'shapes', 'transformations', 'p
 // the same trade-off the dynamic topics already accept.
 function stripTags(html) { return String(html).replace(/<[^>]+>/g, '').trim(); }
 
+// --- 2b. Visual models for the static topics the review found had none. Hand-authored, simple,
+// reusing the same .fig-*/.viz classes the dynamic topics' generated figures already use, so they
+// read as one consistent visual language rather than a bolted-on addition. ---
+
+const STATIC_MODELS = {
+  operations: `<div class="cap">Order of operations</div>
+    <svg class="viz" viewBox="0 0 260 150" width="260" role="img" aria-label="BEDMAS priority order, brackets first">
+      <rect class="fig-shape" x="10" y="8" width="240" height="26" rx="7"/><text class="fig-txt" x="130" y="26" text-anchor="middle">Brackets</text>
+      <line class="fig-arr" x1="130" y1="34" x2="130" y2="44" marker-end="url(#dArrow)"/>
+      <rect class="fig-shape" x="30" y="46" width="200" height="26" rx="7"/><text class="fig-txt" x="130" y="64" text-anchor="middle">Exponents</text>
+      <line class="fig-arr" x1="130" y1="72" x2="130" y2="82" marker-end="url(#dArrow)"/>
+      <rect class="fig-shape" x="50" y="84" width="160" height="26" rx="7"/><text class="fig-txt" x="130" y="102" text-anchor="middle">&times; and &divide; (left to right)</text>
+      <line class="fig-arr" x1="130" y1="110" x2="130" y2="120" marker-end="url(#dArrow)"/>
+      <rect class="fig-shape" x="70" y="122" width="120" height="26" rx="7"/><text class="fig-txt" x="130" y="140" text-anchor="middle">+ and &minus; (left to right)</text>
+      <defs><marker id="dArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--ink-soft)"/></marker></defs>
+    </svg>`,
+
+  factors: `<div class="cap">Factor tree for 36</div>
+    <svg class="viz" viewBox="0 0 220 170" width="220" role="img" aria-label="Factor tree showing 36 broken into prime factors 2, 2, 3, 3">
+      <line class="fig-line" x1="110" y1="20" x2="60" y2="60"/><line class="fig-line" x1="110" y1="20" x2="160" y2="60"/>
+      <line class="fig-line" x1="60" y1="70" x2="35" y2="110"/><line class="fig-line" x1="60" y1="70" x2="85" y2="110"/>
+      <line class="fig-line" x1="160" y1="70" x2="135" y2="110"/><line class="fig-line" x1="160" y1="70" x2="185" y2="110"/>
+      <circle class="fig-pt" cx="110" cy="20" r="16"/><text class="fig-txt" x="110" y="25" text-anchor="middle" style="fill:#fff">36</text>
+      <circle class="fig-shape" cx="60" cy="65" r="15"/><text class="fig-txt" x="60" y="70" text-anchor="middle">6</text>
+      <circle class="fig-shape" cx="160" cy="65" r="15"/><text class="fig-txt" x="160" y="70" text-anchor="middle">6</text>
+      <circle class="fig-shape" cx="35" cy="120" r="14"/><text class="fig-txt" x="35" y="125" text-anchor="middle">2</text>
+      <circle class="fig-shape" cx="85" cy="120" r="14"/><text class="fig-txt" x="85" y="125" text-anchor="middle">3</text>
+      <circle class="fig-shape" cx="135" cy="120" r="14"/><text class="fig-txt" x="135" y="125" text-anchor="middle">2</text>
+      <circle class="fig-shape" cx="185" cy="120" r="14"/><text class="fig-txt" x="185" y="125" text-anchor="middle">3</text>
+      <text class="fig-txt soft" x="110" y="158" text-anchor="middle">36 = 2 &times; 2 &times; 3 &times; 3</text>
+    </svg>`,
+
+  percentages: `<div class="cap">25% of a hundred square</div>
+    <svg class="viz" viewBox="0 0 210 210" width="180" role="img" aria-label="A ten by ten grid with 25 of the 100 small squares shaded">
+      ${(() => { let g = ''; for (let r = 0; r < 10; r++) for (let c = 0; c < 10; c++) { const shaded = r < 3 ? (r < 2 ? true : c < 5) : false; g += `<rect x="${c * 20 + 5}" y="${r * 20 + 5}" width="18" height="18" fill="${shaded ? 'var(--brand)' : 'none'}" stroke="var(--grid)"/>`; } return g; })()}
+    </svg>
+    <div class="pvexp">25 of 100 squares shaded = 25%</div>`,
+
+  ratios: `<div class="cap">Ratio 2 : 3 as a bar model</div>
+    <svg class="viz" viewBox="0 0 260 90" width="260" role="img" aria-label="A bar split into 2 blue parts and 3 gold parts, showing a 2 to 3 ratio">
+      <rect x="10" y="10" width="52" height="34" fill="var(--brand)"/><rect x="62" y="10" width="52" height="34" fill="var(--brand)"/>
+      <rect x="114" y="10" width="52" height="34" fill="var(--marigold)"/><rect x="166" y="10" width="52" height="34" fill="var(--marigold)"/><rect x="218" y="10" width="32" height="34" fill="var(--marigold)"/>
+      <text class="fig-txt soft" x="10" y="66" text-anchor="start">2 parts</text><text class="fig-txt soft" x="250" y="66" text-anchor="end">3 parts</text>
+    </svg>`,
+
+  powers: `<div class="cap">2&sup3; as repeated multiplication</div>
+    <svg class="viz" viewBox="0 0 260 70" width="260" role="img" aria-label="2 cubed shown as 2 times 2 times 2 equals 8">
+      <rect class="fig-shape" x="10" y="10" width="40" height="40" rx="8"/><text class="fig-txt" x="30" y="35" text-anchor="middle">2</text>
+      <text class="fig-txt soft" x="60" y="35" text-anchor="middle">&times;</text>
+      <rect class="fig-shape" x="72" y="10" width="40" height="40" rx="8"/><text class="fig-txt" x="92" y="35" text-anchor="middle">2</text>
+      <text class="fig-txt soft" x="122" y="35" text-anchor="middle">&times;</text>
+      <rect class="fig-shape" x="134" y="10" width="40" height="40" rx="8"/><text class="fig-txt" x="154" y="35" text-anchor="middle">2</text>
+      <text class="fig-txt soft" x="192" y="35" text-anchor="middle">=</text>
+      <rect x="206" y="10" width="46" height="40" rx="8" fill="var(--easy-bg)" stroke="var(--easy)"/><text class="fig-txt" x="229" y="35" text-anchor="middle" style="fill:var(--easy)">8</text>
+    </svg>`,
+
+  patterns: `<div class="cap">Position &rarr; term, common difference +4</div>
+    <svg class="viz" viewBox="0 0 260 90" width="260" role="img" aria-label="Table of sequence positions 1 to 4 against terms 3, 7, 11, 15 with a plus 4 arrow between each">
+      ${[3, 7, 11, 15].map((v, i) => `<rect class="fig-shape" x="${10 + i * 62}" y="30" width="46" height="34" rx="6"/><text class="fig-txt" x="${33 + i * 62}" y="52" text-anchor="middle">${v}</text><text class="fig-txt soft" x="${33 + i * 62}" y="20" text-anchor="middle">n=${i + 1}</text>`).join('')}
+      ${[0, 1, 2].map(i => `<text class="fig-txt ang" x="${68 + i * 62}" y="52" text-anchor="middle">+4</text>`).join('')}
+    </svg>`,
+
+  expressions: `<div class="cap">Algebra tiles for 3x + 2</div>
+    <svg class="viz" viewBox="0 0 220 70" width="220" role="img" aria-label="Three long x tiles and two small unit tiles representing the expression 3x plus 2">
+      ${[0, 1, 2].map(i => `<rect class="fig-shape" x="${10 + i * 46}" y="10" width="38" height="18" rx="4"/><text class="fig-txt" x="${29 + i * 46}" y="24" text-anchor="middle" style="font-size:11px">x</text>`).join('')}
+      ${[0, 1].map(i => `<rect class="fig-shape" x="${152 + i * 26}" y="10" width="18" height="18" rx="4"/><text class="fig-txt" x="${161 + i * 26}" y="24" text-anchor="middle" style="font-size:11px">1</text>`).join('')}
+      <text class="fig-txt soft" x="110" y="52" text-anchor="middle">3 lots of x, plus 2 units = 3x + 2</text>
+    </svg>`,
+
+  equations: `<div class="cap">A balance scale: x + 4 = 10</div>
+    <svg class="viz" viewBox="0 0 240 130" width="240" role="img" aria-label="A balance scale, level, with x plus 4 on the left pan and 10 on the right pan">
+      <line class="fig-ax" x1="120" y1="20" x2="120" y2="55"/>
+      <line class="fig-line" x1="30" y1="55" x2="210" y2="55"/>
+      <line class="fig-line" x1="45" y1="55" x2="45" y2="80"/><line class="fig-line" x1="20" y1="80" x2="70" y2="80"/>
+      <line class="fig-line" x1="195" y1="55" x2="195" y2="80"/><line class="fig-line" x1="170" y1="80" x2="220" y2="80"/>
+      <circle class="fig-pt" cx="120" cy="18" r="4"/>
+      <text class="fig-txt" x="45" y="100" text-anchor="middle">x + 4</text>
+      <text class="fig-txt" x="195" y="100" text-anchor="middle">10</text>
+      <text class="fig-txt soft" x="120" y="120" text-anchor="middle">Balanced: whatever you do to one side, do to the other</text>
+    </svg>`,
+
+  inequalities: `<div class="cap">x &gt; 4 on a number line</div>
+    <svg class="viz" viewBox="0 0 260 60" width="260" role="img" aria-label="Number line from 1 to 7 with an open circle at 4 and the line shaded to the right, showing x greater than 4">
+      <line class="fig-ax" x1="15" y1="30" x2="245" y2="30"/>
+      ${[1, 2, 3, 4, 5, 6, 7].map((n, i) => `<line class="fig-g" x1="${15 + i * 38}" y1="25" x2="${15 + i * 38}" y2="35"/><text class="fig-txt soft" x="${15 + i * 38}" y="48" text-anchor="middle" style="font-size:10px">${n}</text>`).join('')}
+      <line class="fig-line" x1="${15 + 3 * 38}" y1="30" x2="245" y2="30" style="stroke-width:4"/>
+      <circle cx="${15 + 3 * 38}" cy="30" r="6" fill="var(--paper)" stroke="var(--brand)" stroke-width="2.5"/>
+      <line class="fig-arr" x1="230" y1="30" x2="245" y2="30" marker-end="url(#iArrow)"/>
+      <defs><marker id="iArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--brand)"/></marker></defs>
+    </svg>`,
+
+  volume: `<div class="cap">2 &times; 3 &times; 2 cuboid, built layer by layer</div>
+    <svg class="viz" viewBox="0 0 200 140" width="200" role="img" aria-label="Two layers of a 3 by 2 grid of unit cubes stacked to show volume">
+      ${[0, 1].map(layer => Array.from({ length: 6 }, (_, i) => { const c = i % 3, r = Math.floor(i / 3); const ox = 30 + c * 34 - layer * 6; const oy = 90 - r * 30 - layer * 34; return `<rect x="${ox}" y="${oy}" width="30" height="26" fill="rgba(59,76,168,.12)" stroke="var(--brand)"/>`; }).join('')).join('')}
+      <text class="fig-txt soft" x="100" y="128" text-anchor="middle">2 layers of 3&times;2 = 12 unit cubes</text>
+    </svg>`,
+
+  conversions: `<div class="cap">Metric ladder &mdash; each step is &times;10</div>
+    <svg class="viz" viewBox="0 0 260 70" width="260" role="img" aria-label="km to m to cm to mm, each connected by a times 10 arrow">
+      ${['km', 'm', 'cm', 'mm'].map((u, i) => `<rect class="fig-shape" x="${10 + i * 62}" y="15" width="46" height="30" rx="7"/><text class="fig-txt" x="${33 + i * 62}" y="35" text-anchor="middle">${u}</text>`).join('')}
+      ${[0, 1, 2].map(i => `<line class="fig-arr" x1="${58 + i * 62}" y1="30" x2="${68 + i * 62}" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="${63 + i * 62}" y="18" text-anchor="middle" style="font-size:10px">&times;10</text>`).join('')}
+      <defs><marker id="cArrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--ink-soft)"/></marker></defs>
+    </svg>`,
+
+  statistics: `<div class="cap">Dot plot for 2, 3, 3, 10 &mdash; the 10 pulls the mean up</div>
+    <svg class="viz" viewBox="0 0 260 70" width="260" role="img" aria-label="Dot plot showing values 2, 3, 3 and 10 on a number line, with the mean marked between 4 and 5">
+      <line class="fig-ax" x1="15" y1="45" x2="245" y2="45"/>
+      ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n, i) => `<line class="fig-g" x1="${15 + i * 23}" y1="40" x2="${15 + i * 23}" y2="50"/>`).join('')}
+      <circle class="fig-pt" cx="${15 + 1 * 23}" cy="35" r="5"/>
+      <circle class="fig-pt" cx="${15 + 2 * 23}" cy="35" r="5"/><circle class="fig-pt" cx="${15 + 2 * 23}" cy="23" r="5"/>
+      <circle class="fig-pt" cx="${15 + 9 * 23}" cy="35" r="5"/>
+      <text class="fig-txt ang" x="${15 + 3.5 * 23}" y="62" text-anchor="middle" style="font-size:10.5px">mean = 4.5</text>
+    </svg>`,
+
+  probability: `<div class="cap">Sample space for two coin tosses</div>
+    <svg class="viz" viewBox="0 0 190 190" width="190" role="img" aria-label="A two by two grid showing the four equally likely outcomes HH, HT, TH, TT for tossing two coins">
+      <line class="fig-ax" x1="55" y1="20" x2="55" y2="170"/><line class="fig-ax" x1="55" y1="20" x2="180" y2="20"/>
+      <text class="fig-txt soft" x="90" y="12" text-anchor="middle">coin 2</text><text class="fig-txt soft" x="15" y="98" text-anchor="middle">coin 1</text>
+      <text class="fig-txt" x="90" y="33" text-anchor="middle">H</text><text class="fig-txt" x="150" y="33" text-anchor="middle">T</text>
+      <text class="fig-txt" x="40" y="65" text-anchor="middle">H</text><text class="fig-txt" x="40" y="140" text-anchor="middle">T</text>
+      <rect class="fig-shape" x="60" y="45" width="60" height="40"/><text class="fig-txt" x="90" y="70" text-anchor="middle">HH</text>
+      <rect class="fig-shape" x="120" y="45" width="60" height="40"/><text class="fig-txt" x="150" y="70" text-anchor="middle">HT</text>
+      <rect class="fig-shape" x="60" y="120" width="60" height="40"/><text class="fig-txt" x="90" y="145" text-anchor="middle">TH</text>
+      <rect class="fig-shape" x="120" y="120" width="60" height="40"/><text class="fig-txt" x="150" y="145" text-anchor="middle">TT</text>
+    </svg>`
+};
+
+// --- 2c. Content fixes from the educational review — see the review report for the reasoning
+// behind each change. Applied as a patch over the loaded data rather than editing the archived
+// source file, so every change here is visible, versioned and reversible in one place. ---
+
+function applyContentFixes(CURRICULUM, CH) {
+  const byId = {};
+  CURRICULUM.forEach((g) => g.topics.forEach((t) => { byId[t.id] = t; }));
+
+  // Decimals: fix #1 — an ordering question listed 3 numbers but two were identical (0.7 and 0.7),
+  // so the answer key silently dropped one. Made the third value genuinely distinct. Both the
+  // question and its answer wrap all three numbers in a single <span class="m">, so patch that
+  // whole run of text rather than each number separately.
+  const dec = byId.decimals;
+  const dupQ = dec.easy.find((e) => e.q.includes('0.7, 0.67, 0.7'));
+  if (dupQ) {
+    dupQ.q = dupQ.q.replace('0.7, 0.67, 0.7', '0.7, 0.67, 0.72');
+    dupQ.steps = dupQ.steps.map((s) => s.replace('0.67, 0.7', '0.67, 0.7, 0.72'));
+    dupQ.ans = dupQ.ans.replace('0.67, 0.7', '0.67, 0.7, 0.72');
+  }
+  // Decimals: fix #2 — "Round 12.45 to 1 decimal place" was answered 12.4, contradicting the
+  // notebook's own "5 or more rounds up" rule (12.45 rounds to 12.5). Corrected the answer key.
+  const roundQ = dec.easy.find((e) => e.q.includes('12.45'));
+  if (roundQ) {
+    roundQ.steps = roundQ.steps.map((s) => s.replace('12.4', '12.5'));
+    roundQ.ans = roundQ.ans.replace('12.4', '12.5');
+  }
+
+  // Fractions: the review found no misconception check for dividing fractions (only addition is
+  // covered), and no mixed-number question anywhere in the bank. Extend the Watch Out with the
+  // division error, and swap the least-distinctive Hard question for a mixed-number one.
+  const frac = byId.fractions;
+  frac.watchout += ' And when dividing, flip the second fraction before multiplying — dividing straight across gives the wrong answer.';
+  // The Hard tier's final question (1/2 + 1/3 + 1/6, using nested .frac/.n/.d spans rather than
+  // plain "1/2" text) is the least distinctive of the 10 — replace it with a mixed-number question,
+  // since the review found none anywhere in this chapter despite mixed numbers being common in
+  // real assessments. Keeps the tier at exactly 10 questions.
+  const mixedFrac = (n, d) => `<span class="frac"><span class="n">${n}</span><span class="d">${d}</span></span>`;
+  frac.hard[frac.hard.length - 1] = {
+    q: `Work out 1&frac12; + ${mixedFrac(2, 3)} (a mixed number plus a fraction).`,
+    steps: [
+      `Convert 1&frac12; to an improper fraction: ${mixedFrac(3, 2)}.`,
+      `Common denominator of 2 and 3 is 6: ${mixedFrac(3, 2)} = ${mixedFrac(9, 6)}, ${mixedFrac(2, 3)} = ${mixedFrac(4, 6)}.`,
+      `Add: ${mixedFrac(9, 6)} + ${mixedFrac(4, 6)} = ${mixedFrac(13, 6)} = 2${mixedFrac(1, 6)}.`
+    ],
+    ans: `2${mixedFrac(1, 6)}`
+  };
+
+  // Probability: "sample space" is used in the Lesson prose but was never added to Vocabulary, and
+  // the AND/OR combination rule used in the Hard-tier dice questions was only ever demonstrated
+  // through worked steps, never stated as an explicit rule.
+  const prob = CH.probability;
+  if (prob && prob.vocab && !prob.vocab.some((v) => v[0] === 'sample space')) {
+    prob.vocab.push(['sample space', 'the full list of equally likely outcomes for an experiment']);
+  }
+  if (prob) {
+    prob.summary = prob.summary || [];
+    if (!prob.summary.some((s) => s.includes('AND') || s.includes('OR'))) {
+      prob.summary.push('For combined events: AND means multiply the probabilities, OR means add them');
+    }
+  }
+
+  // Pythagoras: tell the learner directly that the numbers refresh on reset — a genuine strength
+  // (prevents rote memorisation) the chapter never actually told the student about.
+  const pyth = CH.pythagoras;
+  if (pyth && pyth.hook && !pyth.hook.includes('fresh numbers')) {
+    pyth.hook += ' (Reset your progress any time for a fresh set of numbers to practise on.)';
+  }
+}
+
 // --- 3. Shared page shell ---
 
 function pageShell({ title, active, bodyHtml, root, extraScripts }) {
@@ -172,17 +368,18 @@ function renderChapterBody(t, group, prev, next) {
   const road = [];
   const addRoad = (key, label, show) => { if (show) road.push(`<button class="hf-jump" type="button" data-target="${key}"><span class="dot"></span><span>${label}</span></button>`); };
   const intro = INTRO_FIG[t.id] ? `<figure class="figwrap intro">${INTRO_FIG[t.id]()}<figcaption class="figcap">${INTRO_CAP[t.id] || ''}</figcaption></figure>` : '';
+  const model = t.model || STATIC_MODELS[t.id] || '';
   addRoad('goals', 'Goals', c.goals);
   addRoad('discovery', 'Discover', c.discovery);
-  addRoad('explain', 'Explanation', true);
   addRoad('vocab', 'Vocabulary', c.vocab);
-  addRoad('visual', 'Visual model', intro || t.model);
+  addRoad('explain', 'Explanation', true);
+  addRoad('visual', 'Visual model', intro || model);
   addRoad('examples', 'Examples', true);
   addRoad('practice', 'Practice', true);
   addRoad('assignment', 'Assignment', true);
   addRoad('retrieval', 'Retrieval', c.retrieval);
   const roadmap = road.length ? `<div class="hf-roadmap" aria-label="Chapter sections">${road.join('')}</div>` : '';
-  const visualParts = [intro, t.model ? `<div class="model">${t.model}</div>` : ''].filter(Boolean).join('');
+  const visualParts = [intro, model ? `<div class="model">${model}</div>` : ''].filter(Boolean).join('');
 
   const S = [];
   if (c.hook) S.push(`<div class="hf-hook"><span class="hf-spark">&#10022;</span><span>${c.hook}</span></div>`);
@@ -190,8 +387,10 @@ function renderChapterBody(t, group, prev, next) {
   if (c.goals) S.push(`<section class="hf-sec goals" data-section="goals"><div class="hf-tag">&#127919; By the end you can</div><ul class="hf-goals">${c.goals.map(g => `<li>${g}</li>`).join('')}</ul></section>`);
   if (c.prereq) S.push(`<section class="hf-sec prereq" data-section="prereq"><div class="hf-tag">&#9989; Before you start</div><ul class="hf-list">${c.prereq.map(p => `<li>${p}</li>`).join('')}</ul></section>`);
   if (c.discovery) S.push(`<section class="hf-sec discovery" data-section="discovery"><div class="hf-tag">&#128302; Discover &mdash; predict first</div><p>${c.discovery.prompt}</p><button class="hf-reveal">Reveal</button><div class="hf-hidden"><p>${c.discovery.answer}</p></div></section>`);
-  S.push(`<section class="hf-sec explain" data-section="explain"><div class="hf-tag">&#128214; Read the chapter</div><p class="hf-sub">${t.idea}</p><div class="lesson">${lessonHtml}</div>${t.why ? `<div class="why">${t.why}</div>` : ''}${t.watchout ? `<div class="watchout"><span class="wtag">&#9888; Watch out</span>${t.watchout}</div>` : ''}</section>`);
+  // Vocabulary now renders BEFORE the explanation: new terms used in the Lesson prose are defined
+  // here first, instead of a strictly-linear reader meeting the word before its formal definition.
   if (c.vocab) S.push(`<section class="hf-sec vocab" data-section="vocab"><div class="hf-tag">&#128218; Key words</div><dl class="hf-vocab">${c.vocab.map(v => `<div class="vrow"><dt>${v[0]}</dt><dd>${v[1]}</dd></div>`).join('')}</dl></section>`);
+  S.push(`<section class="hf-sec explain" data-section="explain"><div class="hf-tag">&#128214; Read the chapter</div><p class="hf-sub">${t.idea}</p><div class="lesson">${lessonHtml}</div>${t.why ? `<div class="why">${t.why}</div>` : ''}${t.watchout ? `<div class="watchout"><span class="wtag">&#9888; Watch out</span>${t.watchout}</div>` : ''}</section>`);
   if (visualParts) S.push(`<section class="hf-sec visual" data-section="visual"><div class="hf-tag">&#128202; Visual model</div><p class="hf-sub">Use the diagram before calculating. The visual should make the structure easier to see.</p>${visualParts}</section>`);
 
   if (dynamic) {
@@ -369,6 +568,7 @@ function renderAboutPage() {
 
 function run() {
   const { CURRICULUM, CH, ORDER } = loadData();
+  applyContentFixes(CURRICULUM, CH);
   const ORDER_IDX = {}; ORDER.forEach((o, i) => (ORDER_IDX[o.id] = i));
 
   fs.mkdirSync(TOPICS_DIR, { recursive: true });

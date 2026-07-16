@@ -35,13 +35,21 @@
     g += q(c + o, c - o, 'I', '(+, +)') + q(c - o, c - o, 'II', '(−, +)') + q(c - o, c + o, 'III', '(−, −)') + q(c + o, c + o, 'IV', '(+, −)');
     return '<svg class="viz" viewBox="0 0 ' + S + ' ' + S + '" width="250" role="img" aria-label="four quadrants">' + g + '</svg>';
   }
-  function rightTri(aL, bL, cL) {
+  // orient (0-3) rotates/mirrors the triangle so the right angle and hypotenuse aren't always in
+  // the same visual corner — real test diagrams vary this, and always drawing it the same way was
+  // letting learners practise spotting the hypotenuse in only one fixed layout.
+  function rightTri(aL, bL, cL, orient) {
     var W = 230, H = 175, ox = 36, oy = 142, aw = 150, bh = 100;
-    var g = '<polygon class="fig-shape" points="' + ox + ',' + oy + ' ' + (ox + aw) + ',' + oy + ' ' + ox + ',' + (oy - bh) + '"/>';
-    g += '<path class="fig-ra" d="M' + (ox + 14) + ',' + oy + ' L' + (ox + 14) + ',' + (oy - 14) + ' L' + ox + ',' + (oy - 14) + '"/>';
-    g += '<text class="fig-txt" text-anchor="middle" x="' + (ox + aw / 2) + '" y="' + (oy + 18) + '">' + aL + '</text>';
-    g += '<text class="fig-txt" text-anchor="end" x="' + (ox - 6) + '" y="' + (oy - bh / 2 + 4) + '">' + bL + '</text>';
-    g += '<text class="fig-txt" text-anchor="start" x="' + (ox + aw / 2 + 6) + '" y="' + (oy - bh / 2 - 4) + '">' + cL + '</text>';
+    var mirrorX = orient === 1 || orient === 3, flipY = orient === 2 || orient === 3;
+    var X = function (x) { return mirrorX ? W - x : x; };
+    var Y = function (y) { return flipY ? H - y : y; };
+    var corner = [X(ox), Y(oy)], right = [X(ox + aw), Y(oy)], top = [X(ox), Y(oy - bh)];
+    var raH = mirrorX ? -14 : 14, raV = flipY ? 14 : -14;
+    var g = '<polygon class="fig-shape" points="' + corner.join(',') + ' ' + right.join(',') + ' ' + top.join(',') + '"/>';
+    g += '<path class="fig-ra" d="M' + (X(ox) + raH) + ',' + Y(oy) + ' L' + (X(ox) + raH) + ',' + (Y(oy) + raV) + ' L' + X(ox) + ',' + (Y(oy) + raV) + '"/>';
+    g += '<text class="fig-txt" text-anchor="middle" x="' + X(ox + aw / 2) + '" y="' + (Y(oy) + (flipY ? -10 : 18)) + '">' + aL + '</text>';
+    g += '<text class="fig-txt" text-anchor="' + (mirrorX ? 'start' : 'end') + '" x="' + (X(ox) + (mirrorX ? 8 : -6)) + '" y="' + Y(oy - bh / 2 + 4) + '">' + bL + '</text>';
+    g += '<text class="fig-txt" text-anchor="' + (mirrorX ? 'end' : 'start') + '" x="' + (X(ox + aw / 2) + (mirrorX ? -8 : 8)) + '" y="' + (Y(oy - bh / 2) + (flipY ? 14 : -6)) + '">' + cL + '</text>';
     return '<svg class="viz" viewBox="0 0 ' + W + ' ' + H + '" width="225" role="img" aria-label="right-angled triangle">' + g + '</svg>';
   }
   function triFig(a, b, cc) {
@@ -219,18 +227,18 @@
     pythagoras: {
       easy: function (r) {
         var t = pick(r, [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [7, 24, 25], [20, 21, 29], [12, 16, 20], [10, 24, 26], [9, 40, 41], [15, 20, 25], [18, 24, 30]]), a = t[0], b = t[1], c = t[2];
-        return { q: 'A right-angled triangle has legs ' + M(a + ' cm') + ' and ' + M(b + ' cm') + '. Find the hypotenuse.', fig: rightTri(a + ' cm', b + ' cm', '?'),
+        return { q: 'A right-angled triangle has legs ' + M(a + ' cm') + ' and ' + M(b + ' cm') + '. Find the hypotenuse.', fig: rightTri(a + ' cm', b + ' cm', '?', ri(r, 0, 3)),
           steps: ['Pythagoras: c² = a² + b².', 'c² = ' + a + '² + ' + b + '² = ' + a * a + ' + ' + b * b + ' = ' + M(a * a + b * b) + '.', 'c = √' + (a * a + b * b) + ' = ' + M(c + ' cm') + '.'], ans: M(c + ' cm'), accept: [String(c)] };
       },
       medium: function (r) {
         var t = pick(r, [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [7, 24, 25], [20, 21, 29], [12, 16, 20], [10, 24, 26], [15, 20, 25]]), a = t[0], b = t[1], c = t[2];
         var known = pick(r, [a, b]), find = known === a ? b : a;
-        return { q: 'A right-angled triangle has hypotenuse ' + M(c + ' cm') + ' and one leg ' + M(known + ' cm') + '. Find the other leg.', fig: rightTri(known + ' cm', '?', c + ' cm'),
+        return { q: 'A right-angled triangle has hypotenuse ' + M(c + ' cm') + ' and one leg ' + M(known + ' cm') + '. Find the other leg.', fig: rightTri(known + ' cm', '?', c + ' cm', ri(r, 0, 3)),
           steps: ['Rearrange: leg² = c² − (known leg)².', '= ' + c + '² − ' + known + '² = ' + c * c + ' − ' + known * known + ' = ' + M(c * c - known * known) + '.', 'leg = √' + (c * c - known * known) + ' = ' + M(find + ' cm') + '.'], ans: M(find + ' cm'), accept: [String(find)] };
       },
       hard: function (r) {
         var a = ri(r, 4, 12), b = ri(r, 3, 11); if (b >= a) b = a - 1; if (b < 3) b = 3; var c = Math.round(Math.sqrt(a * a + b * b) * 10) / 10;
-        return { q: 'A right-angled triangle has legs ' + M(a + ' cm') + ' and ' + M(b + ' cm') + '. Find the hypotenuse, to 1 decimal place.', fig: rightTri(a + ' cm', b + ' cm', '?'),
+        return { q: 'A right-angled triangle has legs ' + M(a + ' cm') + ' and ' + M(b + ' cm') + '. Find the hypotenuse, to 1 decimal place.', fig: rightTri(a + ' cm', b + ' cm', '?', ri(r, 0, 3)),
           steps: ['c² = ' + a + '² + ' + b + '² = ' + a * a + ' + ' + b * b + ' = ' + M(a * a + b * b) + '.', 'c = √' + (a * a + b * b) + ' ≈ ' + M(c + ' cm') + '.'], ans: M(c + ' cm'), accept: [c.toFixed(1)] };
       }
     },
