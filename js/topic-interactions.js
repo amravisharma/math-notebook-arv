@@ -15,6 +15,10 @@
 
   function normAns(s) {
     var x = String(s).toLowerCase().trim().replace(/\s+/g, '');
+    // Answer keys use the true minus sign (− U+2212); nobody's keyboard types that. Normalise it
+    // (and the visually-identical en/em dashes some autocorrect substitutes) to a plain hyphen so
+    // "-4" and "−4" compare equal.
+    x = x.replace(/[−–—]/g, '-');
     x = x.replace(/[°º²³]/g, '').replace(/,/g, '').replace(/π/g, 'pi');
     x = x.replace(/squared|cubed/g, '');
     x = x.replace(/\$/g, '');       // "$51" and "51" are the same answer
@@ -146,23 +150,6 @@
         wrap.querySelectorAll('.tab').forEach(function (x) { x.classList.remove('on'); });
         tab.classList.add('on');
         wrap.querySelectorAll('.pane').forEach(function (p) { p.classList.toggle('on', p.dataset.lv === tab.dataset.lv); });
-        return;
-      }
-
-      // Progressive hint (Khan Academy style): reveal ONLY the first step of the working, so a
-      // stuck learner gets a nudge without the whole solution. One hint per question, available
-      // before (or after) marking.
-      var hb = e.target.closest('.hintbtn');
-      if (hb) {
-        if (hb.disabled) return;
-        var exh = hb.closest('.ex');
-        var firstStep = exh.querySelector('.sol .steps li');
-        var box = exh.querySelector('.hintbox');
-        if (firstStep && box) {
-          box.innerHTML = '<span class="htag">&#128161; Hint &mdash; the first step</span>' + firstStep.innerHTML;
-          box.classList.add('show');
-        }
-        hb.disabled = true; hb.innerHTML = '&#128161; Hint shown';
         return;
       }
 

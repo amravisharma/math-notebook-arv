@@ -50,10 +50,11 @@
 <ul class="def-list">
   <li>A <span class="term">term-to-term rule</span> tells you how to get the next term from the one before it, e.g. "add 4".</li>
   <li>A <span class="term">position-to-term rule</span> (the nth-term rule) lets you jump straight to any term &mdash; like the 100th &mdash; without listing every term before it.</li>
-  <li>The common difference in a linear sequence becomes the coefficient of n; a constant then shifts the rule to match the real first term.</li>
+  <li>The common difference in a linear sequence becomes <em>the number multiplying n</em>; a constant is then added or subtracted to shift the rule so it matches the real first term.</li>
   <li>Not every pattern grows by a constant amount &mdash; square numbers and triangular numbers grow by a changing amount each step.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Two rules</span><span class="formula">term-to-term: add the common difference<br>position-to-term: nth term = d &times; n + adjust</span></div>
+<p>Going the other way &mdash; from a sequence <em>to</em> its rule &mdash; is the direction most questions actually ask. For 7, 11, 15, 19&hellip;: the difference is always +4, so the rule starts "4n". Testing n = 1 gives 4&times;1 = 4, but the real first term is 7, so add 3: the rule is <b>4n + 3</b>. Check it: n = 2 &rarr; 4&times;2+3 = 11. &#10003;</p>
 <div class="rw-examples">
   <div class="rw-card">
     <span class="rw-tag">&#127917; Theatre seating</span>
@@ -92,16 +93,14 @@
           <ol class="steps"><li>Each new square adds 3 → rule 3n + something.</li><li>Fits term 1 with +1: 3n + 1. For 20: 3×20 + 1 = 61.</li></ol>
           <div class="answer"><span class="tag">Answer</span><span class="val"><span class="m">3n + 1; 61 sticks</span></span></div>
         </article></div></section>
-  <section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Stuck? Take a Hint &mdash; it reveals just the first step. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs"><button class="tab on" data-lv="Easy">Easy<span class="n">10</span></button><button class="tab " data-lv="Medium">Medium<span class="n">10</span></button><button class="tab " data-lv="Hard">Hard<span class="n">10</span></button></div><div class="pane on" data-lv="Easy"><div class="ex" data-key="patterns|easy|0" data-tid="patterns">
+  <section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs"><button class="tab on" data-lv="Easy">Easy<span class="n">10</span></button><button class="tab " data-lv="Medium">Medium<span class="n">10</span></button><button class="tab " data-lv="Hard">Hard<span class="n">10</span></button></div><div class="pane on" data-lv="Easy"><div class="ex" data-key="patterns|easy|0" data-tid="patterns">
           <div class="ex-top"><span class="num">1</span><div class="q">Write the next two terms: <span class="m">3, 6, 9, 12</span>, …</div></div>
           
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -117,10 +116,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -136,10 +133,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -155,10 +150,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -174,10 +167,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -193,10 +184,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -212,10 +201,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -231,10 +218,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -250,10 +235,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -269,10 +252,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -288,10 +269,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -307,10 +286,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -326,10 +303,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -345,10 +320,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -364,10 +337,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -383,10 +354,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -402,10 +371,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -421,10 +388,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -440,10 +405,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -459,10 +422,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -478,10 +439,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -497,10 +456,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -516,10 +473,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -535,10 +490,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -554,10 +507,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -573,10 +524,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -592,10 +541,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -611,10 +558,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -630,10 +575,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -649,10 +592,8 @@
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>

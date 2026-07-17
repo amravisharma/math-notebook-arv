@@ -327,6 +327,128 @@ function applyContentFixes(CURRICULUM, CH) {
   if (pa && pa.model && pa.model.includes('viewBox="0 0 170 90"')) {
     pa.model = pa.model.replace('viewBox="0 0 170 90"', 'viewBox="0 0 170 100"').replace('<text x="85" y="86"', '<text x="85" y="96"');
   }
+
+  // --- Round-2 educational review follow-up (see math-notebook-review-round2 artifact) ---
+  // Vocabulary gaps: terms used in the expanded lessons/practice but never formally defined.
+  const pushVocab = (id, term, def) => {
+    const c = CH[id];
+    if (c && c.vocab && !c.vocab.some((v) => v[0] === term)) c.vocab.push([term, def]);
+  };
+  pushVocab('fractions', 'reciprocal', 'a fraction flipped upside down — multiply by it instead of dividing');
+  pushVocab('factors', 'composite', 'a number with more than two factors — not prime, and not 1');
+  pushVocab('percentages', 'base', 'the original amount a percentage is taken of');
+  pushVocab('volume', 'net', 'a solid unfolded flat, showing every face at once');
+
+  // Fractions: division of fractions had only 1 item in 30 (Hard[8]) against 4 multiplication
+  // items — replace 2 of the multiplication duplicates with division, one framed concretely
+  // ("how many quarters fit?") matching the new lesson worked example, one fraction ÷ fraction.
+  const mixedFracR2 = (n, d) => `<span class="frac"><span class="n">${n}</span><span class="d">${d}</span></span>`;
+  if (frac.hard[4]) {
+    frac.hard[4] = {
+      q: `How many quarters fit into 3? Work out 3 &divide; ${mixedFracR2(1, 4)}.`,
+      steps: [`Dividing by a fraction asks "how many of these fit?" &mdash; flip and multiply: 3 &times; ${mixedFracR2(4, 1)}.`, `= 12.`],
+      ans: `12`
+    };
+  }
+  if (frac.hard[7]) {
+    frac.hard[7] = {
+      q: `Divide ${mixedFracR2(2, 3)} &divide; ${mixedFracR2(1, 6)}.`,
+      steps: [`Flip the second fraction and multiply: ${mixedFracR2(2, 3)} &times; ${mixedFracR2(6, 1)}.`, `= 12/3 = 4.`],
+      ans: `4`
+    };
+  }
+
+  // Percentages: the only "reverse" item (Hard[8]: "15% of a number is 45") is abstract — no
+  // "sale price after a discount, find the original" item existed, the direction real life asks
+  // most often. Replace 2 of the 3 near-duplicate "increases by X%, find new value" items.
+  const pct = byId.percentages;
+  if (pct.hard[5]) {
+    pct.hard[5] = {
+      q: `A jacket is on sale for <span class="m">$60</span> after <span class="m">25%</span> off. What was the original price?`,
+      steps: [`The sale price is 100% &minus; 25% = 75% of the original.`, `Original = 60 &divide; 0.75 = <span class="m">$80</span>.`],
+      ans: `<span class="m">$80</span>`
+    };
+  }
+  if (pct.hard[6]) {
+    pct.hard[6] = {
+      q: `After a <span class="m">20%</span> pay rise, Mia earns <span class="m">$480</span> a week. What did she earn before the rise?`,
+      steps: [`$480 is 100% + 20% = 120% of the original wage.`, `Original = 480 &divide; 1.2 = <span class="m">$400</span>.`],
+      ans: `<span class="m">$400</span>`
+    };
+  }
+
+  // Place value: no item exercised a rounding "carry" across place columns, and none asked for a
+  // numeral written from words with an internal zero (the exact case that hides the zero-as-
+  // placeholder idea). Replace 2 of the 4 near-identical "largest/smallest digit" items.
+  const pv = byId['place-value'];
+  if (pv.hard[2]) {
+    pv.hard[2] = {
+      q: `Round <span class="m">9996</span> to the nearest 10.`,
+      steps: [`Look at the ones digit: 6.`, `6 is 5 or more, so round up &mdash; this carries all the way across: 9996 &rarr; <span class="m">10 000</span>.`],
+      ans: `<span class="m">10 000</span>`
+    };
+  }
+  if (pv.hard[3]) {
+    pv.hard[3] = {
+      q: `Write "six thousand and five" as a numeral.`,
+      steps: [`Six thousand is 6000.`, `"And five" adds 5 ones, but the hundreds and tens columns are empty &mdash; don't drop those zeros: <span class="m">6005</span>.`],
+      ans: `<span class="m">6005</span>`
+    };
+  }
+
+  // Ratios: rate half of "Ratios & Rates" had no best-buy/unit-price comparison despite the
+  // chapter's own real-world blurb promising one. Replace 1 of the 3 near-duplicate "differ by n"
+  // items.
+  const rat = byId.ratios;
+  if (rat.hard[6]) {
+    rat.hard[6] = {
+      q: `Which is better value: <span class="m">500 g</span> of rice for <span class="m">$4.50</span>, or <span class="m">750 g</span> for <span class="m">$6.30</span>?`,
+      steps: [`Unit price A: $4.50 &divide; 500 = $0.009 per gram (0.9c/g).`, `Unit price B: $6.30 &divide; 750 = $0.0084 per gram (0.84c/g).`, `B is cheaper per gram, so it is better value.`],
+      ans: `750 g for $6.30`
+    };
+  }
+
+  // Expressions: negative coefficients outside a bracket never appeared in the bank — the first
+  // time a student meets −2(x − 3) would be in a test. Replace one simpler multiplicative item.
+  const expr = byId.expressions;
+  if (expr.hard[8]) {
+    expr.hard[8] = {
+      q: `Expand and simplify <span class="m">&minus;3(x &minus; 4)</span>.`,
+      steps: [`Multiply every term inside by &minus;3: &minus;3&times;x = &minus;3x, and &minus;3&times;(&minus;4) = +12.`, `&minus;3(x &minus; 4) = <span class="m">&minus;3x + 12</span>.`],
+      ans: `<span class="m">−3x + 12</span>`
+    };
+  }
+
+  // Inequalities: every item solves for x, but none directly tests whether a given boundary value
+  // is itself part of the solution — the exact question the ride-height scenario raises. Replace
+  // 2 of the 10 near-duplicate "solve a 2-step inequality" Medium items.
+  const ineq = byId.inequalities;
+  if (ineq.medium[4]) {
+    ineq.medium[4] = {
+      q: `A charity asks for donations of at least $15 (<span class="m">d &ge; 15</span>). Is a donation of exactly $15 accepted?`,
+      steps: [`&ge; means "greater than OR equal to" &mdash; the boundary value is included.`, `$15 satisfies d &ge; 15, so it IS accepted.`],
+      ans: `Yes`
+    };
+  }
+  if (ineq.medium[8]) {
+    ineq.medium[8] = {
+      q: `A lift has a strict weight limit: total weight must be under 500 kg (<span class="m">w &lt; 500</span>). Is exactly 500 kg allowed?`,
+      steps: [`&lt; means strictly less than &mdash; the boundary value is NOT included.`, `500 is not less than 500, so exactly 500 kg is NOT allowed.`],
+      ans: `No`
+    };
+  }
+
+  // Statistics: an even-count median item existed only once, in the Hard tier — Medium (where
+  // mean/median are first practised together) used odd-count (5-value) data in all 10 items, so a
+  // learner could complete the tier without ever averaging two middle values.
+  const stats = byId.statistics;
+  if (stats.medium[9]) {
+    stats.medium[9] = {
+      q: `For <span class="m">20, 6, 14, 8</span>, find the mean and median (even count).`,
+      steps: [`Mean: (20+6+14+8) &divide; 4 = 48 &divide; 4 = 12.`, `Median: sorted is 6, 8, 14, 20 &mdash; with 4 values, average the middle two: (8+14) &divide; 2 = 11.`],
+      ans: `mean 12, median 11`
+    };
+  }
 }
 
 // --- 3. Shared page shell ---
@@ -425,7 +547,7 @@ function renderChapterBody(t, group, prev, next) {
 
   if (dynamic) {
     S.push(`<section class="hf-sec worked" data-section="examples"><div class="hf-tag">&#9998; Worked examples across scenarios</div><p class="hf-sub">Read these like a teacher modelling the method: one basic case, one mixed case, and one harder transfer case.</p><div id="dyn-worked">Loading&hellip;</div></section>`);
-    S.push(`<section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Stuck? Take a Hint &mdash; it reveals just the first step. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs" id="dyn-tabs"></div><div id="dyn-panes"></div></section>`);
+    S.push(`<section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs" id="dyn-tabs"></div><div id="dyn-panes"></div></section>`);
     S.push(`<section class="hf-sec assignment" data-section="assignment"><div class="hf-tag">&#128221; Assignment work</div><p class="hf-sub">Do these on paper after the guided practice. They mix fluency, reasoning, application, challenge and reflection question types.</p><div class="assignment-grid" id="dyn-assignment"></div><div class="assignment-part"><h4>Part D - Explain and create</h4><ul><li>Write a short paragraph explaining the main idea of ${t.name} in your own words.</li><li>Create one new ${t.name} question, solve it, and show the checking step.</li><li>Describe one mistake a student might make and how to fix it.</li></ul></div></section>`);
   } else {
     const LEVELS = [['Easy', 'easy'], ['Medium', 'medium'], ['Hard', 'hard']];
@@ -440,10 +562,8 @@ function renderChapterBody(t, group, prev, next) {
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
-            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
-          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -468,7 +588,7 @@ function renderChapterBody(t, group, prev, next) {
           <div class="answer"><span class="tag">Answer</span><span class="val">${e.ans}</span></div>
         </article>`).join('')}</div></section>`);
     }
-    S.push(`<section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Stuck? Take a Hint &mdash; it reveals just the first step. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs">${tabs}</div>${panes}</section>`);
+    S.push(`<section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs">${tabs}</div>${panes}</section>`);
     const assignmentItems = (items, start, count) => (items || []).slice(start, start + count).map(e => `<li>${e.q}</li>`).join('');
     const part = (title, items, type = 'ol') => items ? `<div class="assignment-part"><h4>${title}</h4><${type}>${items}</${type}></div>` : '';
     S.push(`<section class="hf-sec assignment" data-section="assignment"><div class="hf-tag">&#128221; Assignment work</div>

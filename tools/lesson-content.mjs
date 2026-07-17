@@ -30,6 +30,42 @@ export function pizzaSVG(total, coloredCount, opts) {
   return `<svg viewBox="0 0 124 124" width="124" height="124" role="img" aria-label="A pizza cut into ${total} slices, ${coloredCount} of one topping and ${total - coloredCount} of the other">${paths}</svg>`;
 }
 
+// A cuboid's net (unfolded flat), coloured by matching face-pair — top/bottom, front/back, left/
+// right — so the "3 pairs, add, then double" surface-area method has a picture to point at.
+export function cuboidNetSVG(l, w, h) {
+  const s = 14;
+  const L = l * s, W = w * s, H = h * s;
+  const totalW = 2 * W + 2 * L, totalH = 2 * W + H;
+  const rowMid = W, rowBot = W + H, colRight = W + L, colBack = W + L + W;
+  const colorPair = ['#CDEBD9', '#C7D0F2', '#FCE7B8'];
+  const face = (x, y, fw, fh, fill, label) =>
+    `<rect x="${x}" y="${y}" width="${fw}" height="${fh}" fill="${fill}" stroke="#8A90A8" stroke-width="1.2"/>` +
+    `<text x="${x + fw / 2}" y="${y + fh / 2 + 4}" text-anchor="middle" font-family="Space Mono" font-size="10" font-weight="700" fill="#20263F">${label}</text>`;
+  let g = '';
+  g += face(W, 0, L, W, colorPair[0], 'TOP');
+  g += face(0, rowMid, W, H, colorPair[2], 'L');
+  g += face(W, rowMid, L, H, colorPair[1], 'FRONT');
+  g += face(colRight, rowMid, W, H, colorPair[2], 'R');
+  g += face(colBack, rowMid, L, H, colorPair[1], 'BACK');
+  g += face(W, rowBot, L, W, colorPair[0], 'BOTTOM');
+  return `<svg viewBox="0 0 ${totalW} ${totalH}" width="${Math.min(totalW, 210)}" role="img" aria-label="Net of a ${l} by ${w} by ${h} cuboid unfolded into six faces">${g}</svg>`;
+}
+
+// Slice a circle into thin wedges and lay them in a zigzag strip — the classic argument for why
+// A = πr²: the strip approximates a rectangle of height r and width half the circumference (πr).
+export function wedgeRearrangeSVG() {
+  const W = 168, H = 64, n = 8, b = W / n;
+  let g = '';
+  for (let i = 0; i < n; i++) {
+    const x0 = i * b, x1 = (i + 1) * b, xm = x0 + b / 2, up = i % 2 === 0;
+    const pts = up ? `${x0},${H} ${x1},${H} ${xm},0` : `${x0},0 ${x1},0 ${xm},${H}`;
+    g += `<polygon points="${pts}" fill="${up ? '#E4572E' : '#FCE7B8'}" stroke="#fff" stroke-width="1"/>`;
+  }
+  g += `<text x="${W / 2}" y="${H + 16}" text-anchor="middle" font-family="Space Mono" font-size="10" fill="#5A6178">width &asymp; half the circumference (&pi;r)</text>`;
+  g += `<text x="${W / 2}" y="${H + 29}" text-anchor="middle" font-family="Space Mono" font-size="10" fill="#5A6178">height &asymp; r &nbsp;&rarr;&nbsp; area &asymp; &pi;r &times; r = &pi;r&sup2;</text>`;
+  return `<svg viewBox="0 -4 ${W} ${H + 38}" width="${W}" role="img" aria-label="A circle sliced into wedges and rearranged into a zigzag strip that approximates a rectangle">${g}</svg>`;
+}
+
 export const LESSON_EXPANSIONS = {
 
   conversions: `
@@ -39,6 +75,7 @@ export const LESSON_EXPANSIONS = {
   <li>A <span class="term">rate</span> combines two different kinds of unit, like speed (distance per time) or a price per kilogram.</li>
   <li>speed = distance &divide; time, which rearranges to distance = speed &times; time, or time = distance &divide; speed.</li>
   <li>Always make units match before calculating &mdash; mixing minutes with hours, or cm with m, is the classic slip.</li>
+  <li>Speed itself has two common "outfits": km/h and m/s. To go from km/h to m/s, divide by 3.6 (since 1000 m &divide; 3600 s = 1 &divide; 3.6) &mdash; so 90 km/h = 90 &divide; 3.6 = <b>25 m/s</b>.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Speed relationship</span><span class="formula">speed = distance &divide; time (rearranges three ways)</span></div>
 <div class="rw-examples">
@@ -54,6 +91,10 @@ export const LESSON_EXPANSIONS = {
     <span class="rw-tag">&#128138; Reading a medicine dose</span>
     <p>A label says 5 mg per kg of body weight. For a 20 kg child, that's 5 &times; 20 = <b>100 mg</b> &mdash; mixing up mg and g here could mean a dose 1000 times too strong.</p>
   </div>
+  <div class="rw-card">
+    <span class="rw-tag">&#128692; A cyclist's mixed-unit speed</span>
+    <p>A cyclist rides 24 km in 30 minutes. 30 minutes is <b>0.5 hours</b> &mdash; convert the time first: speed = 24 &divide; 0.5 = <b>48 km/h</b>. Dividing 24 by "30" (forgetting the unit switch) gives a wrong, much smaller answer.</p>
+  </div>
 </div>`,
 
   statistics: `
@@ -64,6 +105,8 @@ export const LESSON_EXPANSIONS = {
   <li>The <span class="term">mode</span> is the value that appears most often.</li>
   <li>The <span class="term">range</span> (max &minus; min) describes how spread out the data is, not where its centre lies.</li>
   <li>The mean uses every value, so one huge outlier can drag it away from what's typical &mdash; the median ignores outliers and is often a fairer summary.</li>
+  <li>The mean does not have to be one of the actual data values. For 2, 3, 3, 10 the mean is 4.5 &mdash; a number that appears nowhere in the list.</li>
+  <li>With an <em>even</em> number of values, there is no single middle one &mdash; the median is the average of the two middle values once the data is in order.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Centre &amp; spread</span><span class="formula">mean = fair share (sum &divide; count)<br>median = middle<br>mode = most common<br>range = max &minus; min</span></div>
 <div class="rw-examples">
@@ -87,6 +130,8 @@ export const LESSON_EXPANSIONS = {
   <li>The <span class="term">sample space</span> is the full list of equally likely outcomes for an experiment &mdash; get this list right before calculating anything.</li>
   <li>For equally likely outcomes: <span class="term">P(event) = favourable outcomes &divide; total outcomes</span>.</li>
   <li>The complement rule: P(not A) = 1 &minus; P(A) &mdash; this often turns a hard "at least one" question into an easy one.</li>
+  <li>A probability is not tested by one trial. "30% chance of rain" not raining doesn't make the forecast wrong &mdash; probabilities are checked over <em>many</em> repeats, comparing the predicted probability to the <span class="term">relative frequency</span> (how often it actually happened).</li>
+  <li>Each toss, roll or spin is independent of the last. If a coin has landed tails five times running, heads is still exactly 50% likely next time &mdash; it is never "due".</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Core formulas</span><span class="formula">P(event) = favourable &divide; total<br>P(not A) = 1 &minus; P(A)</span></div>
 <div class="rw-examples">
@@ -111,6 +156,7 @@ export const LESSON_EXPANSIONS = {
   <li>An enlargement multiplies every length by the scale factor k.</li>
   <li>Area does <em>not</em> scale by k &mdash; it scales by <span class="hl">k&sup2;</span>.</li>
   <li>Double every side of a shape (scale factor 2) and its area becomes <b>4 times</b> bigger (2&sup2;), not 2 times.</li>
+  <li>By convention, if a question does not say which way to rotate, mathematicians rotate <span class="term">anticlockwise</span> &mdash; the same direction as turning a clock's hands backwards.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Enlargement</span><span class="formula">lengths &times; k &rarr; shape is SIMILAR<br>area &times; k&sup2;</span></div>
 <div class="rw-examples">
@@ -135,6 +181,7 @@ export const LESSON_EXPANSIONS = {
   <li>The <span class="term">converse</span> also works: if a&sup2; + b&sup2; = c&sup2; is true for a triangle's three sides, that triangle must have a right angle &mdash; the theorem can <em>test</em> a triangle, not just measure one.</li>
   <li>Whole-number sets like <span class="hl teal">3-4-5</span> and 5-12-13 satisfy the rule exactly and are worth recognising instantly.</li>
   <li>The rule only works for right-angled triangles, and c must always be the longest side, opposite the right angle.</li>
+  <li>When an answer is not a whole number, keep the full decimal through every step and round only at the very end &mdash; rounding in the middle can shift the final answer.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Theorem &amp; converse</span><span class="formula">a&sup2; + b&sup2; = c&sup2;<br>and if a&sup2;+b&sup2;=c&sup2;, the angle IS right</span></div>
 <div class="rw-examples">
@@ -173,12 +220,18 @@ export const LESSON_EXPANSIONS = {
     <span class="rw-tag">&#127939; A running track's lanes</span>
     <p>A 400 m track's lanes are curved. Runners in outer lanes start further forward, because a bigger radius means a bigger circumference (C = 2&pi;r) to cover the same number of laps fairly.</p>
   </div>
+  <div class="rw-card">
+    ${wedgeRearrangeSVG()}
+    <span class="rw-tag">&#129921; Why A = &pi;r&sup2;?</span>
+    <p>Slice a circle into thin wedges and lay them out alternating point-up, point-down. The zigzag strip is roughly a rectangle: height r, width half the circumference (&pi;r) &mdash; area = &pi;r &times; r = &pi;r&sup2;.</p>
+  </div>
 </div>`,
 
   'perimeter-area': `
 <p><span class="term">Perimeter</span> is a one-dimensional length around the edge of a shape; <span class="term">area</span> is a two-dimensional covering, counted in <span class="hl">unit squares</span>.</p>
 <ul class="def-list">
   <li>Key area formulas: rectangle = length &times; width; triangle = &frac12; &times; base &times; height (exactly half its surrounding rectangle); parallelogram = base &times; height.</li>
+  <li>For a triangle, "height" always means the <span class="term">perpendicular height</span> &mdash; measured straight up from the base at a right angle &mdash; never the slanted side, even when the slanted side looks like the obvious measurement to use.</li>
   <li>A <span class="term">compound shape</span> (made of simpler shapes joined together) is found by splitting it into rectangles and triangles, then adding or subtracting their areas.</li>
   <li>Perimeter and area measure genuinely different things &mdash; a shape can have a bigger perimeter but a <em>smaller</em> area than another shape.</li>
 </ul>
@@ -202,7 +255,8 @@ export const LESSON_EXPANSIONS = {
 <p><span class="term">Volume</span> measures how much space a 3-D solid fills, in <span class="hl">cubic</span> units; <span class="term">surface area</span> is the total area of all its flat faces.</p>
 <ul class="def-list">
   <li>For any prism (including a cuboid), volume = base area &times; height &mdash; how many unit cubes tile the base, times how many layers stack up.</li>
-  <li>Surface area is the material needed to wrap or cover a solid completely &mdash; the sum of every face's area.</li>
+  <li>Surface area is the material needed to wrap or cover a solid completely &mdash; the sum of every face's area. Unfold a box flat and you get its <span class="term">net</span>: every face laid out where you can see and add up all six at once.</li>
+  <li>A cuboid's 6 faces come in <b>3 matching pairs</b> (top&amp;bottom, front&amp;back, left&amp;right) &mdash; find one area from each pair, add the three, then double the total.</li>
   <li>Scaling a 3-D shape affects volume differently to area: double every edge of a cube and its volume becomes <b>8 times</b> bigger (2&sup3;), not 2 times.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Prism &amp; capacity</span><span class="formula">V = base area &times; height<br>1 litre = 1000 cm&sup3;</span></div>
@@ -219,6 +273,12 @@ export const LESSON_EXPANSIONS = {
     <span class="rw-tag">&#127873; Wrapping a gift</span>
     <p>Wrapping paper needed is the box's <b>surface area</b> (every face added up); how much it can hold is its <b>volume</b> &mdash; two different questions about the very same box.</p>
   </div>
+  <div class="rw-card">
+    ${cuboidNetSVG(4, 3, 2)}
+    <span class="rw-tag">&#128230; Unfolding a cereal box (4 &times; 3 &times; 2 cm)</span>
+    <p>Top &amp; bottom: 4&times;3 = 12 cm&sup2; each. Front &amp; back: 4&times;2 = 8 cm&sup2; each. Left &amp; right: 3&times;2 = 6 cm&sup2; each.</p>
+    <p>SA = 2&times;(12 + 8 + 6) = 2&times;26 = <b>52 cm&sup2;</b> &mdash; the flattened net above shows exactly these 6 pieces.</p>
+  </div>
 </div>`,
 
   equations: `
@@ -228,6 +288,7 @@ export const LESSON_EXPANSIONS = {
   <li>Every step must be a "legal move": add, subtract, multiply or divide <span class="hl">both sides equally</span> so the balance stays true.</li>
   <li>To undo an operation, apply its opposite (its <span class="term">inverse</span>) &mdash; undo in the reverse order to how the expression was built.</li>
   <li>Always check your answer by substituting it back into the original equation &mdash; both sides should come out equal.</li>
+  <li>Every equation in this chapter has the unknown on just one side. Equations with the unknown on <em>both</em> sides (like x + 3 = 2x &minus; 1) use the same balance idea with one extra move, and come later.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Legal moves</span><span class="formula">do the SAME thing to both sides<br>undo operations in reverse</span></div>
 <div class="rw-examples">
@@ -252,6 +313,7 @@ export const LESSON_EXPANSIONS = {
   <li>A strict inequality (&lt;, &gt;) uses an open circle on a number line &mdash; the endpoint itself is not included.</li>
   <li>&le; or &ge; uses a closed, filled circle &mdash; the endpoint itself is included.</li>
   <li>Many real limits are ranges, not single numbers: a maximum, a minimum, or an allowed band of values.</li>
+  <li>Always check the boundary itself: with &ge; or &le;, the boundary value <em>is</em> a solution; with a strict &gt; or &lt;, it is <em>not</em>.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">The exception</span><span class="formula">&times; or &divide; by a NEGATIVE &rarr; reverse the inequality sign</span></div>
 <div class="rw-examples">
@@ -278,6 +340,8 @@ export const LESSON_EXPANSIONS = {
   <li>Lines with the same gradient are parallel &mdash; they climb at the same rate but cross the y-axis at different points.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Line equation</span><span class="formula">y = mx + c<br>m = gradient = rise &divide; run<br>c = y-intercept</span></div>
+<p>To draw y = 2x &minus; 1 by hand: pick three easy x-values, substitute each into the equation, then plot the (x, y) pairs and join them with a straight line.</p>
+<div class="kbox"><span class="kbox-tag">y = 2x &minus; 1, worked point by point</span><span class="formula">x=0: y=2(0)&minus;1=&minus;1 &rarr; (0,&minus;1)<br>x=1: y=2(1)&minus;1=1 &rarr; (1,1)<br>x=2: y=2(2)&minus;1=3 &rarr; (2,3)</span></div>
 <div class="rw-examples">
   <div class="rw-card">
     <span class="rw-tag">&#128241; Comparing phone plans</span>
@@ -300,6 +364,7 @@ export const LESSON_EXPANSIONS = {
   <li>Angles on a straight line always add to 180&deg;; angles all the way around a point always add to 360&deg;.</li>
   <li>The angles inside any triangle always add to 180&deg;.</li>
   <li>When a line crosses a pair of parallel lines: corresponding ("F") angles are equal, alternate ("Z") angles are equal, and co-interior ("C") angles add to 180&deg;.</li>
+  <li>An angle's size depends only on how much it has turned &mdash; not on how long its two arms are drawn. A tiny angle with long arms and a big angle with short arms can look confusingly similar; always check the gap between the arms, not their length.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Key facts</span><span class="formula">straight line = 180&deg;<br>point = 360&deg;<br>triangle = 180&deg;<br>vertical angles equal</span></div>
 <div class="rw-examples">
@@ -313,7 +378,7 @@ export const LESSON_EXPANSIONS = {
   </div>
   <div class="rw-card">
     <span class="rw-tag">&#129517; A ship's bearing</span>
-    <p>A ship sails on a bearing of 60&deg;, then turns to a bearing of 150&deg; &mdash; a turn of 150&deg; &minus; 60&deg; = <b>90&deg;</b>, a quarter-turn to the right.</p>
+    <p>A <span class="term">bearing</span> is an angle measured clockwise from north, always written as 3 digits (e.g. 060&deg;). A ship sails on a bearing of 60&deg;, then turns to a bearing of 150&deg; &mdash; a turn of 150&deg; &minus; 60&deg; = <b>90&deg;</b>, a quarter-turn clockwise.</p>
   </div>
 </div>`,
 
@@ -324,6 +389,7 @@ export const LESSON_EXPANSIONS = {
   <li>The interior angles of any polygon add up to <span class="term">(n &minus; 2) &times; 180&deg;</span>, where n is the number of sides.</li>
   <li>This works because any polygon can be split into (n &minus; 2) triangles from one corner, and each triangle carries 180&deg;.</li>
   <li>In a <span class="term">regular</span> polygon every side and angle is equal, so each interior angle is the total divided by n.</li>
+  <li>At every corner, the interior and exterior angles sit on a straight line: interior + exterior = 180&deg;. So the exterior-angle shortcut (360&deg; &divide; n) and the interior formula always agree &mdash; they're two routes to the same answer.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Angle sums</span><span class="formula">interior = (n &minus; 2) &times; 180&deg;<br>exterior angles always total 360&deg;</span></div>
 <div class="rw-examples">
@@ -370,6 +436,7 @@ export const LESSON_EXPANSIONS = {
 <p>A <span class="term">factor</span> divides a whole number exactly, with no remainder; a <span class="term">multiple</span> is a number you land on when counting up in that number's times table.</p>
 <ul class="def-list">
   <li>A <span class="term">prime</span> number has exactly two factors: 1 and itself. 1 is <em>not</em> prime, because it only has one factor.</li>
+  <li>A <span class="term">composite</span> number has more than two factors &mdash; it is neither prime nor equal to 1. Every whole number greater than 1 is either prime or composite.</li>
   <li>Every whole number bigger than 1 breaks down into prime factors in exactly one way &mdash; its unique "atomic" fingerprint.</li>
   <li><span class="hl">HCF</span> (Highest Common Factor) is the largest number that divides two numbers exactly.</li>
   <li><span class="hl">LCM</span> (Lowest Common Multiple) is the smallest number that both numbers divide into exactly.</li>
@@ -393,7 +460,7 @@ export const LESSON_EXPANSIONS = {
   powers: `
 <p>An <span class="term">exponent</span> (or index) counts how many times the <span class="term">base</span> is multiplied by itself: 2&sup3; = 2&times;2&times;2 (which is <em>not</em> 2&times;3).</p>
 <ul class="def-list">
-  <li>Index law: when multiplying powers with the same base, add the exponents &mdash; a&#8319; &times; a&#7480; = a&#8319;&#8314;&#7480;.</li>
+  <li>Index law: when multiplying powers with the same base, <em>add</em> the exponents, never multiply them &mdash; a&#8319; &times; a&#7480; = a&#8319;&#8314;&#7480;. So 2&sup3; &times; 2&sup2; = 2&#8309; = 32, not 2&#8310; = 64.</li>
   <li>A <span class="hl">square root</span> undoes squaring &mdash; it asks "what number, multiplied by itself, gives this value?"</li>
   <li>Any base to the power 0 equals 1 (a&#8304; = 1) &mdash; a direct result of the same product rule.</li>
   <li><span class="hl teal">Scientific notation</span> writes very large or very small numbers compactly, as a value between 1 and 10 multiplied by a power of 10.</li>
@@ -419,10 +486,11 @@ export const LESSON_EXPANSIONS = {
 <ul class="def-list">
   <li>A <span class="term">term-to-term rule</span> tells you how to get the next term from the one before it, e.g. "add 4".</li>
   <li>A <span class="term">position-to-term rule</span> (the nth-term rule) lets you jump straight to any term &mdash; like the 100th &mdash; without listing every term before it.</li>
-  <li>The common difference in a linear sequence becomes the coefficient of n; a constant then shifts the rule to match the real first term.</li>
+  <li>The common difference in a linear sequence becomes <em>the number multiplying n</em>; a constant is then added or subtracted to shift the rule so it matches the real first term.</li>
   <li>Not every pattern grows by a constant amount &mdash; square numbers and triangular numbers grow by a changing amount each step.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Two rules</span><span class="formula">term-to-term: add the common difference<br>position-to-term: nth term = d &times; n + adjust</span></div>
+<p>Going the other way &mdash; from a sequence <em>to</em> its rule &mdash; is the direction most questions actually ask. For 7, 11, 15, 19&hellip;: the difference is always +4, so the rule starts "4n". Testing n = 1 gives 4&times;1 = 4, but the real first term is 7, so add 3: the rule is <b>4n + 3</b>. Check it: n = 2 &rarr; 4&times;2+3 = 11. &#10003;</p>
 <div class="rw-examples">
   <div class="rw-card">
     <span class="rw-tag">&#127917; Theatre seating</span>
@@ -443,10 +511,10 @@ export const LESSON_EXPANSIONS = {
 <ul class="def-list">
   <li>A <span class="term">term</span> is one piece of an expression, like 3x; the number in front (3) is its <span class="term">coefficient</span>.</li>
   <li>Only <span class="hl">like terms</span> &mdash; terms with exactly the same letter part &mdash; can be combined: 3x + 5x = 8x, but 3x + 2y cannot be simplified further.</li>
-  <li><span class="term">Expanding</span> a bracket means multiplying every term inside it by what's outside: a(b + c) = ab + ac.</li>
+  <li><span class="term">Expanding</span> a bracket means multiplying every term inside it by what's outside: a(b + c) = ab + ac. If the outside number is negative, every term inside flips sign: &minus;2(x &minus; 3) = &minus;2x + 6, not &minus;2x &minus; 6.</li>
   <li>Two expressions are equivalent if they give the same value for every number substituted in &mdash; a fact you can spot-check by trying a number in both.</li>
 </ul>
-<div class="kbox"><span class="kbox-tag">The engine: distributive property</span><span class="formula">a(b + c) = ab + ac &nbsp;(expanding &mdash; and, reversed, factoring)</span></div>
+<div class="kbox"><span class="kbox-tag">The engine: distributive property</span><span class="formula">a(b + c) = ab + ac &nbsp;(expanding &mdash; and, reversed, factoring)<br>&minus;2(x &minus; 3) = &minus;2x + 6 &nbsp;(a negative outside flips every sign inside)</span></div>
 <div class="rw-examples">
   <div class="rw-card">
     <span class="rw-tag">&#128241; Phone data plan</span>
@@ -495,8 +563,9 @@ export const LESSON_EXPANSIONS = {
   <li>To <span class="term">add or subtract</span> decimals, line up the decimal points so you combine same-size parts: tenths with tenths, hundredths with hundredths.</li>
   <li>To <span class="term">multiply</span> decimals, count the total decimal places in both numbers &mdash; the answer needs that many decimal places.</li>
   <li>More digits does not mean a bigger number. Compare by place value: 0.5 is bigger than 0.45, even though 0.45 has more digits.</li>
+  <li>To <span class="term">divide</span> by a decimal, multiply both numbers by 10 (or 100&hellip;) until the divisor is a whole number &mdash; this doesn't change the answer, just makes the division easier. e.g. 3.5 &divide; 0.5: multiply both by 10 &rarr; 35 &divide; 5 = <b>7</b>.</li>
 </ul>
-<div class="kbox"><span class="kbox-tag">Two rules, one reason</span><span class="formula">+ , &minus; : line up the points<br>&times; : count decimal places<br>&divide; : scale to clear the divisor</span></div>
+<div class="kbox"><span class="kbox-tag">Two rules, one reason</span><span class="formula">+ , &minus; : line up the points<br>&times; : count decimal places<br>&divide; : &times;10 both until the divisor is whole</span></div>
 <div class="rw-examples">
   <div class="rw-card">
     <span class="rw-tag">&#128181; Supermarket receipt</span>
@@ -519,7 +588,8 @@ export const LESSON_EXPANSIONS = {
   <li>The <span class="term">denominator</span> names the size of each equal part; the <span class="term">numerator</span> counts how many of those parts you have.</li>
   <li>Multiplying or dividing the top and bottom by the same number gives an <span class="term">equivalent fraction</span> &mdash; the same point on the number line, with a new name.</li>
   <li>You can only add or subtract fractions once the parts are the same size &mdash; that means finding a common denominator first.</li>
-  <li>Dividing by a fraction asks "how many of these fit?" &mdash; which is why dividing by a fraction means flipping it and multiplying (its reciprocal).</li>
+  <li>Dividing by a fraction asks "how many of these fit?" &mdash; so 2 &divide; &frac14; asks "how many quarters fit into 2?" The shortcut is to flip the second fraction (its <span class="term">reciprocal</span> &mdash; the fraction turned upside down) and multiply instead.</li>
+  <li>Multiplying does not always make things bigger. &frac12; &times; &frac13; = &frac16;, which is smaller than both &mdash; multiplying by a fraction less than 1 shrinks the amount, the opposite of multiplying by a whole number.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">The engine</span><span class="formula">Equivalent: &times;/&divide; top &amp; bottom alike<br>Add: same-size parts first<br>Multiply: across<br>Divide: &times; the reciprocal</span></div>
 <div class="rw-examples">
@@ -536,6 +606,11 @@ export const LESSON_EXPANSIONS = {
     <span class="rw-tag">&#128336; Telling the time</span>
     <p>"Quarter past" the hour is 1&frasl;4 of 60 minutes = <b>15 minutes</b>. "Half past" is 1&frasl;2 of 60 = <b>30 minutes</b>.</p>
   </div>
+  <div class="rw-card">
+    <span class="rw-tag">&#129381; Scooping flour</span>
+    <p>A jar holds 2 cups of flour. Using a &frac14;-cup scoop, how many scoops empty it? That is exactly 2 &divide; &frac14; &mdash; "how many quarters fit into 2?"</p>
+    <p>Flip and multiply: 2 &times; 4&frasl;1 = <b>8 scoops</b>. Counting scoops and dividing by a fraction are the same question.</p>
+  </div>
 </div>`,
 
   percentages: `
@@ -545,6 +620,7 @@ export const LESSON_EXPANSIONS = {
   <li>To find a percentage of an amount: <span class="hl">(percent &divide; 100) &times; amount</span>.</li>
   <li>A percentage is always taken <em>of</em> a particular amount, called the base. Change the base, and the same percentage becomes a different actual amount.</li>
   <li>Percentage changes do not simply add: a 10% rise followed by a 10% fall does <em>not</em> return you to the start, because the second 10% is of a different amount.</li>
+  <li><span class="term">Working backwards:</span> if you know the price <em>after</em> a discount and need the original, the sale price is not 100% &mdash; it is (100 &minus; discount)% of the original. Divide by that percentage (as a decimal) to undo it.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Core moves</span><span class="formula">% of amount = (% &divide; 100) &times; amount<br>change is measured against the ORIGINAL</span></div>
 <div class="rw-examples">
@@ -559,6 +635,11 @@ export const LESSON_EXPANSIONS = {
   <div class="rw-card">
     <span class="rw-tag">&#128200;&#128201; Rise then fall</span>
     <p>A $100 item rises 10% to $110, then falls 10%. 10% of $110 = $11, so it drops to <b>$99</b> &mdash; not back to $100, because the second 10% was taken of a bigger number.</p>
+  </div>
+  <div class="rw-card">
+    <span class="rw-tag">&#128281; Working out the original price</span>
+    <p>A jacket is on sale for <b>$60</b> after <b>25% off</b>. $60 is not the whole jacket &mdash; it's what's left after removing a quarter, so $60 is <b>75%</b> of the original.</p>
+    <p>Original = 60 &divide; 0.75 = <b>$80</b>. Taking 25% off $60 (giving $45) would be the wrong direction &mdash; that undoes a discount that was never applied to $60 in the first place.</p>
   </div>
 </div>`,
 
