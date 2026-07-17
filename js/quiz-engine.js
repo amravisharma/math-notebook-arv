@@ -311,7 +311,8 @@
             '<div class="ex-top"><span class="num">' + (idx + 1) + '</span><div class="q">' + e.q + '</div></div>' +
             (e.fig ? '<div class="figwrap">' + e.fig + '</div>' : '') +
             '<div class="attempt"><input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">' +
-            '<button class="markbtn">✓ Mark answer</button><button class="reveal locked">🔒 Show solution</button></div>' +
+            '<button class="markbtn">✓ Mark answer</button><button class="hintbtn">💡 Hint</button><button class="reveal locked">🔒 Show solution</button></div>' +
+            '<div class="hintbox"></div>' +
             '<div class="sol"><div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>' +
             '<div class="lead">Approach</div><p class="approach">' + approach + '</p>' +
             '<div class="lead">Working, step by step</div><ol class="steps">' + e.steps.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol>' +

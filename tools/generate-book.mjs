@@ -15,6 +15,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { LESSON_EXPANSIONS } from './lesson-content.mjs';
+import { NOTICE_WONDER, GO_FURTHER, MENTAL_TIPS, CPA_PANELS } from './enrichment-content.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, '_source', 'original-single-page.html');
@@ -253,6 +255,11 @@ function applyContentFixes(CURRICULUM, CH) {
   const byId = {};
   CURRICULUM.forEach((g) => g.topics.forEach((t) => { byId[t.id] = t; }));
 
+  // Educational-review follow-up: "Read the Chapter" was too thin to build real understanding from
+  // (one short paragraph, no worked real-world scenarios). LESSON_EXPANSIONS in lesson-content.mjs
+  // replaces t.lesson per topic with a fuller explanation plus 3 real-world example cards.
+  Object.keys(LESSON_EXPANSIONS).forEach((id) => { if (byId[id]) byId[id].lesson = LESSON_EXPANSIONS[id]; });
+
   // Decimals: fix #1 — an ordering question listed 3 numbers but two were identical (0.7 and 0.7),
   // so the answer key silently dropped one. Made the third value genuinely distinct. Both the
   // question and its answer wrap all three numbers in a single <span class="m">, so patch that
@@ -380,14 +387,17 @@ function renderChapterBody(t, group, prev, next) {
   const intro = INTRO_FIG[t.id] ? `<figure class="figwrap intro">${INTRO_FIG[t.id]()}<figcaption class="figcap">${INTRO_CAP[t.id] || ''}</figcaption></figure>` : '';
   const model = t.model || STATIC_MODELS[t.id] || '';
   addRoad('goals', 'Goals', c.goals);
+  addRoad('wonder', 'Notice', NOTICE_WONDER[t.id]);
   addRoad('discovery', 'Discover', c.discovery);
   addRoad('vocab', 'Vocabulary', c.vocab);
   addRoad('explain', 'Explanation', true);
   addRoad('visual', 'Visual model', intro || model);
+  addRoad('explore', 'Explore', true);
   addRoad('examples', 'Examples', true);
   addRoad('practice', 'Practice', true);
   addRoad('assignment', 'Assignment', true);
   addRoad('retrieval', 'Retrieval', c.retrieval);
+  addRoad('further', 'Go further', GO_FURTHER[t.id]);
   const roadmap = road.length ? `<div class="hf-roadmap" aria-label="Chapter sections">${road.join('')}</div>` : '';
   const visualParts = [intro, model ? `<div class="model">${model}</div>` : ''].filter(Boolean).join('');
 
@@ -396,16 +406,26 @@ function renderChapterBody(t, group, prev, next) {
   if (roadmap) S.push(roadmap);
   if (c.goals) S.push(`<section class="hf-sec goals" data-section="goals"><div class="hf-tag">&#127919; By the end you can</div><ul class="hf-goals">${c.goals.map(g => `<li>${g}</li>`).join('')}</ul></section>`);
   if (c.prereq) S.push(`<section class="hf-sec prereq" data-section="prereq"><div class="hf-tag">&#9989; Before you start</div><ul class="hf-list">${c.prereq.map(p => `<li>${p}</li>`).join('')}</ul></section>`);
+  // Illustrative Mathematics' "Notice and Wonder" warm-up: an open scene with two low-stakes
+  // prompts, placed BEFORE the directed Discover prediction so the learner looks before predicting.
+  const nw = NOTICE_WONDER[t.id];
+  if (nw) S.push(`<section class="hf-sec wonder" data-section="wonder"><div class="hf-tag">&#128064; Notice &amp; wonder</div><p class="hf-sub">Before any rules: just look. What do you notice? What do you wonder?</p><p class="nw-scene">${nw.scene}</p><button class="hf-reveal">Compare with a mathematician's eye</button><div class="hf-hidden"><div class="nw-grid"><div class="nw-col"><h5>You might notice&hellip;</h5><ul>${nw.notice.map(x => `<li>${x}</li>`).join('')}</ul></div><div class="nw-col"><h5>You might wonder&hellip;</h5><ul>${nw.wonder.map(x => `<li>${x}</li>`).join('')}</ul></div></div><p class="nw-tail">Hold on to those wonderings &mdash; this chapter answers most of them.</p></div></section>`);
   if (c.discovery) S.push(`<section class="hf-sec discovery" data-section="discovery"><div class="hf-tag">&#128302; Discover &mdash; predict first</div><p>${c.discovery.prompt}</p><button class="hf-reveal">Reveal</button><div class="hf-hidden"><p>${c.discovery.answer}</p></div></section>`);
   // Vocabulary now renders BEFORE the explanation: new terms used in the Lesson prose are defined
   // here first, instead of a strictly-linear reader meeting the word before its formal definition.
   if (c.vocab) S.push(`<section class="hf-sec vocab" data-section="vocab"><div class="hf-tag">&#128218; Key words</div><dl class="hf-vocab">${c.vocab.map(v => `<div class="vrow"><dt>${v[0]}</dt><dd>${v[1]}</dd></div>`).join('')}</dl></section>`);
-  S.push(`<section class="hf-sec explain" data-section="explain"><div class="hf-tag">&#128214; Read the chapter</div><p class="hf-sub">${t.idea}</p><div class="lesson">${lessonHtml}</div>${t.why ? `<div class="why">${t.why}</div>` : ''}${t.watchout ? `<div class="watchout"><span class="wtag">&#9888; Watch out</span>${t.watchout}</div>` : ''}</section>`);
-  if (visualParts) S.push(`<section class="hf-sec visual" data-section="visual"><div class="hf-tag">&#128202; Visual model</div><p class="hf-sub">Use the diagram before calculating. The visual should make the structure easier to see.</p>${visualParts}</section>`);
+  // Math Mammoth-style explicit mental-calculation strategy, appended to the chapter reading.
+  const mmtip = MENTAL_TIPS[t.id] ? `<div class="mmtip"><span class="mtag">&#9889; Mental maths strategy</span>${MENTAL_TIPS[t.id]}</div>` : '';
+  S.push(`<section class="hf-sec explain" data-section="explain"><div class="hf-tag">&#128214; Read the chapter</div><p class="hf-sub">${t.idea}</p><div class="lesson">${lessonHtml}</div>${t.why ? `<div class="why">${t.why}</div>` : ''}${t.watchout ? `<div class="watchout"><span class="wtag">&#9888; Watch out</span>${t.watchout}</div>` : ''}${mmtip}</section>`);
+  // Singapore-style Concrete → Pictorial → Abstract strip, for the four classic bar-model topics.
+  const cpa = CPA_PANELS[t.id] ? `<div class="cpa-wrap"><div class="cap">Concrete &rarr; Pictorial &rarr; Abstract &mdash; three views of the same idea</div>${CPA_PANELS[t.id]}</div>` : '';
+  if (visualParts || cpa) S.push(`<section class="hf-sec visual" data-section="visual"><div class="hf-tag">&#128202; Visual model</div><p class="hf-sub">Use the diagram before calculating. The visual should make the structure easier to see.</p>${visualParts}${cpa}</section>`);
+  // GeoGebra/Desmos-style interactive: js/explore.js builds the widget for this topic id at runtime.
+  S.push(`<section class="hf-sec explore" data-section="explore"><div class="hf-tag">&#127899;&#65039; Explore &mdash; play with the maths</div><p class="hf-sub">Predict what will happen first, then drag &mdash; the diagram responds instantly.</p><div id="explore-widget" class="explore-widget"></div></section>`);
 
   if (dynamic) {
     S.push(`<section class="hf-sec worked" data-section="examples"><div class="hf-tag">&#9998; Worked examples across scenarios</div><p class="hf-sub">Read these like a teacher modelling the method: one basic case, one mixed case, and one harder transfer case.</p><div id="dyn-worked">Loading&hellip;</div></section>`);
-    S.push(`<section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs" id="dyn-tabs"></div><div id="dyn-panes"></div></section>`);
+    S.push(`<section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Stuck? Take a Hint &mdash; it reveals just the first step. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs" id="dyn-tabs"></div><div id="dyn-panes"></div></section>`);
     S.push(`<section class="hf-sec assignment" data-section="assignment"><div class="hf-tag">&#128221; Assignment work</div><p class="hf-sub">Do these on paper after the guided practice. They mix fluency, reasoning, application, challenge and reflection question types.</p><div class="assignment-grid" id="dyn-assignment"></div><div class="assignment-part"><h4>Part D - Explain and create</h4><ul><li>Write a short paragraph explaining the main idea of ${t.name} in your own words.</li><li>Create one new ${t.name} question, solve it, and show the checking step.</li><li>Describe one mistake a student might make and how to fix it.</li></ul></div></section>`);
   } else {
     const LEVELS = [['Easy', 'easy'], ['Medium', 'medium'], ['Hard', 'hard']];
@@ -420,8 +440,10 @@ function renderChapterBody(t, group, prev, next) {
           <div class="attempt">
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
+            <button class="hintbtn">&#128161; Hint</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          <div class="hintbox"></div>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -446,7 +468,7 @@ function renderChapterBody(t, group, prev, next) {
           <div class="answer"><span class="tag">Answer</span><span class="val">${e.ans}</span></div>
         </article>`).join('')}</div></section>`);
     }
-    S.push(`<section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs">${tabs}</div>${panes}</section>`);
+    S.push(`<section class="hf-sec practice" data-section="practice"><div class="hf-tag">&#9997;&#65039; Guided and independent practice</div><p class="hf-sub">Work up through Easy &rarr; Medium &rarr; Hard. Stuck? Take a Hint &mdash; it reveals just the first step. Type an answer and press Mark; the full solution unlocks after each attempt.</p><div class="tabs">${tabs}</div>${panes}</section>`);
     const assignmentItems = (items, start, count) => (items || []).slice(start, start + count).map(e => `<li>${e.q}</li>`).join('');
     const part = (title, items, type = 'ol') => items ? `<div class="assignment-part"><h4>${title}</h4><${type}>${items}</${type}></div>` : '';
     S.push(`<section class="hf-sec assignment" data-section="assignment"><div class="hf-tag">&#128221; Assignment work</div>
@@ -463,6 +485,9 @@ function renderChapterBody(t, group, prev, next) {
   if (c.realworld) S.push(`<section class="hf-sec realworld" data-section="realworld"><div class="hf-tag">&#127757; In the real world</div><p>${c.realworld}</p></section>`);
   if (c.reflect) S.push(`<section class="hf-sec reflect" data-section="reflect"><div class="hf-tag">&#129504; Reflect</div><ul class="hf-check">${c.reflect.map(r => `<li><label><input type="checkbox"> <span>${r}</span></label></li>`).join('')}</ul></section>`);
   if (c.retrieval) S.push(`<section class="hf-sec retrieval" data-section="retrieval"><div class="hf-tag">&#9889; Quick recall</div><p class="hf-sub">Answer in your head, then reveal.</p><ol class="hf-retr">${c.retrieval.map(qa => `<li><span class="rq">${qa[0]}</span> <button class="hf-reveal mini">Show</button><span class="hf-hidden ra">${qa[1]}</span></li>`).join('')}</ol></section>`);
+  // NRICH-style low-threshold-high-ceiling investigation: everyone can start, no one can finish.
+  const gf = GO_FURTHER[t.id];
+  if (gf) S.push(`<section class="hf-sec further" data-section="further"><div class="hf-tag">&#128640; Go further &mdash; open investigation</div><p class="hf-sub">No single right answer here: everyone can start, and nobody can completely finish. Get stuck &mdash; that is the point.</p><p>${gf.prompt}</p><div class="gf-ext"><span class="gf-tag">Raise the ceiling</span>${gf.extension}</div></section>`);
   if (c.summary) S.push(`<section class="hf-sec summary" data-section="summary"><div class="hf-tag">&#127793; In a nutshell</div><ul class="hf-sum">${c.summary.map(s => `<li>${s}</li>`).join('')}</ul></section>`);
   S.push(`<div class="hf-next">${prev ? `<a class="hf-navlink prev" href="${prev.id}.html"><span class="dir">&larr; Previous</span><span class="nm">${prev.name}</span></a>` : '<span></span>'}${next ? `<a class="hf-navlink next" href="${next.id}.html"><span class="dir">Next &rarr;</span><span class="nm">${next.name}</span></a>` : '<span></span>'}</div>`);
 
@@ -595,8 +620,8 @@ function run() {
       const next = idx < ORDER.length - 1 ? ORDER[idx + 1] : null;
       const { html: body, checkMap } = renderChapterBody(t, group, prev, next);
       const scripts = DYNAMIC_IDS.has(t.id)
-        ? ['js/quiz-engine.js', 'js/topic-interactions.js']
-        : ['js/topic-interactions.js'];
+        ? ['js/quiz-engine.js', 'js/topic-interactions.js', 'js/explore.js']
+        : ['js/topic-interactions.js', 'js/explore.js'];
       const html = pageShell({ title: t.name, active: t.id, root: '../', bodyHtml: body, extraScripts: scripts });
       // Static topics' answers get an accept[] derived from their authored `ans` text (see
       // stripTags/staticCheck above), merged into the same window.TOPIC_CHECK the dynamic topics'

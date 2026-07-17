@@ -110,6 +110,23 @@
         return;
       }
 
+      // Progressive hint (Khan Academy style): reveal ONLY the first step of the working, so a
+      // stuck learner gets a nudge without the whole solution. One hint per question, available
+      // before (or after) marking.
+      var hb = e.target.closest('.hintbtn');
+      if (hb) {
+        if (hb.disabled) return;
+        var exh = hb.closest('.ex');
+        var firstStep = exh.querySelector('.sol .steps li');
+        var box = exh.querySelector('.hintbox');
+        if (firstStep && box) {
+          box.innerHTML = '<span class="htag">&#128161; Hint &mdash; the first step</span>' + firstStep.innerHTML;
+          box.classList.add('show');
+        }
+        hb.disabled = true; hb.innerHTML = '&#128161; Hint shown';
+        return;
+      }
+
       var mb = e.target.closest('.markbtn');
       if (mb) {
         if (mb.disabled) return;
