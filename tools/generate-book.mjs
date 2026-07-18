@@ -235,10 +235,10 @@ const STATIC_MODELS = {
       <text class="fig-txt soft" x="100" y="144" text-anchor="middle">= 12 unit cubes</text>
     </svg>`,
 
-  conversions: `<div class="cap">Metric ladder &mdash; each step is &times;10</div>
-    <svg class="viz" viewBox="0 0 260 70" width="260" role="img" aria-label="km to m to cm to mm, each connected by a times 10 arrow">
+  conversions: `<div class="cap">Metric ladder &mdash; each step is a power of ten</div>
+    <svg class="viz" viewBox="0 0 260 70" width="260" role="img" aria-label="km to m to cm to mm, connected by times 1000, times 100 and times 10 arrows">
       ${['km', 'm', 'cm', 'mm'].map((u, i) => `<rect class="fig-shape" x="${10 + i * 62}" y="15" width="46" height="30" rx="7"/><text class="fig-txt" x="${33 + i * 62}" y="35" text-anchor="middle">${u}</text>`).join('')}
-      ${[0, 1, 2].map(i => `<line class="fig-arr" x1="${58 + i * 62}" y1="30" x2="${68 + i * 62}" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="${63 + i * 62}" y="18" text-anchor="middle" style="font-size:10px">&times;10</text>`).join('')}
+      ${['&times;1000', '&times;100', '&times;10'].map((lab, i) => `<line class="fig-arr" x1="${58 + i * 62}" y1="30" x2="${68 + i * 62}" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="${63 + i * 62}" y="18" text-anchor="middle" style="font-size:9px">${lab}</text>`).join('')}
       <defs><marker id="cArrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--ink-soft)"/></marker></defs>
     </svg>`,
 
@@ -467,6 +467,71 @@ function applyContentFixes(CURRICULUM, CH) {
       ans: `mean 12, median 11`
     };
   }
+
+  // --- Round-3 review follow-up: worked-solution completeness (the "show the working" P0s) ---
+  // A recurring finding across the site was that Medium/Hard "Working, step by step" blocks
+  // restated the rule and jumped to the answer, showing no intermediate arithmetic — so a stuck
+  // learner clicking "Show solution" had nothing to learn from. The fixes below rebuild those
+  // steps as a full ordered trace (one operation per line). Every answer is unchanged.
+  const mspan = (s) => `<span class="m">${s}</span>`;
+  const fracHtml = (n, d) => `<span class="frac"><span class="n">${n}</span><span class="d">${d}</span></span>`;
+
+  // Operations & Order (BEDMAS): all 20 Medium/Hard solutions were two generic templated
+  // lines. medium[0]/hard[0] also feed the top-of-chapter worked examples, so those improve too.
+  const op = byId.operations;
+  const opSteps = {
+    medium: [
+      [`Brackets first: ${mspan('8 + 2 = 10')}.`, `Exponent: ${mspan('3² = 9')}.`, `Multiply: ${mspan('10 × 9 = 90')}.`, `Subtract: ${mspan('90 − 5 = 85')}.`],
+      [`Exponent first: ${mspan('2² = 4')}.`, `Multiply: ${mspan('6 × 3 = 18')}.`, `Add: ${mspan('4 + 18 = 22')}.`],
+      [`Brackets first: ${mspan('15 − 7 = 8')}.`, `Multiply: ${mspan('8 × 4 = 32')}.`, `Add: ${mspan('32 + 1 = 33')}.`],
+      [`Brackets first: ${mspan('2 + 3 = 5')}.`, `Divide: ${mspan('50 ÷ 5 = 10')}.`, `Add: ${mspan('10 + 6 = 16')}.`],
+      [`Brackets first: ${mspan('9 − 5 = 4')}.`, `Exponent: ${mspan('4² = 16')}.`, `Multiply: ${mspan('4 × 16 = 64')}.`],
+      [`Exponents first: ${mspan('3² = 9')} and ${mspan('4² = 16')}.`, `Add: ${mspan('9 + 16 = 25')}.`, `Subtract: ${mspan('25 − 5 = 20')}.`],
+      [`Brackets first: ${mspan('6 + 4 = 10')}.`, `Exponent: ${mspan('10² = 100')}.`, `Divide: ${mspan('100 ÷ 20 = 5')}.`],
+      [`Exponent first: ${mspan('4² = 16')}.`, `Multiply: ${mspan('3 × 16 = 48')}.`, `Subtract: ${mspan('100 − 48 = 52')}.`],
+      [`Inside the brackets, ÷ before +: ${mspan('12 ÷ 4 = 3')}, then ${mspan('3 + 5 = 8')}.`, `Multiply: ${mspan('8 × 2 = 16')}.`],
+      [`Exponent first: ${mspan('2³ = 8')}.`, `Multiply: ${mspan('8 × 2 = 16')}.`, `Add: ${mspan('7 + 16 = 23')}.`],
+    ],
+    hard: [
+      [`Innermost brackets: ${mspan('3 + 1 = 4')}.`, `Outer brackets: ${mspan('2 × 4 = 8')}.`, `Divide: ${mspan('48 ÷ 8 = 6')}.`, `Exponent: ${mspan('5² = 25')}.`, `Add: ${mspan('6 + 25 = 31')}.`],
+      [`Exponents inside the brackets: ${mspan('4² = 16')}, ${mspan('2³ = 8')}.`, `Each bracket: ${mspan('16 − 8 = 8')} and ${mspan('6 + 3 = 9')}.`, `Multiply: ${mspan('8 × 9 = 72')}.`],
+      [`Brackets (exponent first): ${mspan('2² = 4')}, then ${mspan('4 + 1 = 5')}.`, `Divide and multiply, left to right: ${mspan('100 ÷ 5 = 20')}, ${mspan('3 × 4 = 12')}.`, `Subtract: ${mspan('20 − 12 = 8')}.`],
+      [`Innermost brackets: ${mspan('8 − 6 = 2')}.`, `Exponents: ${mspan('2² = 4')} and ${mspan('3² = 9')}.`, `Inside the outer bracket: ${mspan('9 + 4 = 13')}.`, `Multiply: ${mspan('2 × 13 = 26')}.`],
+      [`Brackets: ${mspan('7 + 5 = 12')}.`, `Exponent: ${mspan('6² = 36')}.`, `Multiply and divide, left to right: ${mspan('12 × 3 = 36')}, ${mspan('36 ÷ 2 = 18')}.`, `Subtract: ${mspan('36 − 18 = 18')}.`],
+      [`Exponent inside the brackets: ${mspan('2³ = 8')}, then ${mspan('30 − 8 = 22')}.`, `Divide: ${mspan('22 ÷ 11 = 2')}.`, `Exponent: ${mspan('5² = 25')}.`, `Add: ${mspan('2 + 25 = 27')}.`],
+      [`Innermost brackets: ${mspan('1 + 2 = 3')}.`, `Divide inside: ${mspan('18 ÷ 3 = 6')}.`, `Exponent: ${mspan('5² = 25')}.`, `Multiply: ${mspan('6 × 3 = 18')}.`, `Subtract: ${mspan('25 − 18 = 7')}.`],
+      [`Brackets: ${mspan('2 + 3 = 5')} and ${mspan('10 − 6 = 4')}.`, `Exponents: ${mspan('5² = 25')}, ${mspan('4² = 16')}.`, `Subtract: ${mspan('25 − 16 = 9')}.`],
+      [`Exponent first: ${mspan('6³ = 216')}.`, `Brackets: ${mspan('4 × 9 = 36')}.`, `Divide: ${mspan('216 ÷ 36 = 6')}.`, `Add: ${mspan('6 + 7 = 13')}.`],
+      [`Inside the brackets, ÷ then exponent: ${mspan('45 ÷ 5 = 9')}, ${mspan('3² = 9')}, then ${mspan('9 + 9 = 18')}.`, `Multiply: ${mspan('18 × 2 = 36')}.`],
+    ]
+  };
+  ['medium', 'hard'].forEach((k) => opSteps[k].forEach((st, i) => { if (op[k][i]) op[k][i].steps = st; }));
+
+  // Fractions: every add/subtract solution named the common denominator, then skipped the one
+  // genuinely new step — rewriting each fraction over it — before giving the answer. Show it.
+  const fMed = [
+    [`Common denominator of 4 and 3 is ${mspan('12')}.`, `Rewrite each over 12: ${fracHtml(3, 4)} = ${fracHtml(9, 12)} (×3) and ${fracHtml(2, 3)} = ${fracHtml(8, 12)} (×4).`, `Add the numerators: ${fracHtml(9, 12)} + ${fracHtml(8, 12)} = ${fracHtml(17, 12)} = 1${fracHtml(5, 12)}.`],
+    [`Common denominator of 6 and 4 is ${mspan('12')}.`, `Rewrite each over 12: ${fracHtml(5, 6)} = ${fracHtml(10, 12)} (×2) and ${fracHtml(1, 4)} = ${fracHtml(3, 12)} (×3).`, `Subtract: ${fracHtml(10, 12)} − ${fracHtml(3, 12)} = ${fracHtml(7, 12)}.`],
+    [`Common denominator of 3 and 6 is ${mspan('6')}.`, `Rewrite: ${fracHtml(2, 3)} = ${fracHtml(4, 6)} (×2); ${fracHtml(1, 6)} already has denominator 6.`, `Add: ${fracHtml(4, 6)} + ${fracHtml(1, 6)} = ${fracHtml(5, 6)}.`],
+    [`Common denominator of 8 and 2 is ${mspan('8')}.`, `Rewrite: ${fracHtml(1, 2)} = ${fracHtml(4, 8)} (×4); ${fracHtml(7, 8)} already has denominator 8.`, `Subtract: ${fracHtml(7, 8)} − ${fracHtml(4, 8)} = ${fracHtml(3, 8)}.`],
+    [`Common denominator of 2 and 5 is ${mspan('10')}.`, `Rewrite each over 10: ${fracHtml(1, 2)} = ${fracHtml(5, 10)} (×5) and ${fracHtml(2, 5)} = ${fracHtml(4, 10)} (×2).`, `Add: ${fracHtml(5, 10)} + ${fracHtml(4, 10)} = ${fracHtml(9, 10)}.`],
+    [`Common denominator of 5 and 10 is ${mspan('10')}.`, `Rewrite: ${fracHtml(3, 5)} = ${fracHtml(6, 10)} (×2); ${fracHtml(1, 10)} already has denominator 10.`, `Add: ${fracHtml(6, 10)} + ${fracHtml(1, 10)} = ${fracHtml(7, 10)}.`],
+    [`Common denominator of 8 and 4 is ${mspan('8')}.`, `Rewrite: ${fracHtml(1, 4)} = ${fracHtml(2, 8)} (×2); ${fracHtml(5, 8)} already has denominator 8.`, `Subtract: ${fracHtml(5, 8)} − ${fracHtml(2, 8)} = ${fracHtml(3, 8)}.`],
+    [`Common denominator of 3 and 4 is ${mspan('12')}.`, `Rewrite each over 12: ${fracHtml(2, 3)} = ${fracHtml(8, 12)} (×4) and ${fracHtml(3, 4)} = ${fracHtml(9, 12)} (×3).`, `Add: ${fracHtml(8, 12)} + ${fracHtml(9, 12)} = ${fracHtml(17, 12)} = 1${fracHtml(5, 12)}.`],
+    [`Common denominator of 10 and 5 is ${mspan('10')}.`, `Rewrite: ${fracHtml(2, 5)} = ${fracHtml(4, 10)} (×2); ${fracHtml(9, 10)} already has denominator 10.`, `Subtract: ${fracHtml(9, 10)} − ${fracHtml(4, 10)} = ${fracHtml(5, 10)} = ${fracHtml(1, 2)}.`],
+    [`Common denominator of 4 and 6 is ${mspan('12')}.`, `Rewrite each over 12: ${fracHtml(1, 4)} = ${fracHtml(3, 12)} (×3) and ${fracHtml(5, 6)} = ${fracHtml(10, 12)} (×2).`, `Add: ${fracHtml(3, 12)} + ${fracHtml(10, 12)} = ${fracHtml(13, 12)} = 1${fracHtml(1, 12)}.`],
+  ];
+  fMed.forEach((st, i) => { if (frac.medium[i]) frac.medium[i].steps = st; });
+
+  // Fraction-of-a-quantity (Hard 0–3) was used but never modelled: show the method — divide by
+  // the denominator, multiply by the numerator.
+  const ofQty = [
+    [`${fracHtml(2, 3)} of 30: divide by the denominator (${mspan('30 ÷ 3 = 10')}), then multiply by the numerator (${mspan('10 × 2 = 20')}).`, `Now ${fracHtml(3, 4)} of 20: ${mspan('20 ÷ 4 = 5')}, then ${mspan('5 × 3 = 15')}.`],
+    [`${fracHtml(3, 5)} of 40: ${mspan('40 ÷ 5 = 8')}, then ${mspan('8 × 3 = 24')}.`, `Now ${fracHtml(1, 2)} of 24: ${mspan('24 ÷ 2 = 12')}.`],
+    [`${fracHtml(3, 4)} of 24: ${mspan('24 ÷ 4 = 6')}, then ${mspan('6 × 3 = 18')}.`, `Now ${fracHtml(2, 3)} of 18: ${mspan('18 ÷ 3 = 6')}, then ${mspan('6 × 2 = 12')}.`],
+    [`${fracHtml(2, 5)} of 60: ${mspan('60 ÷ 5 = 12')}, then ${mspan('12 × 2 = 24')}.`, `Now ${fracHtml(3, 4)} of 24: ${mspan('24 ÷ 4 = 6')}, then ${mspan('6 × 3 = 18')}.`],
+  ];
+  ofQty.forEach((st, i) => { if (frac.hard[i]) frac.hard[i].steps = st; });
 }
 
 // --- 3. Shared page shell ---
