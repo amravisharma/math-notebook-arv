@@ -632,6 +632,16 @@ function applyContentFixes(CURRICULUM, CH) {
     };
   }
 
+  // Volume: the mistake-detective tested add-vs-multiply (covered well elsewhere) but never the
+  // cm³-vs-cm² units confusion the chapter itself flags as the key distinction. Swap it in.
+  if (CH.volume) {
+    CH.volume.mistake = {
+      wrong: `A cuboid&rsquo;s volume is written as <span class="bad">24 cm&sup2;</span>.`,
+      error: `They used square units (cm&sup2;, for area) where volume needs cubic units (cm&sup3;).`,
+      fix: `Volume fills space in three directions, so it is measured in <b>cubic</b> units: 24 cm&sup3;. Square units (cm&sup2;) are for surface area &mdash; the flat covering.`
+    };
+  }
+
   // Probability: the Hard "at least one head" item recommends the complement method but only ever
   // counted directly. Show both routes so the complement technique the chapter teaches is modelled.
   const prb = byId.probability;
