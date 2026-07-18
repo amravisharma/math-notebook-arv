@@ -545,6 +545,36 @@ function applyContentFixes(CURRICULUM, CH) {
     [`Prime factorise: ${mspan('24 = 2 × 2 × 2 × 3')} and ${mspan('36 = 2 × 2 × 3 × 3')}.`, `HCF = primes in both = ${mspan('2 × 2 × 3 = 12')}.`, `LCM = highest power of each = ${mspan('2³ × 3² = 8 × 9 = 72')}.`],
   ];
   factHcfLcm.forEach((st, i) => { if (fac.medium[i]) fac.medium[i].steps = st; });
+
+  // Integers: the −3² vs (−3)² distinction was taught in the Watch-out box but never tested (Hard
+  // only had (−3)²). Turn that item into an explicit side-by-side contrast so the nuance is checked.
+  const intg = byId.integers;
+  if (intg.hard[4]) {
+    intg.hard[4] = {
+      q: `Work out ${mspan('(−3)²')} and ${mspan('−3²')}. (The brackets change everything.)`,
+      steps: [
+        `${mspan('(−3)²')} means ${mspan('(−3) × (−3) = 9')} &mdash; the brackets square the whole negative number.`,
+        `${mspan('−3²')} means ${mspan('−(3²) = −(9) = −9')} &mdash; with no brackets the power applies to the 3 only, then the minus sign is applied.`,
+        `So ${mspan('(−3)² = 9')} but ${mspan('−3² = −9')}.`
+      ],
+      ans: `9 and −9`
+    };
+  }
+
+  // Statistics: "pick a sensible average for the situation" was a stated goal but never assessed —
+  // all 30 items were pure computation. Convert two near-duplicate mean/median items into the
+  // judgement task the goal names (leaving the even-count median item at medium[9] intact).
+  const st2 = byId.statistics;
+  st2.medium[7] = {
+    q: `A shoe shop records the sizes it sells and wants to stock the <b>most popular</b> size. Which average should it use &mdash; mean, median or mode?`,
+    steps: [`The shop wants the value that comes up most often, not a calculated centre or a middle value.`, `The <b>mode</b> is the most frequent value &mdash; here, the size sold most.`],
+    ans: `mode`
+  };
+  st2.medium[8] = {
+    q: `Seven houses sell for similar prices, but one mansion sells for ten times as much. To describe a <b>typical</b> price, is the mean or the median fairer?`,
+    steps: [`The mansion is an outlier; it drags the mean upward so it no longer represents a typical house.`, `The <b>median</b> (the middle value) is barely affected by one extreme value, so it is the fairer choice here.`],
+    ans: `median`
+  };
 }
 
 // --- 3. Shared page shell ---
