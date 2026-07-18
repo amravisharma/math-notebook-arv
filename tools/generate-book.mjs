@@ -621,6 +621,27 @@ function applyContentFixes(CURRICULUM, CH) {
     steps: [`The mansion is an outlier; it drags the mean upward so it no longer represents a typical house.`, `The <b>median</b> (the middle value) is barely affected by one extreme value, so it is the fairer choice here.`],
     ans: `median`
   };
+
+  // Statistics: a "Data & Averages" chapter with no chart to read. Add one frequency-table item so
+  // data literacy means more than a bare list of numbers (replaces a plain "find the mode" item).
+  if (st2.hard[8]) {
+    st2.hard[8] = {
+      q: `A shop records the shoe sizes it sells: <table class="pvtable"><thead><tr><th>Size</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead><tbody><tr><td>Sold</td><td>3</td><td>8</td><td>5</td><td>2</td></tr></tbody></table>Read the table: what is the modal size (the mode)?`,
+      steps: [`The mode is the value with the highest frequency.`, `Size 7 was sold most often (8 times), so the modal size is <span class="m">7</span>.`],
+      ans: `7`
+    };
+  }
+
+  // Probability: the Hard "at least one head" item recommends the complement method but only ever
+  // counted directly. Show both routes so the complement technique the chapter teaches is modelled.
+  const prb = byId.probability;
+  if (prb.hard[0]) {
+    prb.hard[0].steps = [
+      `Sample space (4 equally likely): HH, HT, TH, TT.`,
+      `Exactly one head — HT and TH — is 2/4 = <span class="m">1/2</span>.`,
+      `At least one head, counted directly (HH, HT, TH) is 3/4. Or by the complement: 1 − P(no heads) = 1 − P(TT) = 1 − 1/4 = <span class="m">3/4</span> — the same answer, the easy way.`
+    ];
+  }
 }
 
 // --- 3. Shared page shell ---

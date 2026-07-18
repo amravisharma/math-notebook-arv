@@ -404,8 +404,14 @@
             : ['Circumference = 2πr.', '= 2 × 3.14 × ' + rad + ' = ' + M(C + ' cm') + '.'], ans: M(C + ' cm'), accept: [C.toFixed(2)] };
       },
       hard: function (r) {
-        // Inverse problems: rearrange C = 2πr or A = πr² to find the radius (reinforces square roots).
-        if (pick(r, ['area', 'findR']) === 'findR') {
+        // Inverse problems (rearrange to find r) and a semicircle composite-shape stretch.
+        var mode = pick(r, ['area', 'findR', 'semi']);
+        if (mode === 'semi') {
+          var radS = ri(r, 2, 12), As = Math.round(3.14 * radS * radS / 2 * 100) / 100;
+          return { q: 'Find the area of a <b>semicircle</b> (half a circle) of radius ' + M(radS + ' cm') + '. Use ' + M('π = 3.14') + ', answer to 2 dp.', fig: circleFig(radS + ' cm', 'r'),
+            steps: ['A semicircle is half a full circle, so area = πr² ÷ 2.', '= 3.14 × ' + radS + '² ÷ 2 = ' + (3.14 * radS * radS).toFixed(2) + ' ÷ 2 = ' + M(As + ' cm²') + '.'], ans: M(As + ' cm²'), accept: [As.toFixed(2)] };
+        }
+        if (mode === 'findR') {
           var rad = ri(r, 3, 12);
           if (pick(r, ['fromC', 'fromA']) === 'fromC') {
             var C = Math.round(2 * 3.14 * rad * 100) / 100, rc = Math.round((C / (2 * 3.14)) * 10) / 10;
