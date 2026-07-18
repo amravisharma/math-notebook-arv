@@ -94,17 +94,34 @@ function circleFig(label, kind) {
   else g += `<line class="fig-line" x1="${c}" y1="${c}" x2="${c + R}" y2="${c}"/><text class="fig-txt" text-anchor="middle" x="${c + R / 2}" y="${c - 7}">${label}</text>`;
   return `<svg class="viz" viewBox="0 0 ${S} ${S}" width="165" role="img" aria-label="circle">${g}</svg>`;
 }
+// Squares-built-on-each-side proof of a2 + b2 = c2, on a 3-4-5 triangle: the two smaller square
+// areas (9 and 16) visibly add to the largest (25). Gives the theorem a *why*, not just a statement.
+function pythagorasProof() {
+  const ox = 72, oy = 150, u = 18;
+  const X = (m) => +(ox + m * u).toFixed(1), Y = (m) => +(oy - m * u).toFixed(1);
+  const poly = (pts, fill) => `<polygon points="${pts.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="${fill}" stroke="var(--ink-soft)" stroke-width="1"/>`;
+  let g = '';
+  g += poly([[0, 0], [4, 0], [4, -4], [0, -4]], 'rgba(59,76,168,.14)');   // a2 = 16 (below)
+  g += poly([[0, 0], [0, 3], [-3, 3], [-3, 0]], 'rgba(59,76,168,.14)');   // b2 = 9 (left)
+  g += poly([[0, 3], [4, 0], [7, 4], [3, 7]], 'rgba(255,194,75,.24)');    // c2 = 25 (hypotenuse)
+  g += `<polygon points="${X(0)},${Y(0)} ${X(4)},${Y(0)} ${X(0)},${Y(3)}" fill="var(--paper)" stroke="var(--brand)" stroke-width="1.5"/>`;
+  g += `<path class="fig-ra" d="M${X(0.7)},${Y(0)} L${X(0.7)},${Y(0.7)} L${X(0)},${Y(0.7)}"/>`;
+  g += `<text class="fig-txt" text-anchor="middle" x="${X(2)}" y="${Y(-2) + 4}">a&sup2; = 16</text>`;
+  g += `<text class="fig-txt" text-anchor="middle" x="${X(-1.5)}" y="${Y(1.5) + 4}">b&sup2; = 9</text>`;
+  g += `<text class="fig-txt" text-anchor="middle" x="${X(3.4)}" y="${Y(3.6) + 4}">c&sup2; = 25</text>`;
+  return `<svg class="viz" viewBox="0 0 218 240" width="218" role="img" aria-label="Squares built on the three sides of a 3-4-5 right triangle, with areas 9, 16 and 25, showing 9 plus 16 equals 25">${g}</svg>`;
+}
 const INTRO_FIG = {
   graphs: quadrantChart, angles: () => straightAngle(125), shapes: polyRow,
   transformations: () => coordPlane(6, [{ x: -3, y: 1, label: 'A' }, { x: 1, y: 1, label: "A'", hollow: true }], { arrows: [{ x1: -3, y1: 1, x2: 1, y2: 1 }] }),
-  pythagoras: () => rightTri('a', 'b', 'c'), circles: () => circleFig('r', 'r')
+  pythagoras: pythagorasProof, circles: () => circleFig('r', 'r')
 };
 const INTRO_CAP = {
   graphs: 'The axes split the plane into four quadrants. A point&rsquo;s signs (x, y) decide which one it lands in.',
   angles: 'Angles on a straight line always add to 180&deg;; angles around a point add to 360&deg;.',
   shapes: 'Polygons are named by their number of sides. Interior angles sum to (n &minus; 2) &times; 180&deg;.',
   transformations: 'A translation slides every point by the same amount &mdash; here (x, y) each shift right by 4.',
-  pythagoras: 'In a right-angled triangle, a&sup2; + b&sup2; = c&sup2;, where c is the hypotenuse (opposite the right angle).',
+  pythagoras: 'Build a square on each side of this 3-4-5 triangle. The two smaller areas add up exactly to the largest: 9 + 16 = 25. That <em>is</em> a&sup2; + b&sup2; = c&sup2; &mdash; seen as areas, not just stated as a rule.',
   circles: 'r = radius, d = 2r. Circumference = 2&pi;r, Area = &pi;r&sup2;.'
 };
 const DYNAMIC_IDS = new Set(['graphs', 'angles', 'shapes', 'transformations', 'pythagoras', 'circles']);
