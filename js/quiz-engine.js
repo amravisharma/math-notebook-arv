@@ -224,21 +224,48 @@
     },
     angles: {
       easy: function (r) {
-        if (pick(r, ['s', 'c']) === 's') {
+        var kind = pick(r, ['s', 'c', 'v']);
+        if (kind === 's') {
           var a = ri(r, 20, 160), x = 180 - a;
           return { q: 'Two angles sit on a straight line. One is ' + M(a + '°') + '. Find the other angle ' + M('x') + '.', fig: straightAngle(a),
             steps: ['Angles on a straight line add to ' + M('180°') + '.', 'x = 180° − ' + a + '° = ' + M(x + '°') + '.'], ans: M(x + '°'), accept: [String(x)] };
         }
-        var a2 = ri(r, 15, 80), x2 = 90 - a2;
-        return { q: 'Two angles are complementary. One is ' + M(a2 + '°') + '. Find the other angle ' + M('x') + '.', fig: complementFig(a2),
-          steps: ['Complementary angles add to ' + M('90°') + '.', 'x = 90° − ' + a2 + '° = ' + M(x2 + '°') + '.'], ans: M(x2 + '°'), accept: [String(x2)] };
+        if (kind === 'c') {
+          var a2 = ri(r, 15, 80), x2 = 90 - a2;
+          return { q: 'Two angles are complementary. One is ' + M(a2 + '°') + '. Find the other angle ' + M('x') + '.', fig: complementFig(a2),
+            steps: ['Complementary angles add to ' + M('90°') + '.', 'x = 90° − ' + a2 + '° = ' + M(x2 + '°') + '.'], ans: M(x2 + '°'), accept: [String(x2)] };
+        }
+        // Vertically opposite / adjacent angles at a crossing (a taught fact that had no practice).
+        var av = ri(r, 25, 155), opp = pick(r, ['opp', 'adj']);
+        var xv = opp === 'opp' ? av : 180 - av, xDeg = opp === 'opp' ? av / 2 + 180 : (av + 180) / 2;
+        return { q: 'Two straight lines cross. One angle is ' + M(av + '°') + '. Find the marked angle ' + M('x') + (opp === 'opp' ? ', which is vertically opposite it.' : ', which is next to it on a straight line.'), fig: crossFig(av, xDeg),
+          steps: opp === 'opp' ? ['Vertically opposite angles (straight across a crossing) are equal.', 'x = ' + M(av + '°') + '.']
+            : ['x and the ' + av + '° angle lie on a straight line, so they add to 180°.', 'x = 180° − ' + av + '° = ' + M(xv + '°') + '.'],
+          ans: M(xv + '°'), accept: [String(xv)] };
       },
       medium: function (r) {
+        // Parallel-line angles (corresponding / alternate / co-interior): taught but never practised.
+        if (pick(r, ['pt', 'par']) === 'par') {
+          var ap = ri(r, 40, 140), pk = pick(r, ['corr', 'alt', 'co']), xp = pk === 'co' ? 180 - ap : ap;
+          var nm = pk === 'corr' ? 'corresponding (F)' : pk === 'alt' ? 'alternate (Z)' : 'co-interior (C)';
+          return { q: 'A transversal crosses two parallel lines. One angle is ' + M(ap + '°') + '. Find the ' + nm + ' angle ' + M('x') + '.', fig: parallelFig(pk),
+            steps: pk === 'co' ? ['Co-interior (C) angles between parallel lines add to 180°.', 'x = 180° − ' + ap + '° = ' + M(xp + '°') + '.']
+              : [(pk === 'corr' ? 'Corresponding (F)' : 'Alternate (Z)') + ' angles between parallel lines are equal.', 'x = ' + M(xp + '°') + '.'],
+            ans: M(xp + '°'), accept: [String(xp)] };
+        }
         var a = ri(r, 40, 150), b = ri(r, 40, Math.max(41, 300 - a)), bb = Math.min(b, 300 - a), x = 360 - a - bb;
         return { q: 'Three angles meet at a point: ' + M(a + '°') + ', ' + M(bb + '°') + ' and ' + M('x') + '. Find ' + M('x') + '.', fig: aroundPoint(a, bb),
           steps: ['Angles around a point add to ' + M('360°') + '.', 'x = 360° − ' + a + '° − ' + bb + '° = ' + M(x + '°') + '.'], ans: M(x + '°'), accept: [String(x)] };
       },
       hard: function (r) {
+        // Multi-step exterior-angle question: triangle sum THEN the exterior-angle theorem.
+        if (pick(r, ['tri', 'ext']) === 'ext') {
+          var ea = ri(r, 35, 75), apex = ri(r, 30, 80), eb = 180 - ea - apex, ex = ea + apex;
+          return { q: 'A triangle’s base is extended, making an exterior angle ' + M('x') + '. The two interior angles at the base are ' + M(ea + '°') + ' and ' + M(eb + '°') + '. Find ' + M('x') + '.', fig: extTriFig(ea + '°', eb + '°'),
+            steps: ['Angles in a triangle add to 180°, so the third (apex) angle = 180° − ' + ea + '° − ' + eb + '° = ' + M(apex + '°') + '.',
+              'An exterior angle equals the sum of the two remote interior angles: x = ' + ea + '° + ' + apex + '° = ' + M(ex + '°') + '.'],
+            ans: M(ex + '°'), accept: [String(ex)] };
+        }
         var a = ri(r, 35, 110), b = ri(r, 30, Math.max(31, 160 - a)), bb = Math.min(b, 160 - a), x = 180 - a - bb;
         return { q: 'A triangle has angles ' + M(a + '°') + ', ' + M(bb + '°') + ' and ' + M('x') + '. Find ' + M('x') + '.', fig: triFig(a + '°', bb + '°', 'x'),
           steps: ['The angles in a triangle add to ' + M('180°') + '.', 'x = 180° − ' + a + '° − ' + bb + '° = ' + M(x + '°') + '.'], ans: M(x + '°'), accept: [String(x)] };
@@ -246,20 +273,43 @@
     },
     shapes: {
       easy: function (r) {
-        if (pick(r, ['n', 't']) === 'n') {
+        var k = pick(r, ['n', 't', 'c']);
+        if (k === 'n') {
           var n = pick(r, [5, 6, 7, 8, 9, 10]);
           return { q: 'How many sides does a ' + NGON[n] + ' have?', fig: polyFig(n), steps: ['A ' + NGON[n] + ' is a polygon with ' + M(n) + ' sides.'], ans: M(n), accept: [String(n)] };
+        }
+        if (k === 'c') {
+          // Triangle classification by side length: taught (and in the Explore sort) but never graded.
+          var type = pick(r, ['equilateral', 'isosceles', 'scalene']), s1, s2, s3;
+          if (type === 'equilateral') { s1 = s2 = s3 = ri(r, 4, 9); }
+          else if (type === 'isosceles') { s1 = s2 = ri(r, 5, 9); s3 = ri(r, 2, s1 - 1); }
+          else { s1 = ri(r, 5, 7); s2 = s1 + ri(r, 1, 2); s3 = s2 + ri(r, 1, 2); }
+          return { q: 'Classify the triangle with side lengths ' + M(s1 + ' cm, ' + s2 + ' cm, ' + s3 + ' cm') + ' as equilateral, isosceles or scalene.', fig: triFig('', '', ''),
+            steps: [type === 'equilateral' ? 'All three sides are equal.' : type === 'isosceles' ? 'Exactly two sides are equal.' : 'No two sides are equal.', 'So the triangle is ' + M(type) + '.'], ans: M(type), accept: [type] };
         }
         var a = ri(r, 40, 90), b = ri(r, 30, Math.max(31, 140 - a)), bb = Math.min(b, 140 - a), x = 180 - a - bb;
         return { q: 'Find the missing angle ' + M('x') + ' in a triangle whose other angles are ' + M(a + '°') + ' and ' + M(bb + '°') + '.', fig: triFig(a + '°', bb + '°', 'x'),
           steps: ['Angles in a triangle add to ' + M('180°') + '.', 'x = 180° − ' + a + '° − ' + bb + '° = ' + M(x + '°') + '.'], ans: M(x + '°'), accept: [String(x)] };
       },
       medium: function (r) {
+        // Fourth angle of a quadrilateral (uses the previously-unused quadFig builder).
+        if (pick(r, ['sum', 'quad']) === 'quad') {
+          var q1 = ri(r, 60, 130), q2 = ri(r, 60, 130);
+          var lo = Math.max(50, 210 - q1 - q2), hi = Math.min(140, 320 - q1 - q2), q3 = ri(r, lo, hi), q4 = 360 - q1 - q2 - q3;
+          return { q: 'Three angles of a quadrilateral are ' + M(q1 + '°') + ', ' + M(q2 + '°') + ' and ' + M(q3 + '°') + '. Find the fourth angle ' + M('x') + '.', fig: quadFig(q1 + '°', q2 + '°', q3 + '°', 'x'),
+            steps: ['The angles in a quadrilateral add to ' + M('360°') + '.', 'x = 360° − ' + q1 + '° − ' + q2 + '° − ' + q3 + '° = ' + M(q4 + '°') + '.'], ans: M(q4 + '°'), accept: [String(q4)] };
+        }
         var n = ri(r, 3, 12), sum = (n - 2) * 180;
         return { q: 'What is the sum of the interior angles of a ' + NGON[n] + ' (' + M(n) + ' sides)?', fig: polyFig(n),
           steps: ['Interior angle sum = (n − 2) × 180°.', '= (' + n + ' − 2) × 180° = ' + M(n - 2) + ' × 180° = ' + M(sum + '°') + '.'], ans: M(sum + '°'), accept: [String(sum)] };
       },
       hard: function (r) {
+        // Inverse problem: given a regular polygon's interior angle, find the number of sides.
+        if (pick(r, ['ang', 'inv']) === 'inv') {
+          var ni = pick(r, [3, 4, 5, 6, 8, 9, 10, 12]), eachI = (ni - 2) * 180 / ni, extI = 180 - eachI;
+          return { q: 'Each interior angle of a <b>regular</b> polygon is ' + M(eachI + '°') + '. How many sides does it have?', fig: polyFig(ni),
+            steps: ['Each exterior angle = 180° − ' + eachI + '° = ' + M(extI + '°') + '.', 'Number of sides = 360° ÷ exterior angle = 360° ÷ ' + extI + '° = ' + M(ni) + '.'], ans: M(ni + ' sides'), accept: [String(ni), ni + ' sides'] };
+        }
         var n = pick(r, [3, 4, 5, 6, 8, 9, 10, 12]);
         if (pick(r, ['in', 'ex']) === 'in') {
           var each = (n - 2) * 180 / n;
@@ -287,6 +337,20 @@
           steps: [ax === 'x-axis' ? 'Reflecting in the x-axis flips the sign of y: (x, −y).' : 'Reflecting in the y-axis flips the sign of x: (−x, y).', '= ' + M('(' + nx + ', ' + ny + ')') + '.'], ans: M('(' + nx + ', ' + ny + ')'), accept: coordAcc(nx, ny) };
       },
       hard: function (r) {
+        // Enlargement: the chapter's most-taught idea (scale factor, area × k²) had no practice.
+        if (pick(r, ['rot', 'enl']) === 'enl') {
+          if (pick(r, ['coord', 'area']) === 'area') {
+            var k0 = pick(r, [2, 3]), a0 = ri(r, 3, 12), a1 = a0 * k0 * k0;
+            return { q: 'A shape is enlarged by scale factor ' + M(k0) + '. Its area was ' + M(a0 + ' cm²') + '. What is its new area?',
+              steps: ['Lengths scale by k, so area scales by ' + M('k² = ' + k0 + '² = ' + (k0 * k0)) + '.', 'New area = ' + a0 + ' × ' + (k0 * k0) + ' = ' + M(a1 + ' cm²') + '.'],
+              ans: M(a1 + ' cm²'), accept: [String(a1)] };
+          }
+          var ex = ri(r, 1, 4), ey = ri(r, 1, 4), k = pick(r, [2, 3]), nx0 = ex * k, ny0 = ey * k;
+          return { q: 'Enlarge the point ' + M('(' + ex + ', ' + ey + ')') + ' by scale factor ' + M(k) + ' from the origin. New coordinates?',
+            fig: coordPlane(Math.max(6, nx0 + 1, ny0 + 1), [{ x: ex, y: ey, label: 'P' }, { x: nx0, y: ny0, label: "P'", hollow: true }]),
+            steps: ['Multiply each coordinate by the scale factor ' + k + ': (' + ex + ' × ' + k + ', ' + ey + ' × ' + k + ').', '= ' + M('(' + nx0 + ', ' + ny0 + ')') + '.'],
+            ans: M('(' + nx0 + ', ' + ny0 + ')'), accept: coordAcc(nx0, ny0) };
+        }
         var x = ri(r, -5, 5), y = ri(r, -5, 5); if (x === 0 && y === 0) return null;
         var t = pick(r, ['180', '90cw', '90ccw']), nx, ny, d, rule;
         if (t === '180') { nx = -x; ny = -y; d = '180°'; rule = '(x, y) → (−x, −y)'; }
@@ -310,6 +374,17 @@
           steps: ['Rearrange: leg² = c² − (known leg)².', '= ' + c + '² − ' + known + '² = ' + c * c + ' − ' + known * known + ' = ' + M(c * c - known * known) + '.', 'leg = √' + (c * c - known * known) + ' = ' + M(find + ' cm') + '.'], ans: M(find + ' cm'), accept: [String(find)] };
       },
       hard: function (r) {
+        // Converse of Pythagoras: taught as a core use, but only ever a yes/no retrieval item.
+        if (pick(r, ['calc', 'conv']) === 'conv') {
+          var trip = pick(r, [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [7, 24, 25]]);
+          var right = pick(r, ['yes', 'no']) === 'yes';
+          var s1 = trip[0], s2 = trip[1], s3 = right ? trip[2] : trip[2] + pick(r, [1, 2, 3]);
+          var isRight = (s1 * s1 + s2 * s2 === s3 * s3);
+          return { q: 'A triangle has sides ' + M(s1 + ', ' + s2 + ' and ' + s3 + ' cm') + '. Is it right-angled? (yes/no)',
+            steps: ['Test the converse: do the two shorter sides² add to the longest side²? ' + s1 + '² + ' + s2 + '² = ' + (s1 * s1 + s2 * s2) + ', and ' + s3 + '² = ' + (s3 * s3) + '.',
+              isRight ? 'They are equal, so by the converse of Pythagoras the triangle IS right-angled.' : 'They are not equal, so the triangle is NOT right-angled.'],
+            ans: M(isRight ? 'yes' : 'no'), accept: [isRight ? 'yes' : 'no'] };
+        }
         var a = ri(r, 4, 12), b = ri(r, 3, 11); if (b >= a) b = a - 1; if (b < 3) b = 3; var c = Math.round(Math.sqrt(a * a + b * b) * 10) / 10;
         return { q: 'A right-angled triangle has legs ' + M(a + ' cm') + ' and ' + M(b + ' cm') + '. Find the hypotenuse, to 1 decimal place.', fig: rightTri(a + ' cm', b + ' cm', '?', ri(r, 0, 3)),
           steps: ['c² = ' + a + '² + ' + b + '² = ' + a * a + ' + ' + b * b + ' = ' + M(a * a + b * b) + '.', 'c = √' + (a * a + b * b) + ' ≈ ' + M(c + ' cm') + '.'], ans: M(c + ' cm'), accept: [c.toFixed(1)] };
@@ -322,11 +397,25 @@
         var d = 2 * v; return { q: 'A circle has diameter ' + M(d + ' cm') + '. What is its radius?', fig: circleFig(d + ' cm', 'd'), steps: ['Radius = diameter ÷ 2.', '= ' + d + ' ÷ 2 = ' + M(v + ' cm') + '.'], ans: M(v + ' cm'), accept: [String(v)] };
       },
       medium: function (r) {
-        var rad = ri(r, 2, 12), C = Math.round(2 * 3.14 * rad * 100) / 100;
-        return { q: 'Find the circumference of a circle with radius ' + M(rad + ' cm') + '. Use ' + M('π = 3.14') + ', answer to 2 dp.', fig: circleFig(rad + ' cm', 'r'),
-          steps: ['Circumference = 2πr.', '= 2 × 3.14 × ' + rad + ' = ' + M(C + ' cm') + '.'], ans: M(C + ' cm'), accept: [C.toFixed(2)] };
+        // Sometimes give the diameter, so the "did you halve it?" warning is actually exercised.
+        var rad = ri(r, 2, 12), C = Math.round(2 * 3.14 * rad * 100) / 100, useD = pick(r, ['r', 'd']) === 'd';
+        return { q: 'Find the circumference of a circle with ' + (useD ? 'diameter ' + M(2 * rad + ' cm') : 'radius ' + M(rad + ' cm')) + '. Use ' + M('π = 3.14') + ', answer to 2 dp.', fig: circleFig((useD ? 2 * rad : rad) + ' cm', useD ? 'd' : 'r'),
+          steps: useD ? ['First halve the diameter to get the radius: ' + (2 * rad) + ' ÷ 2 = ' + rad + ' cm.', 'Circumference = 2πr = 2 × 3.14 × ' + rad + ' = ' + M(C + ' cm') + '.']
+            : ['Circumference = 2πr.', '= 2 × 3.14 × ' + rad + ' = ' + M(C + ' cm') + '.'], ans: M(C + ' cm'), accept: [C.toFixed(2)] };
       },
       hard: function (r) {
+        // Inverse problems: rearrange C = 2πr or A = πr² to find the radius (reinforces square roots).
+        if (pick(r, ['area', 'findR']) === 'findR') {
+          var rad = ri(r, 3, 12);
+          if (pick(r, ['fromC', 'fromA']) === 'fromC') {
+            var C = Math.round(2 * 3.14 * rad * 100) / 100, rc = Math.round((C / (2 * 3.14)) * 10) / 10;
+            return { q: 'A circle has circumference ' + M(C + ' cm') + '. Find its radius. Use ' + M('π = 3.14') + ', answer to 1 dp.', fig: circleFig('C = ' + C + ' cm', 'c'),
+              steps: ['Rearrange C = 2πr:  r = C ÷ (2π).', 'r = ' + C + ' ÷ (2 × 3.14) = ' + M(rc + ' cm') + '.'], ans: M(rc + ' cm'), accept: [rc.toFixed(1)] };
+          }
+          var A = Math.round(3.14 * rad * rad * 100) / 100, inner = Math.round((A / 3.14) * 100) / 100, ra = Math.round(Math.sqrt(A / 3.14) * 10) / 10;
+          return { q: 'A circle has area ' + M(A + ' cm²') + '. Find its radius. Use ' + M('π = 3.14') + ', answer to 1 dp.', fig: circleFig('A = ' + A + ' cm²', 'a'),
+            steps: ['Rearrange A = πr²:  r = √(A ÷ π).', 'r = √(' + A + ' ÷ 3.14) = √' + inner + ' = ' + M(ra + ' cm') + '.'], ans: M(ra + ' cm'), accept: [ra.toFixed(1)] };
+        }
         var rad = ri(r, 2, 12), A = Math.round(3.14 * rad * rad * 100) / 100;
         return { q: 'Find the area of a circle with radius ' + M(rad + ' cm') + '. Use ' + M('π = 3.14') + ', answer to 2 dp.', fig: circleFig(rad + ' cm', 'r'),
           steps: ['Area = πr².', '= 3.14 × ' + rad + '² = 3.14 × ' + rad * rad + ' = ' + M(A + ' cm²') + '.'], ans: M(A + ' cm²'), accept: [A.toFixed(2)] };
