@@ -231,11 +231,12 @@ export const LESSON_EXPANSIONS = {
 <p><span class="term">Perimeter</span> is a one-dimensional length around the edge of a shape; <span class="term">area</span> is a two-dimensional covering, counted in <span class="hl">unit squares</span>.</p>
 <ul class="def-list">
   <li>Key area formulas: rectangle = length &times; width; triangle = &frac12; &times; base &times; height (exactly half its surrounding rectangle); parallelogram = base &times; height.</li>
+  <li>A <span class="term">trapezium</span> has one pair of parallel sides (lengths a and b, a distance h apart). Its area is <span class="hl">&frac12;(a + b) &times; h</span> &mdash; average the two parallel sides, then multiply by the height. For a = 6, b = 10, h = 4: &frac12;(6 + 10) &times; 4 = &frac12; &times; 16 &times; 4 = 32.</li>
   <li>For a triangle, "height" always means the <span class="term">perpendicular height</span> &mdash; measured straight up from the base at a right angle &mdash; never the slanted side, even when the slanted side looks like the obvious measurement to use.</li>
   <li>A <span class="term">compound shape</span> (made of simpler shapes joined together) is found by splitting it into rectangles and triangles, then adding or subtracting their areas.</li>
   <li>Perimeter and area measure genuinely different things &mdash; a shape can have a bigger perimeter but a <em>smaller</em> area than another shape.</li>
 </ul>
-<div class="kbox"><span class="kbox-tag">Key areas</span><span class="formula">rectangle = l &times; w<br>triangle = &frac12; &times; b &times; h<br>parallelogram = b &times; h</span></div>
+<div class="kbox"><span class="kbox-tag">Key areas</span><span class="formula">rectangle = l &times; w<br>triangle = &frac12; &times; b &times; h<br>parallelogram = b &times; h<br>trapezium = &frac12;(a + b) &times; h</span></div>
 <div class="rw-examples">
   <div class="rw-card">
     <span class="rw-tag">&#128679; Fencing a garden</span>
@@ -288,7 +289,7 @@ export const LESSON_EXPANSIONS = {
   <li>Every step must be a "legal move": add, subtract, multiply or divide <span class="hl">both sides equally</span> so the balance stays true.</li>
   <li>To undo an operation, apply its opposite (its <span class="term">inverse</span>) &mdash; undo in the reverse order to how the expression was built.</li>
   <li>Always check your answer by substituting it back into the original equation &mdash; both sides should come out equal.</li>
-  <li>Every equation in this chapter has the unknown on just one side. Equations with the unknown on <em>both</em> sides (like x + 3 = 2x &minus; 1) use the same balance idea with one extra move, and come later.</li>
+  <li>If the unknown appears on <em>both</em> sides (like 3x + 5 = x + 13), do one extra move first: subtract the smaller x-term from both sides to gather all the x's on one side, then solve as usual. Subtract x from both sides &rarr; 2x + 5 = 13 &rarr; 2x = 8 &rarr; <span class="hl">x = 4</span>. The balance idea is unchanged &mdash; you are just lifting an x-shaped weight off each pan.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Legal moves</span><span class="formula">do the SAME thing to both sides<br>undo operations in reverse</span></div>
 <div class="rw-examples">
@@ -510,8 +511,9 @@ export const LESSON_EXPANSIONS = {
 <p>A <span class="term">variable</span> is a letter standing in for a number that is unknown or can change.</p>
 <ul class="def-list">
   <li>A <span class="term">term</span> is one piece of an expression, like 3x; the number in front (3) is its <span class="term">coefficient</span>.</li>
-  <li>Only <span class="hl">like terms</span> &mdash; terms with exactly the same letter part &mdash; can be combined: 3x + 5x = 8x, but 3x + 2y cannot be simplified further.</li>
+  <li>Only <span class="hl">like terms</span> &mdash; terms with exactly the same letter part <em>and the same power</em> &mdash; can be combined: 3x + 5x = 8x, but 3x + 2y (different letters) and x + x&sup2; (different powers, since x&sup2; means x&times;x) cannot be combined.</li>
   <li><span class="term">Expanding</span> a bracket means multiplying every term inside it by what's outside: a(b + c) = ab + ac. If the outside number is negative, every term inside flips sign: &minus;2(x &minus; 3) = &minus;2x + 6, not &minus;2x &minus; 6.</li>
+  <li><span class="term">Factorising</span> is expanding in reverse: find the highest common factor of the terms and write it outside a bracket. 6x + 9 share a common factor of 3, so 6x + 9 = <span class="hl">3(2x + 3)</span>. Check by expanding back: 3&times;2x + 3&times;3 = 6x + 9. &#10003;</li>
   <li>Two expressions are equivalent if they give the same value for every number substituted in &mdash; a fact you can spot-check by trying a number in both.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">The engine: distributive property</span><span class="formula">a(b + c) = ab + ac &nbsp;(expanding &mdash; and, reversed, factoring)<br>&minus;2(x &minus; 3) = &minus;2x + 6 &nbsp;(a negative outside flips every sign inside)</span></div>
@@ -674,6 +676,9 @@ export const LESSON_EXPANSIONS = {
   <li>A ratio can also be written as a fraction of the whole. In the ratio 5 : 6 there are 5 + 6 = 11 parts altogether, so the first quantity is <span class="hl">5&frasl;11</span> of the total and the second is <span class="hl">6&frasl;11</span> of the total.</li>
   <li>Ratios can be simplified exactly like fractions &mdash; divide every part by the same number. e.g. 10 : 12 simplifies to <span class="hl">5 : 6</span> (divide both by 2).</li>
   <li>To share an amount in a given ratio, add the parts first, divide to find the value of <em>one</em> part, then multiply for each share (the <span class="term">unitary method</span>).</li>
+  <li>A <span class="term">rate</span> compares two <em>different</em> units. To find a <span class="term">unit rate</span>, divide so the second quantity becomes 1: $4.50 for 500 g is 4.50 &divide; 500 = <span class="hl">$0.009 per gram</span>. Reducing to "per one" is what lets you compare fairly.</li>
+  <li>To find the better value, compare unit rates: 500 g for $4.50 is $0.009/g, while 750 g for $6.30 is 6.30 &divide; 750 = $0.0084/g &mdash; cheaper per gram, so better value even though it costs more in total.</li>
+  <li><span class="term">Speed</span> is the most common rate: speed = distance &divide; time. 300 km in 5 hours is 300 &divide; 5 = <span class="hl">60 km/h</span>.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Unitary method</span><span class="formula">total &divide; (sum of parts) = one part &rarr; multiply for each share</span></div>
 <div class="rw-examples">
@@ -692,6 +697,11 @@ export const LESSON_EXPANSIONS = {
     <span class="rw-tag">&#128176; Splitting chore money</span>
     <p>Two siblings share $40 for chores in the ratio 3 : 5.</p>
     <p>3 + 5 = 8 parts. $40 &divide; 8 = $5 per part. So they get 3 &times; $5 = <b>$15</b> and 5 &times; $5 = <b>$25</b>.</p>
+  </div>
+  <div class="rw-card">
+    <span class="rw-tag">&#128722; Best value at the shop</span>
+    <p>Which is cheaper per gram: 500 g of rice for $4.50, or 750 g for $6.30?</p>
+    <p>500 g: $4.50 &divide; 500 = <b>$0.009/g</b>. 750 g: $6.30 &divide; 750 = <b>$0.0084/g</b>. The bigger bag wins &mdash; always compare the <em>unit rate</em>, not the total price.</p>
   </div>
 </div>`,
 
