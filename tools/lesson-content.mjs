@@ -495,6 +495,7 @@ export const LESSON_EXPANSIONS = {
 </ul>
 <div class="kbox"><span class="kbox-tag">Two rules</span><span class="formula">term-to-term: add the common difference<br>position-to-term: nth term = d &times; n + adjust</span></div>
 <p>Going the other way &mdash; from a sequence <em>to</em> its rule &mdash; is the direction most questions actually ask. For 7, 11, 15, 19&hellip;: the difference is always +4, so the rule starts "4n". Testing n = 1 gives 4&times;1 = 4, but the real first term is 7, so add 3: the rule is <b>4n + 3</b>. Check it: n = 2 &rarr; 4&times;2+3 = 11. &#10003;</p>
+<p>When the difference itself changes, look at the <span class="term">second differences</span> (the gaps between the gaps). For 2, 6, 12, 20, 30&hellip; the first differences are 4, 6, 8, 10 &mdash; each 2 more than the last &mdash; so the next gap is 12 and the next term is 42. Two families are worth knowing by name: the <span class="hl">square numbers</span> 1, 4, 9, 16&hellip; have nth term n&sup2;, and the <span class="hl">triangular numbers</span> 1, 3, 6, 10&hellip; have nth term n(n + 1) &divide; 2.</p>
 <div class="rw-examples">
   <div class="rw-card">
     <span class="rw-tag">&#127917; Theatre seating</span>
@@ -566,7 +567,7 @@ export const LESSON_EXPANSIONS = {
 <ul class="def-list">
   <li>A decimal names a precise point on the number line, just like a fraction &mdash; 0.75 is exactly the same point as 3&frasl;4.</li>
   <li>To <span class="term">add or subtract</span> decimals, line up the decimal points so you combine same-size parts: tenths with tenths, hundredths with hundredths.</li>
-  <li>To <span class="term">multiply</span> decimals, count the total decimal places in both numbers &mdash; the answer needs that many decimal places.</li>
+  <li>To <span class="term">multiply</span> decimals, count the total decimal places in both numbers &mdash; the answer needs that many. This works because you are really scaling by tens: 3.6 &times; 0.4 = (36 &divide; 10) &times; (4 &divide; 10) = 36 &times; 4 &divide; 100 = 144 &divide; 100 = <span class="hl">1.44</span>.</li>
   <li>More digits does not mean a bigger number. Compare by place value: 0.5 is bigger than 0.45, even though 0.45 has more digits.</li>
   <li>To <span class="term">divide</span> by a decimal, multiply both numbers by 10 (or 100&hellip;) until the divisor is a whole number &mdash; this doesn't change the answer, just makes the division easier. e.g. 3.5 &divide; 0.5: multiply both by 10 &rarr; 35 &divide; 5 = <b>7</b>.</li>
 </ul>
