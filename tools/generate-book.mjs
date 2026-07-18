@@ -183,7 +183,36 @@ const STATIC_MODELS = {
       <circle class="fig-shape" cx="135" cy="120" r="14"/><text class="fig-txt" x="135" y="125" text-anchor="middle">2</text>
       <circle class="fig-shape" cx="185" cy="120" r="14"/><text class="fig-txt" x="185" y="125" text-anchor="middle">3</text>
       <text class="fig-txt soft" x="110" y="158" text-anchor="middle">36 = 2 &times; 2 &times; 3 &times; 3</text>
-    </svg>`,
+    </svg>
+    <div class="cap" style="margin-top:16px">HCF &amp; LCM of 18 and 24 as shared prime factors</div>
+    <svg class="viz" viewBox="0 0 264 150" width="264" role="img" aria-label="Two overlapping circles of prime factors: 18 is 2,3,3 and 24 is 2,2,2,3; the shared 2 and 3 sit in the overlap">
+      <circle cx="98" cy="70" r="58" fill="var(--brand)" fill-opacity=".10" stroke="var(--brand)"/>
+      <circle cx="166" cy="70" r="58" fill="var(--marigold)" fill-opacity=".16" stroke="#C9791A"/>
+      <text class="fig-txt" text-anchor="middle" x="58" y="30">18</text>
+      <text class="fig-txt" text-anchor="middle" x="206" y="30">24</text>
+      <text class="fig-txt" text-anchor="middle" x="64" y="76" style="font-size:16px">3</text>
+      <text class="fig-txt" text-anchor="middle" x="132" y="62" style="font-size:16px">2</text>
+      <text class="fig-txt" text-anchor="middle" x="132" y="86" style="font-size:16px">3</text>
+      <text class="fig-txt" text-anchor="middle" x="200" y="60" style="font-size:16px">2</text>
+      <text class="fig-txt" text-anchor="middle" x="200" y="84" style="font-size:16px">2</text>
+      <text class="fig-txt soft" text-anchor="middle" x="132" y="116" style="font-size:10px">shared</text>
+    </svg>
+    <div class="pvexp">HCF = the overlap = 2 &times; 3 = <b>6</b>. LCM = everything = 2 &times; 2 &times; 2 &times; 3 &times; 3 = <b>72</b>.</div>`,
+
+  decimals: `<div class="cap">Which is bigger &mdash; 0.7 or 0.65?</div>
+    <svg class="viz" viewBox="0 0 262 118" width="262" role="img" aria-label="Two bars from 0 to 1: the top filled to 0.7, the bottom to 0.65, showing 0.7 reaches further">
+      ${[['0.7', 0.7, 18, 'var(--brand)'], ['0.65', 0.65, 66, 'var(--marigold)']].map(([lab, v, y, col]) => {
+    const x0 = 44, w = 196;
+    let s = `<text class="fig-txt" text-anchor="end" x="38" y="${y + 17}">${lab}</text>`;
+    s += `<rect x="${x0}" y="${y}" width="${w}" height="24" rx="3" fill="none" stroke="var(--grid)"/>`;
+    s += `<rect x="${x0}" y="${y}" width="${(w * v).toFixed(1)}" height="24" rx="3" fill="${col}" fill-opacity=".55"/>`;
+    for (let i = 1; i < 10; i++) s += `<line x1="${(x0 + w * i / 10).toFixed(1)}" y1="${y}" x2="${(x0 + w * i / 10).toFixed(1)}" y2="${y + 24}" stroke="var(--grid)" stroke-dasharray="2 2"/>`;
+    return s;
+  }).join('')}
+      <line x1="${(44 + 196 * 0.65).toFixed(1)}" y1="14" x2="${(44 + 196 * 0.65).toFixed(1)}" y2="96" stroke="var(--ink-soft)" stroke-dasharray="3 3"/>
+      <line x1="${(44 + 196 * 0.7).toFixed(1)}" y1="14" x2="${(44 + 196 * 0.7).toFixed(1)}" y2="96" stroke="var(--brand)" stroke-dasharray="3 3"/>
+    </svg>
+    <div class="pvexp">0.7 = 0.70, and 70 hundredths &gt; 65 hundredths &mdash; more digits doesn&rsquo;t mean a bigger number.</div>`,
 
   percentages: `<div class="cap">25% of a hundred square</div>
     <svg class="viz" viewBox="0 0 210 210" width="180" role="img" aria-label="A ten by ten grid with 25 of the 100 small squares shaded">
