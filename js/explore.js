@@ -32,6 +32,10 @@
     return out;
   }
 
+  // One mystery sequence per page load, so the patterns widget can also rehearse the harder
+  // direction — inferring a rule FROM terms, not just generating terms from a rule.
+  var patTarget = { d: 2 + Math.floor(Math.random() * 6), c: 1 + Math.floor(Math.random() * 7) };
+
   /* ---------- the 24 specs ---------- */
   var EXPLORES = {
 
@@ -190,10 +194,13 @@
       ],
       render: function (v) {
         var terms = [1, 2, 3, 4, 5].map(function (n) { return v.d * n + v.c; });
+        var mystery = [1, 2, 3, 4, 5].map(function (n) { return patTarget.d * n + patTarget.c; });
+        var matched = v.d === patTarget.d && v.c === patTarget.c;
         return '<div class="ex-num">' + v.d + 'n + ' + v.c + '</div>' +
-          cap('Terms 1&ndash;5: ' + terms.join(', ') + ', &hellip;') +
+          cap('Your terms 1&ndash;5: ' + terms.join(', ') + ', &hellip;') +
           cap('Term ' + v.n + ' = ' + v.d + '&times;' + v.n + ' + ' + v.c + ' = <b>' + (v.d * v.n + v.c) + '</b>') +
-          note('The term-to-term rule (&ldquo;add ' + v.d + '&rdquo;) needs ' + (v.n - 1) + ' steps to reach term ' + v.n + '; the position rule jumps there in one.');
+          cap('&#128269; Mystery sequence: <b>' + mystery.slice(0, 4).join(', ') + ', &hellip;</b> &mdash; set the sliders to generate it.') +
+          note(matched ? '&#9989; Matched! The mystery rule is ' + patTarget.d + 'n + ' + patTarget.c + '. (Find the constant gap for d, then adjust to fit term 1.)' : 'Work backwards: the constant gap between mystery terms is d; then find the adjustment that fixes term 1.');
       }
     },
 
