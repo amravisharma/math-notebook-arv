@@ -440,6 +440,35 @@
 
   var LEVELS = [['Easy', 'easy'], ['Medium', 'medium'], ['Hard', 'hard']];
 
+  // A small pool of misconceptions per dynamic topic, so the Mistake Detective rotates with the
+  // site-wide seed instead of showing the same one every visit (its retrieval value was fading).
+  var MISTAKE_POOL = {
+    graphs: [
+      { wrong: 'Plotting (3, 2) as 3 up, then 2 across.', error: 'They read the pair as (y, x) — up first, then along.', fix: 'Coordinates are (x, y): go ALONG the x-axis first, THEN up. (3, 2) means 3 right, 2 up.' },
+      { wrong: 'Working out a gradient as run &divide; rise.', error: 'They inverted the gradient fraction.', fix: 'Gradient = rise &divide; run — how much y changes for every 1 step in x, not the other way round.' }
+    ],
+    angles: [
+      { wrong: 'The complement of 110&deg; is 70&deg;.', error: 'They used 180&deg; (supplementary) but called it complementary.', fix: 'Complementary angles add to 90&deg;, so 110&deg; has no complement. Angles that add to 180&deg; are supplementary.' },
+      { wrong: 'At a crossing of two lines, all four angles are equal.', error: 'They assumed every angle at a crossing is the same.', fix: 'Only vertically opposite angles are equal; neighbouring angles are supplementary (add to 180&deg;).' }
+    ],
+    shapes: [
+      { wrong: 'Interior angle sum of a pentagon = 5 &times; 180&deg; = 900&deg;.', error: 'They multiplied by n instead of (n &minus; 2).', fix: 'A pentagon splits into 3 triangles from one corner, so the sum is (5 &minus; 2) &times; 180&deg; = 540&deg;.' },
+      { wrong: 'A rhombus is a regular quadrilateral.', error: 'They took &ldquo;all sides equal&rdquo; to mean regular.', fix: 'Regular means equal sides AND equal angles. A rhombus has equal sides but unequal angles, so it is not regular.' }
+    ],
+    transformations: [
+      { wrong: 'Reflecting (3, 2) in the x-axis gives (&minus;3, 2).', error: 'They flipped x instead of y.', fix: 'Reflecting in the x-axis flips the height (y): (3, 2) &rarr; (3, &minus;2). Flipping x is reflection in the y-axis.' },
+      { wrong: 'Enlarging a shape by scale factor 2 doubles its area.', error: 'They scaled area by k instead of k&sup2;.', fix: 'Lengths scale by 2, but area scales by 2&sup2; = 4: a 3&times;3 square (area 9) becomes 6&times;6 (area 36).' }
+    ],
+    pythagoras: [
+      { wrong: 'Hypotenuse of a 3, 4 right triangle = 3 + 4 = 7.', error: 'They added the legs instead of the squares.', fix: 'Square, add, then square-root: c = &radic;(3&sup2; + 4&sup2;) = &radic;25 = 5, not 7.' },
+      { wrong: 'Using a&sup2; + b&sup2; = c&sup2; on any triangle.', error: 'They applied Pythagoras to a triangle with no right angle.', fix: 'Pythagoras only holds for right-angled triangles — confirm the right angle before using it.' }
+    ],
+    circles: [
+      { wrong: 'Area of a circle of radius 5 = &pi; &times; 5 &times; 2 = 31.4.', error: 'They used 2r (that is circumference) instead of r&sup2; for area.', fix: 'Area = &pi;r&sup2; = 3.14 &times; 5&sup2; = 78.5. Circumference uses r once; area uses r squared.' },
+      { wrong: 'Given a diameter of 10, area = &pi; &times; 10&sup2;.', error: 'They put the diameter into the radius formula.', fix: 'Halve the diameter first: radius = 5, so area = &pi; &times; 5&sup2; = 78.5, not &pi; &times; 10&sup2;.' }
+    ]
+  };
+
   function generateFor(topicId) {
     var g = GEN[topicId]; if (!g) return null;
     var seed = window.ProgressStore.getSeed(topicId);
@@ -511,6 +540,17 @@
           partHtml('Part B - Method and reasoning', assignmentItems(t.medium, 1, 3)),
           partHtml('Part C - Application and challenge', assignmentItems(t.hard, 1, 3))
         ].join('');
+      }
+
+      // Rotate the Mistake Detective from this topic's pool, keyed to the same seed as the
+      // questions, so a returning learner meets a fresh misconception rather than the same one.
+      var pool = MISTAKE_POOL[topicId];
+      if (pool && pool.length && window.ProgressStore) {
+        var mk = pool[window.ProgressStore.getSeed(topicId) % pool.length];
+        var misQ = document.querySelector('.hf-sec.mistake .mis-q');
+        if (misQ) misQ.innerHTML = mk.wrong;
+        var misItems = document.querySelectorAll('.hf-sec.mistake .mis-item p');
+        if (misItems && misItems.length >= 3) { misItems[0].innerHTML = mk.error; misItems[2].innerHTML = mk.fix; }
       }
     }
   };

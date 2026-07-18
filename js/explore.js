@@ -104,15 +104,21 @@
     },
 
     decimals: {
-      kind: 'slider', intro: 'Slide through the hundredths and read the same number three ways.',
-      sliders: [{ id: 'h', label: 'Hundredths', min: 0, max: 100, step: 1, val: 37 }],
+      kind: 'slider', intro: 'Multiplying decimals is an area: tenths across &times; tenths down make hundredths. Shade and count.',
+      sliders: [
+        { id: 'a', label: 'First factor', min: 1, max: 9, step: 1, val: 6, fmt: function (x) { return '0.' + x; } },
+        { id: 'b', label: 'Second factor', min: 1, max: 9, step: 1, val: 7, fmt: function (x) { return '0.' + x; } }
+      ],
       render: function (v) {
-        var bar = '<rect x="1" y="1" width="300" height="26" rx="4" fill="#fff" stroke="#8A90A8"/>' +
-          '<rect x="1" y="1" width="' + (v.h * 3) + '" height="26" rx="4" fill="' + TINT + '"/>';
-        for (var i = 1; i < 10; i++) bar += '<line x1="' + (i * 30 + 1) + '" y1="1" x2="' + (i * 30 + 1) + '" y2="27" stroke="#8A90A8" stroke-dasharray="2 3"/>';
-        return svg(302, 30, bar, 'number line from 0 to 1 shaded to ' + (v.h / 100)) +
-          cap((v.h / 100).toFixed(2) + ' = ' + v.h + '&frasl;100 = ' + Math.floor(v.h / 10) + ' tenths + ' + (v.h % 10) + ' hundredths') +
-          note('Notice 0.4 (40 hundredths) is far bigger than 0.09 (9 hundredths) — length beats digit-count.');
+        var s = 15, g = '';
+        for (var r = 0; r < 10; r++) for (var c = 0; c < 10; c++) {
+          var on = c < v.a && r < v.b;
+          g += '<rect x="' + (c * s + 1) + '" y="' + (r * s + 1) + '" width="' + (s - 2) + '" height="' + (s - 2) + '" rx="1.5" fill="' + (on ? BRAND : '#fff') + '" fill-opacity="' + (on ? '.5' : '1') + '" stroke="#B6C0D8"/>';
+        }
+        var prod = v.a * v.b;
+        return svg(152, 152, g, v.a + ' columns by ' + v.b + ' rows shaded, ' + prod + ' of 100 cells') +
+          cap('0.' + v.a + ' &times; 0.' + v.b + ': shade ' + v.a + ' columns &times; ' + v.b + ' rows = <b>' + prod + '</b> of 100 = <b>' + (prod / 100).toFixed(2) + '</b>') +
+          note('Each factor is in tenths, so the shaded area is in hundredths — that is why the answer has 1 + 1 = 2 decimal places (' + v.a + ' &times; ' + v.b + ' = ' + prod + ', then &divide; 100).');
       }
     },
 
@@ -283,17 +289,35 @@
     },
 
     angles: {
-      kind: 'slider', intro: 'Two angles on a straight line always share 180&deg;. Drag one and watch the other pay for it.',
-      sliders: [{ id: 'a', label: 'Angle', min: 10, max: 170, step: 5, val: 60 }],
+      kind: 'slider', intro: 'Pick a scene: two angles on a straight line, or a transversal cutting parallel lines.',
+      sliders: [
+        { id: 'm', label: 'Scene', min: 0, max: 1, step: 1, val: 0, fmt: function (i) { return i ? 'parallel lines' : 'straight line'; } },
+        { id: 'a', label: 'Angle', min: 15, max: 165, step: 5, val: 60 }
+      ],
       render: function (v) {
-        var W = 260, ox = W / 2, oy = 92, len = 100, rad = v.a * Math.PI / 180;
-        var g = '<line x1="' + (ox - len) + '" y1="' + oy + '" x2="' + (ox + len) + '" y2="' + oy + '" stroke="' + SOFT + '" stroke-width="2"/>';
-        g += '<line x1="' + ox + '" y1="' + oy + '" x2="' + (ox + len * Math.cos(rad)).toFixed(1) + '" y2="' + (oy - len * Math.sin(rad)).toFixed(1) + '" stroke="' + BRAND + '" stroke-width="2.5"/>';
-        g += '<circle cx="' + ox + '" cy="' + oy + '" r="3.5" fill="' + INK + '"/>';
+        if (v.m === 1) {
+          var y1 = 60, y2 = 96, sep = y2 - y1, cx = 130, rad = v.a * Math.PI / 180;
+          var dx = sep / Math.tan(rad), Tx = cx - dx / 2, Bx = cx + dx / 2;
+          var vx = Bx - Tx, L = Math.sqrt(vx * vx + sep * sep), ux = vx / L, uy = sep / L, ext = 30;
+          var g = '<line x1="20" y1="' + y1 + '" x2="240" y2="' + y1 + '" stroke="' + SOFT + '" stroke-width="1.5"/>' +
+            '<line x1="20" y1="' + y2 + '" x2="240" y2="' + y2 + '" stroke="' + SOFT + '" stroke-width="1.5"/>';
+          g += '<line x1="' + (Tx - ux * ext).toFixed(1) + '" y1="' + (y1 - uy * ext).toFixed(1) + '" x2="' + (Bx + ux * ext).toFixed(1) + '" y2="' + (y2 + uy * ext).toFixed(1) + '" stroke="' + BRAND + '" stroke-width="2"/>';
+          g += '<circle cx="' + Tx.toFixed(1) + '" cy="' + y1 + '" r="3" fill="' + INK + '"/><circle cx="' + Bx.toFixed(1) + '" cy="' + y2 + '" r="3" fill="' + INK + '"/>';
+          var bx = 1 + ux, by = uy, bl = Math.sqrt(bx * bx + by * by);
+          g += txt((Tx + bx / bl * 26).toFixed(1), (y1 + by / bl * 26 + 4).toFixed(1), v.a + '&deg;', 'middle', 12, BAD, true);
+          g += txt((Bx + bx / bl * 26).toFixed(1), (y2 + by / bl * 26 + 4).toFixed(1), v.a + '&deg;', 'middle', 12, BRAND, true);
+          return svg(260, 132, g, 'a transversal crossing two parallel lines, both corresponding angles ' + v.a + ' degrees') +
+            cap('Both marked angles are ' + v.a + '&deg; &mdash; corresponding (F) angles between parallel lines are equal.') +
+            note('Slide the angle: the two stay locked together, because the parallel lines never change direction.');
+        }
+        var W = 260, ox = W / 2, oy = 92, len = 100, rd = v.a * Math.PI / 180;
+        var g2 = '<line x1="' + (ox - len) + '" y1="' + oy + '" x2="' + (ox + len) + '" y2="' + oy + '" stroke="' + SOFT + '" stroke-width="2"/>';
+        g2 += '<line x1="' + ox + '" y1="' + oy + '" x2="' + (ox + len * Math.cos(rd)).toFixed(1) + '" y2="' + (oy - len * Math.sin(rd)).toFixed(1) + '" stroke="' + BRAND + '" stroke-width="2.5"/>';
+        g2 += '<circle cx="' + ox + '" cy="' + oy + '" r="3.5" fill="' + INK + '"/>';
         var la = (v.a / 2) * Math.PI / 180, lb = ((180 + v.a) / 2) * Math.PI / 180;
-        g += txt((ox + 52 * Math.cos(la)).toFixed(1), (oy - 52 * Math.sin(la) + 4).toFixed(1), v.a + '&deg;', 'middle', 13, BAD, true);
-        g += txt((ox + 52 * Math.cos(lb)).toFixed(1), (oy - 52 * Math.sin(lb) + 4).toFixed(1), (180 - v.a) + '&deg;', 'middle', 13, BRAND, true);
-        return svg(W, 104, g, 'two angles on a straight line: ' + v.a + ' and ' + (180 - v.a) + ' degrees') +
+        g2 += txt((ox + 52 * Math.cos(la)).toFixed(1), (oy - 52 * Math.sin(la) + 4).toFixed(1), v.a + '&deg;', 'middle', 13, BAD, true);
+        g2 += txt((ox + 52 * Math.cos(lb)).toFixed(1), (oy - 52 * Math.sin(lb) + 4).toFixed(1), (180 - v.a) + '&deg;', 'middle', 13, BRAND, true);
+        return svg(W, 104, g2, 'two angles on a straight line: ' + v.a + ' and ' + (180 - v.a) + ' degrees') +
           cap(v.a + '&deg; + ' + (180 - v.a) + '&deg; = 180&deg; — always') +
           note('One grows exactly as fast as the other shrinks: they are supplementary.');
       }
