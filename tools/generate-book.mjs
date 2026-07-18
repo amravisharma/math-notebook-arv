@@ -116,7 +116,25 @@ const DYNAMIC_IDS = new Set(['graphs', 'angles', 'shapes', 'transformations', 'p
 // comma/whitespace-insensitive) grade these too. ~97% of the 720 answers are a single clean value;
 // a handful of multi-part answers (e.g. "$18 and $27") may occasionally mismatch on odd phrasing —
 // the same trade-off the dynamic topics already accept.
-function stripTags(html) { return String(html).replace(/<[^>]+>/g, '').trim(); }
+// Fraction answers are authored as stacked spans (<span class="frac"><span class="n">2</span>
+// <span class="d">3</span></span>) with no literal "/", so a naive tag-strip collapses "2/3" to
+// "23" — which then never matches a learner typing "2/3". Rebuild "n/d" from those spans BEFORE
+// stripping the rest, so the derived accept value is the same text the learner types. (Mixed
+// numbers like 2·1/6 become "21/6"; normAns strips whitespace either way, so the slash is what
+// matters.) Affects the frac-span answers in Fractions and Probability; plain-text "1/6" answers
+// already carry their slash and are untouched.
+//
+// The final tag-strip only removes REAL tags — "<" (or "</") immediately followed by a letter —
+// not a bare "<" used as a maths operator. A naive /<[^>]+>/ ate the "less-than" in Inequalities
+// answers like `<span class="m">x < 7</span>`: it matched "< 7</span>" as one "tag", truncating
+// the accepted answer to just "x" (so a correct "x < 7" could never be marked right, while a bare
+// "x" was wrongly accepted). "x > 4" was unaffected because ">" alone never opens a tag match.
+function stripTags(html) {
+  return String(html)
+    .replace(/<span class="frac">\s*<span class="n">([^<]*)<\/span>\s*<span class="d">([^<]*)<\/span>\s*<\/span>/g, '$1/$2')
+    .replace(/<\/?[a-zA-Z][^>]*>/g, '')
+    .trim();
+}
 
 // --- 2b. Visual models for the static topics the review found had none. Hand-authored, simple,
 // reusing the same .fig-*/.viz classes the dynamic topics' generated figures already use, so they
