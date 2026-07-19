@@ -48,10 +48,10 @@
   <section class="hf-sec explain" data-section="explain"><div class="hf-tag">&#128214; Read the chapter</div><p class="hf-sub">When a calculation mixes +, −, ×, ÷ and brackets, everyone needs the same answer. BEDMAS fixes the order: Brackets, Exponents, Division/Multiplication (left→right), Addition/Subtraction (left→right).</p><div class="lesson">
 <p>Order of operations is a <span class="hl">convention for reading</span>, not a law of nature — we agree on it so an expression like 6 + 4 &times; 3 has exactly one meaning for everyone.</p>
 <ul class="def-list">
-  <li><span class="term">BEDMAS</span> sets the order: Brackets, Exponents, Division/Multiplication (left to right), Addition/Subtraction (left to right).</li>
-  <li>&times; and &divide; rank equally, and + and &minus; rank equally. When operations tie in rank, work strictly <span class="hl">left to right</span>.</li>
-  <li>Brackets are always done first, no matter what operation is written inside them.</li>
-  <li>Spreadsheets, calculators and computer code all follow BEDMAS exactly &mdash; get the order wrong in one formula and every total after it is wrong too.</li>
+  <li><span class="term">BEDMAS</span> sets the order: Brackets, Exponents, Division/Multiplication (left to right), Addition/Subtraction (left to right). For example, in 6 + 4 &times; 3 the &times; is done first: 4 &times; 3 = 12, then 6 + 12 = 18.</li>
+  <li>&times; and &divide; rank equally, and + and &minus; rank equally. When operations tie in rank, work strictly <span class="hl">left to right</span>. For example, 40 &divide; 5 &times; 2 = 8 &times; 2 = 16 (left to right), not 40 &divide; 10 = 4.</li>
+  <li>Brackets are always done first, no matter what operation is written inside them. For example, 2 &times; (3 + 4) = 2 &times; 7 = <span class="hl">14</span>, whereas 2 &times; 3 + 4 is only 10.</li>
+  <li>Spreadsheets, calculators and computer code all follow BEDMAS exactly &mdash; get the order wrong in one formula and every total after it is wrong too. For example, the spreadsheet formula =2+3&times;4 returns <b>14</b> (the &times; first), not 20.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">The order</span><span class="formula">Brackets &rarr; Exponents &rarr; &times;, &divide; <span class="muted">(left to right)</span> &rarr; +, &minus; <span class="muted">(left to right)</span></span></div>
 <div class="rw-examples">

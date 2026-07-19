@@ -49,9 +49,9 @@
 <p>A <span class="term">sequence</span> is an ordered list of numbers built by a rule; each number is a <span class="term">term</span>, and its position in the list is n.</p>
 <ul class="def-list">
   <li>A <span class="term">term-to-term rule</span> tells you how to get the next term from the one before it, e.g. "add 4".</li>
-  <li>A <span class="term">position-to-term rule</span> (the nth-term rule) lets you jump straight to any term &mdash; like the 100th &mdash; without listing every term before it.</li>
-  <li>The common difference in a linear sequence becomes <em>the number multiplying n</em>; a constant is then added or subtracted to shift the rule so it matches the real first term.</li>
-  <li>Not every pattern grows by a constant amount &mdash; square numbers and triangular numbers grow by a changing amount each step.</li>
+  <li>A <span class="term">position-to-term rule</span> (the nth-term rule) lets you jump straight to any term &mdash; like the 100th &mdash; without listing every term before it. For example, with rule 4n + 3, term 100 = 4 &times; 100 + 3 = <span class="hl">403</span>, with no need to list terms 1&ndash;99.</li>
+  <li>The common difference in a linear sequence becomes <em>the number multiplying n</em>; a constant is then added or subtracted to shift the rule so it matches the real first term. For example, 5, 8, 11, 14&hellip; has difference 3, so the rule starts 3n; at n = 1 that gives 3 but the term is 5, so add 2 &rarr; <span class="hl">3n + 2</span>.</li>
+  <li>Not every pattern grows by a constant amount &mdash; square numbers and triangular numbers grow by a changing amount each step. For example, the square numbers 1, 4, 9, 16&hellip; grow by 3, 5, 7 &mdash; a gap that keeps increasing.</li>
 </ul>
 <div class="kbox"><span class="kbox-tag">Two rules</span><span class="formula">term-to-term: add the common difference<br>position-to-term: nth term = d &times; n + adjust</span></div>
 <p>Going the other way &mdash; from a sequence <em>to</em> its rule &mdash; is the direction most questions actually ask. For 7, 11, 15, 19&hellip;: the difference is always +4, so the rule starts "4n". Testing n = 1 gives 4&times;1 = 4, but the real first term is 7, so add 3: the rule is <b>4n + 3</b>. Check it: n = 2 &rarr; 4&times;2+3 = 11. &#10003;</p>
