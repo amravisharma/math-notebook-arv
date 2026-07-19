@@ -133,14 +133,30 @@
     for (var j = 0; j < acceptRaw.length; j++) { if (partsMatch(ip, normParts(acceptRaw[j]))) return true; }
     return false;
   }
-  window.TopicEngine = { normAns: normAns, isCorrect: isCorrect, getCheckMap: CHECK, parseLinearExpr: parseLinearExpr };
+  window.TopicEngine = { normAns: normAns, isCorrect: isCorrect, getCheckMap: CHECK, parseLinearExpr: parseLinearExpr, fractionHtml: fractionHtml };
+
+  // If a typed answer is CLEANLY a fraction or mixed number ("2/3", "1 5/12"), redisplay it with
+  // the same stacked-fraction styling the worked-solution "Answer" box already uses, instead of a
+  // flat "2/3" that reads as a division. Gated on the WHOLE trimmed string matching this narrow
+  // digits/space/slash pattern — since that's the only character set the regex can ever match, the
+  // built HTML can never contain anything unsafe, however the raw typed text was constructed.
+  // Anything not shaped exactly like this (words, coordinates, algebra, decimals, …) falls through
+  // to the plain, always-safe textContent path untouched.
+  function fractionHtml(v) {
+    var mixed = v.match(/^(\d+)\s+(\d+)\/(\d+)$/);
+    if (mixed) return '<span class="m">' + mixed[1] + ' <span class="frac"><span class="n">' + mixed[2] + '</span><span class="d">' + mixed[3] + '</span></span></span>';
+    var simple = v.match(/^(\d+)\/(\d+)$/);
+    if (simple) return '<span class="m"><span class="frac"><span class="n">' + simple[1] + '</span><span class="d">' + simple[2] + '</span></span></span>';
+    return null;
+  }
 
   function applyMark(ex, v, verdict) {
     ex.classList.add('attempted');
     ex.classList.toggle('correct', verdict === 'correct');
     ex.classList.toggle('wrong', verdict === 'wrong');
     var input = ex.querySelector('.ans-input'); input.value = v; input.readOnly = true;
-    ex.querySelector('.your-answer .txt').textContent = v;
+    var yourAnsEl = ex.querySelector('.your-answer .txt'), asFraction = fractionHtml(v);
+    if (asFraction) { yourAnsEl.innerHTML = asFraction; } else { yourAnsEl.textContent = v; }
     var mb = ex.querySelector('.markbtn'); mb.disabled = true;
     mb.innerHTML = verdict === 'correct' ? '✓ Correct' : verdict === 'wrong' ? '✗ Incorrect' : '✓ Answer marked';
     var rev = ex.querySelector('.reveal'); rev.classList.remove('locked');

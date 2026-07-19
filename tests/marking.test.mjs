@@ -12,7 +12,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadTopicEngine } from './helpers.mjs';
 
-const { isCorrect } = loadTopicEngine();
+const { isCorrect, fractionHtml } = loadTopicEngine();
 
 test('regression: numeric tolerance and unit stripping', () => {
   assert.equal(isCorrect('15', ['15']), true);
@@ -120,4 +120,18 @@ test('normParts filter broadening: unit words containing "/" no longer block com
   const accept = ['30 km/h; 3 h 20 min'];
   assert.equal(isCorrect('30 km/h and 3 h 20 min', accept), true);
   assert.equal(isCorrect('30 and 3 h 20 min', accept), true);
+});
+
+test('fractionHtml: renders clean fractions/mixed numbers, leaves everything else alone', () => {
+  assert.equal(fractionHtml('2/3'), '<span class="m"><span class="frac"><span class="n">2</span><span class="d">3</span></span></span>');
+  assert.equal(fractionHtml('1 5/12'), '<span class="m">1 <span class="frac"><span class="n">5</span><span class="d">12</span></span></span>');
+  assert.equal(fractionHtml('20'), null);
+  assert.equal(fractionHtml('x = 5'), null);
+});
+
+test('regression: fractionHtml can never inject HTML, no matter what was typed', () => {
+  // Gated on the WHOLE trimmed string matching a digits/space/slash-only pattern, so there is no
+  // character set the regex can match that could ever carry a tag or attribute.
+  const attempts = ['<script>alert(1)</script>', '2/3<img src=x onerror=alert(1)>', '1</span>5/12', '2/3" onmouseover="alert(1)'];
+  attempts.forEach((a) => assert.equal(fractionHtml(a), null, a));
 });
