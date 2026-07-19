@@ -100,6 +100,17 @@ test('compound rule-and-term answers (patterns.html redesign)', () => {
   assert.equal(isCorrect('3n+2 and 33', accept), false); // wrong term value
 });
 
+test('regression: partsMatch does not let parseFloat truncation fake-match a wrong sign', () => {
+  // "3n − 2" and "3n + 2" both start with the digit "3", and bare parseFloat("3n-2") silently
+  // truncates at the letter "n" and returns 3 — so without a strict-numeric guard, comparing these
+  // two algebra-shaped compound parts by "numeric equality" would wrongly treat them as equal,
+  // defeating the sign check entirely (found while verifying the tile-builder rejects a
+  // wrong-sign tile combination).
+  const accept = ['3n + 2 and 32'];
+  assert.equal(isCorrect('3n − 2 and 32', accept), false);
+  assert.equal(isCorrect('3n - 2 and 32', accept), false);
+});
+
 test('normParts filter broadening: HCF/LCM "=" tokens no longer block compound matching', () => {
   assert.equal(isCorrect('6 and 72', ['HCF = 6, LCM = 72']), true);
   assert.equal(isCorrect('5 and 72', ['HCF = 6, LCM = 72']), false); // wrong HCF must still fail

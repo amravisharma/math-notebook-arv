@@ -59,9 +59,14 @@
       if (a === b) continue;
       // Exact numeric equality only (handles "376.80" vs "376.8"). No rounding tolerance here:
       // ordering questions have neighbouring parts as close as 0.02 apart, so any slack would
-      // accept a wrongly-ordered list.
-      var fa = parseFloat(a), fb = parseFloat(b);
-      if (!isNaN(fa) && !isNaN(fb) && Math.abs(fa - fb) <= 1e-9) continue;
+      // accept a wrongly-ordered list. Gated on BOTH parts being STRICTLY numeric strings (not
+      // just "parseFloat doesn't return NaN") — parseFloat silently truncates at the first
+      // non-numeric character, so without this guard "3n-2" and "3n+2" both read as the bare
+      // number 3 and would falsely compare equal, defeating the sign check on an algebra part.
+      if (/^-?\d*\.?\d+$/.test(a) && /^-?\d*\.?\d+$/.test(b)) {
+        var fa = parseFloat(a), fb = parseFloat(b);
+        if (Math.abs(fa - fb) <= 1e-9) continue;
+      }
       // Fall back to algebraic-expression equivalence for this part (e.g. one part of a "rule and
       // term" compound answer, such as "2+3n" vs the authored "3n + 2").
       var pa = parseLinearExpr(a), pb = parseLinearExpr(b);
