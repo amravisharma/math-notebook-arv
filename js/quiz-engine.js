@@ -285,7 +285,7 @@
           else if (type === 'isosceles') { s1 = s2 = ri(r, 5, 9); s3 = ri(r, 2, s1 - 1); }
           else { s1 = ri(r, 5, 7); s2 = s1 + ri(r, 1, 2); s3 = s2 + ri(r, 1, 2); }
           return { q: 'Classify the triangle with side lengths ' + M(s1 + ' cm, ' + s2 + ' cm, ' + s3 + ' cm') + ' as equilateral, isosceles or scalene.', fig: triFig('', '', ''),
-            steps: [type === 'equilateral' ? 'All three sides are equal.' : type === 'isosceles' ? 'Exactly two sides are equal.' : 'No two sides are equal.', 'So the triangle is ' + M(type) + '.'], ans: M(type), accept: [type] };
+            steps: [type === 'equilateral' ? 'All three sides are equal.' : type === 'isosceles' ? 'Exactly two sides are equal.' : 'No two sides are equal.', 'So the triangle is ' + M(type) + '.'], ans: M(type), accept: [type], tileChoices: ['equilateral', 'isosceles', 'scalene'] };
         }
         var a = ri(r, 40, 90), b = ri(r, 30, Math.max(31, 140 - a)), bb = Math.min(b, 140 - a), x = 180 - a - bb;
         return { q: 'Find the missing angle ' + M('x') + ' in a triangle whose other angles are ' + M(a + '°') + ' and ' + M(bb + '°') + '.', fig: triFig(a + '°', bb + '°', 'x'),
@@ -383,7 +383,7 @@
           return { q: 'A triangle has sides ' + M(s1 + ', ' + s2 + ' and ' + s3 + ' cm') + '. Is it right-angled? (yes/no)',
             steps: ['Test the converse: do the two shorter sides² add to the longest side²? ' + s1 + '² + ' + s2 + '² = ' + (s1 * s1 + s2 * s2) + ', and ' + s3 + '² = ' + (s3 * s3) + '.',
               isRight ? 'They are equal, so by the converse of Pythagoras the triangle IS right-angled.' : 'They are not equal, so the triangle is NOT right-angled.'],
-            ans: M(isRight ? 'yes' : 'no'), accept: [isRight ? 'yes' : 'no'] };
+            ans: M(isRight ? 'yes' : 'no'), accept: [isRight ? 'yes' : 'no'], tileChoices: ['yes', 'no'] };
         }
         var a = ri(r, 4, 12), b = ri(r, 3, 11); if (b >= a) b = a - 1; if (b < 3) b = 3; var c = Math.round(Math.sqrt(a * a + b * b) * 10) / 10;
         return { q: 'A right-angled triangle has legs ' + M(a + ' cm') + ' and ' + M(b + ' cm') + '. Find the hypotenuse, to 1 decimal place.', fig: rightTri(a + ' cm', b + ' cm', '?', ri(r, 0, 3)),
@@ -497,6 +497,60 @@
     return null;
   }
 
+  // ---- tile-spec generator (ES5 port of tools/tile-spec.mjs) ----
+  // Dynamic topics' accept[] values are only known at runtime, so this mirrors the static build's
+  // generic tile-spec architecture (atoms + compose) just for the shapes that actually occur here:
+  // coordinates (points, translations, reflections, rotations, enlargements), classified from the
+  // accept string the same way the static deriveTileSpec is, plus "choice" (classification / yes-no)
+  // shapes wired explicitly per generator via e.tileChoices, since choice decoys (e.g. the other two
+  // triangle types) can't be derived from the accept string alone. Doesn't need to byte-for-byte
+  // match tools/tile-spec.mjs's output — see that file's own header for why.
+  var tsUid = 0;
+  function tsFreshId(prefix) { return prefix + (tsUid++); }
+  function tsNumberPart(value, decoys) {
+    var id = tsFreshId('n'), seen = {}, vals = [];
+    [String(value)].concat(decoys.map(String)).forEach(function (v) { if (!seen[v]) { seen[v] = true; vals.push(v); } });
+    return {
+      slots: [{ id: id, kind: id }],
+      tiles: vals.map(function (v, i) { return { id: id + '_' + i, label: v, value: v, kind: id }; }),
+      template: [{ slot: id }]
+    };
+  }
+  function tsChoicePart(correct, decoys) {
+    var id = tsFreshId('choice'), seen = {}, vals = [];
+    [correct].concat(decoys).forEach(function (v) { if (!seen[v]) { seen[v] = true; vals.push(v); } });
+    return {
+      slots: [{ id: id, kind: id }],
+      tiles: vals.map(function (v, i) { return { id: id + '_' + i, label: v, value: v, kind: id }; }),
+      template: [{ slot: id }]
+    };
+  }
+  function tsCompose(pieces) {
+    var slots = [], tiles = [], template = [];
+    pieces.forEach(function (p) {
+      if (typeof p === 'string') { template.push({ text: p }); return; }
+      slots = slots.concat(p.slots); tiles = tiles.concat(p.tiles); template = template.concat(p.template);
+    });
+    return { slots: slots, tiles: tiles, template: template };
+  }
+  // Separator is a bare ',' (no space) to match coordAcc's exact accept-string format above
+  // ('(' + x + ',' + y + ')') — normAns strips whitespace either way, but matching byte-for-byte
+  // keeps the tile-assembled "Your answer" display consistent with the canonical answer text.
+  function coordinateTileSpec(x, y) {
+    return tsCompose(['(', tsNumberPart(x, [x + 1, x - 1, -x]), ',', tsNumberPart(y, [y + 1, y - 1, -y]), ')']);
+  }
+  function choiceTileSpec(correct, decoys) { return tsChoicePart(correct, decoys); }
+  // Coordinate is the only shape that occurs in a dynamic topic's accept[0] (see coordAcc above) —
+  // plain numbers/angles/measurements are deliberately left free-text-only, same principle as the
+  // static classifier (no real format ambiguity to resolve with tiles).
+  function deriveDynamicTileSpec(raw) {
+    var v = String(raw).trim(), m;
+    if ((m = v.match(/^\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)$/))) {
+      return coordinateTileSpec(Number(m[1]), Number(m[2]));
+    }
+    return null;
+  }
+
   var LEVELS = [['Easy', 'easy'], ['Medium', 'medium'], ['Hard', 'hard']];
 
   // A small pool of misconceptions per dynamic topic, so the Mistake Detective rotates with the
@@ -551,6 +605,7 @@
   window.QuizEngine = {
     GEN: GEN, INTRO_FIG: INTRO_FIG, INTRO_CAP: INTRO_CAP,
     formatHint: formatHint, parseLinearExpr: parseLinearExpr,
+    deriveDynamicTileSpec: deriveDynamicTileSpec, coordinateTileSpec: coordinateTileSpec, choiceTileSpec: choiceTileSpec,
 
     // Renders the practice tabs/panes, worked-examples sample grid, and assignment grid for a
     // dynamic topic, and registers each item's accept[] into window.TOPIC_CHECK for grading.
@@ -565,11 +620,17 @@
           var kkey = topicId + '|' + key + '|' + idx;
           if (e.accept) window.TOPIC_CHECK[kkey] = e.accept;
           var hint = e.accept ? formatHint(e.accept[0]) : null;
+          var tileSpec = e.accept ? (e.tileChoices ? choiceTileSpec(e.accept[0], e.tileChoices.filter(function (c) { return c !== e.accept[0]; })) : deriveDynamicTileSpec(e.accept[0])) : null;
+          var useTiles = !!tileSpec;
+          var tileWidget = useTiles ? '<div class="tile-builder" data-spec=\'' + JSON.stringify(tileSpec) + '\'></div>' : '';
+          var tileToggle = useTiles ? '<button class="tb-toggle" type="button">&#8987; Prefer to type your answer?</button>' : '';
           return '<div class="ex" data-key="' + kkey + '" data-tid="' + topicId + '">' +
             '<div class="ex-top"><span class="num">' + (idx + 1) + '</span><div class="q">' + e.q + '</div></div>' +
             (e.fig ? '<div class="figwrap">' + e.fig + '</div>' : '') +
-            '<div class="attempt"><input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">' +
+            '<div class="attempt">' + tileWidget +
+            '<input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer"' + (useTiles ? ' hidden' : '') + '>' +
             '<button class="markbtn">✓ Mark answer</button><button class="reveal locked">🔒 Show solution</button></div>' +
+            tileToggle +
             (hint ? '<p class="fhint">Format: e.g. <span class="fhint-ex">' + hint + '</span></p>' : '') +
             '<div class="sol"><div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>' +
             '<div class="lead">Approach</div><p class="approach">' + approach + '</p>' +
