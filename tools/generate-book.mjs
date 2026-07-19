@@ -652,6 +652,24 @@ function applyContentFixes(CURRICULUM, CH) {
       `At least one head, counted directly (HH, HT, TH) is 3/4. Or by the complement: 1 − P(no heads) = 1 − P(TT) = 1 − 1/4 = <span class="m">3/4</span> — the same answer, the easy way.`
     ];
   }
+
+  // --- Round-4 follow-up: answer-format fix for "rule + Nth term" compound answers ---
+  // These items had no authored `accept`, so generate-book.mjs derived one straight from `ans` —
+  // producing a single rigid magic string ("Rule 3n + 2; 10th = 32") that only matched typed
+  // verbatim, punctuation included. A learner answering "3n+2, 32" or "2+3n, 32" (mathematically
+  // identical) was marked wrong. Author an explicit accept phrased as "<rule> and <value>" instead:
+  // this reuses the EXISTING normParts()/partsMatch() "A and B" compound machinery (already used
+  // by ratios' "$18 and $27" items) rather than inventing a new parsing pathway, and composes with
+  // the new parseLinearExpr() equivalence so a reordered rule ("2+3n") still matches. `ans` (the
+  // displayed worked solution) is untouched — only the accepted typed form changes.
+  const patterns = byId.patterns;
+  const ruleAndTerm = [
+    ['3n + 2', '32'], ['4n − 2', '38'], ['5n + 2', '52'], ['6n − 5', '55'], ['2n + 2', '22'],
+    ['7n − 4', '66'], ['3n + 7', '37'], ['4n + 2', '42'], ['5n − 5', '45'], ['2n + 6', '26']
+  ];
+  ruleAndTerm.forEach(([rule, term], i) => { if (patterns.medium[i]) patterns.medium[i].accept = [`${rule} and ${term}`]; });
+  if (patterns.hard[0]) patterns.hard[0].accept = ['3n + 1 and 61', '3n + 1 and 61 sticks'];
+  if (patterns.hard[8]) patterns.hard[8].accept = ['3n + 3 and 39'];
 }
 
 // --- 3. Shared page shell ---
@@ -758,7 +776,12 @@ function renderChapterBody(t, group, prev, next) {
     const panes = LEVELS.map(([lbl, key], i) => {
       const cards = (t[key] || []).map((e, idx) => {
         const kkey = `${t.id}|${key}|${idx}`;
-        staticCheck[kkey] = [stripTags(e.ans)];
+        // Almost every item's accept[] is derived straight from its displayed `ans` text (see
+        // stripTags above). A handful of compound answers (e.g. "find the rule AND the 10th
+        // term") need an accept phrasing a learner would actually type, distinct from the
+        // English-sentence `ans` shown in the worked solution — those items carry an explicit
+        // `accept` array (see the Round-4 patches in applyContentFixes) which overrides here.
+        staticCheck[kkey] = (e.accept || [e.ans]).map(stripTags);
         return `<div class="ex" data-key="${kkey}" data-tid="${t.id}">
           <div class="ex-top"><span class="num">${idx + 1}</span><div class="q">${e.q}</div></div>
           ${e.fig ? `<div class="figwrap">${e.fig}</div>` : ''}
