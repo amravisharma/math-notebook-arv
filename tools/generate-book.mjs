@@ -17,7 +17,7 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { LESSON_EXPANSIONS } from './lesson-content.mjs';
 import { NOTICE_WONDER, GO_FURTHER, MENTAL_TIPS, CPA_PANELS } from './enrichment-content.mjs';
-import { formatHint } from './format-hint.mjs';
+import { formatHint, parseLinearExpr } from './format-hint.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, '_source', 'original-single-page.html');
@@ -720,6 +720,32 @@ ${extraScripts.map(s => `<script src="${root}${s}"></script>`).join('\n')}
 
 // --- 4. Chapter (topic) page body, mirroring the original sectionInner() ---
 
+// --- 3b. Graded drag-and-drop pilot: js/tile-builder.js, applied to Patterns' Medium tier ---
+//
+// These 10 "find the rule and the 10th term" items (see the Round-4 accept redesign above) were
+// the clearest case of a free-text answer format a learner had to guess — building it from tiles
+// removes the guessing entirely. Derives the tile pool straight from the same accept[0] string
+// (via parseLinearExpr, the same parser the marking engine and format-hint share), so the tiles
+// can never drift out of sync with what's actually graded.
+function patternsTileSpec(rule, term) {
+  const lin = parseLinearExpr(rule);
+  const coeff = lin.coeff, sign = lin.cons < 0 ? '−' : '+', constMag = Math.abs(lin.cons), termNum = parseInt(term, 10);
+  const uniq = (nums) => [...new Set(nums.filter((n) => n > 0))];
+  const coeffTiles = uniq([coeff, coeff + 1, Math.max(1, coeff - 1)]).map((v) => ({ id: 'c' + v, label: String(v), value: String(v), kind: 'coeff' }));
+  const constTiles = uniq([constMag, constMag + 1, constMag + 3]).map((v) => ({ id: 'k' + v, label: String(v), value: String(v), kind: 'const' }));
+  const termTiles = uniq([termNum, termNum + 1, Math.max(1, termNum - 10)]).map((v) => ({ id: 't' + v, label: String(v), value: String(v), kind: 'term' }));
+  return {
+    slots: [{ id: 'coeff', kind: 'coeff' }, { id: 'sign', kind: 'sign' }, { id: 'const', kind: 'const' }, { id: 'term', kind: 'term' }],
+    tiles: [
+      ...coeffTiles,
+      { id: 'sp', label: '+', value: '+', kind: 'sign' }, { id: 'sm', label: '−', value: '−', kind: 'sign' },
+      ...constTiles,
+      ...termTiles,
+    ],
+    template: [{ slot: 'coeff' }, { text: 'n ' }, { slot: 'sign' }, { text: ' ' }, { slot: 'const' }, { text: ' and ' }, { slot: 'term' }],
+  };
+}
+
 function renderChapterBody(t, group, prev, next) {
   const c = t.__ch || {};
   const dynamic = DYNAMIC_IDS.has(t.id);
@@ -788,14 +814,28 @@ function renderChapterBody(t, group, prev, next) {
         // format-hint.mjs), shown next to the input so a learner isn't left guessing whether
         // "3n+2" or "the rule is 3n + 2" is the expected shape.
         const hint = formatHint(accept[0]);
+        // Graded drag-and-drop pilot (see patternsTileSpec above): only Patterns' Medium tier, the
+        // clearest case of a free-text format a learner had to guess. The tile widget writes into
+        // the SAME <input>, so it's a drop-in alternative UI, not a different marking path — a
+        // "prefer to type?" toggle swaps to the plain input for anyone who'd rather not use tiles.
+        const useTiles = t.id === 'patterns' && key === 'medium';
+        let tileWidget = '', tileToggle = '';
+        if (useTiles) {
+          const [rule, term] = accept[0].split(' and ');
+          const spec = patternsTileSpec(rule, term);
+          tileWidget = `<div class="tile-builder" data-spec='${JSON.stringify(spec)}'></div>`;
+          tileToggle = `<button class="tb-toggle" type="button">&#8987; Prefer to type your answer?</button>`;
+        }
         return `<div class="ex" data-key="${kkey}" data-tid="${t.id}">
           <div class="ex-top"><span class="num">${idx + 1}</span><div class="q">${e.q}</div></div>
           ${e.fig ? `<div class="figwrap">${e.fig}</div>` : ''}
           <div class="attempt">
-            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            ${tileWidget}
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer"${useTiles ? ' hidden' : ''}>
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          ${tileToggle}
           ${hint ? `<p class="fhint">Format: e.g. <span class="fhint-ex">${hint}</span></p>` : ''}
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
@@ -975,6 +1015,10 @@ function run() {
       const scripts = DYNAMIC_IDS.has(t.id)
         ? ['js/quiz-engine.js', 'js/topic-interactions.js', 'js/explore.js']
         : ['js/topic-interactions.js', 'js/explore.js'];
+      // Graded drag-and-drop pilot (patternsTileSpec, above): loaded AFTER topic-interactions.js
+      // so its own DOMContentLoaded bootstrap runs after restoreAnswers() has already set
+      // .ans-input's value for any previously-answered question (see tile-builder.js's comment).
+      if (t.id === 'patterns') scripts.push('js/tile-builder.js');
       const html = pageShell({ title: t.name, active: t.id, root: '../', bodyHtml: body, extraScripts: scripts });
       // Static topics' answers get an accept[] derived from their authored `ans` text (see
       // stripTags/staticCheck above), merged into the same window.TOPIC_CHECK the dynamic topics'
