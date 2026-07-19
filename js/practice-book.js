@@ -11,6 +11,11 @@
    studying rather than testing. Squares practice only ever asks for the square (n²) — never the
    square root — per request.
 
+   Practice/Timed and Dodging are both worksheet views that differ only in WHICH facts are chosen,
+   whether there's a timer, and one extra "Shuffle again" button — renderFactsGrid() is the single
+   shared implementation (card markup, per-item checking, timer, finish/summary) that both
+   renderWorksheet() and renderDodging() configure and call, so that behavior lives in one place.
+
    Mental Maths / Mixed / Weak Area keep the original one-question-at-a-time quiz flow, since that
    wasn't asked to change. */
 (function () {
@@ -98,21 +103,27 @@
     document.getElementById('ws-back').onclick = closeStage;
   }
 
-  function renderWorksheet(area, modeKey, opts) {
+  // Single shared implementation for every worksheet-style session (Practice, Timed, Dodging):
+  // builds the .ws-grid of .ws-item cards, wires each one's check() logic, runs the optional timer,
+  // and builds the finish/summary flow. Per-mode differences (which facts, timer or not, the extra
+  // "Shuffle again" button, restart behaviour) are all passed in via `config` rather than
+  // reimplemented — see renderWorksheet()/renderDodging() below, the only two callers.
+  function renderFactsGrid(config) {
     stage.classList.add('ws-mode');
-    opts = opts || {};
-    var n = WORKSHEET_COUNT[modeKey] || 12;
-    var questions = area === 'squares' ? uniqueSquares(n) : uniqueTableFacts(n, opts.table);
-    var seconds = WORKSHEET_SECONDS[modeKey] || 0;
+    var questions = config.questions, seconds = config.seconds || 0;
     var state = { answered: 0, correct: 0, total: questions.length };
     var timerInterval = null;
+    var extraButtons = config.extraButtons || [];
 
     stage.innerHTML =
-      '<div class="ws-head"><h3>' + (area === 'squares' ? 'Squares' : 'Tables') + ' &mdash; ' + (modeKey === 'timed' ? 'Timed' : 'Practice') + '</h3>' +
+      '<div class="ws-head"><h3>' + config.title + '</h3>' +
       '<span class="ws-score" id="ws-score">0 / ' + state.total + ' answered</span></div>' +
+      (config.subtitle ? '<p class="muted" style="color:var(--ink-soft);margin:-8px 0 14px">' + config.subtitle + '</p>' : '') +
       (seconds ? '<div class="pq-timerbar"><span class="pq-timerfill" id="ws-timerfill" style="width:100%"></span></div>' : '') +
       '<div class="ws-grid" id="ws-grid"></div>' +
-      '<div class="mode-row" style="margin-top:18px"><button class="btn primary" id="ws-finish">Finish</button><button class="btn" id="ws-back">Back to menu</button></div>';
+      '<div class="mode-row" style="margin-top:18px"><button class="btn primary" id="ws-finish">Finish</button>' +
+      extraButtons.map(function (b) { return '<button class="btn" id="' + b.id + '">' + b.label + '</button>'; }).join('') +
+      '<button class="btn" id="ws-back">Back to menu</button></div>';
 
     var grid = document.getElementById('ws-grid');
     var scoreEl = document.getElementById('ws-score');
@@ -139,7 +150,7 @@
         state.answered++; if (ok) state.correct++;
         recordGymResult(q.area, ok);
         scoreEl.textContent = state.correct + ' / ' + state.answered + ' answered (of ' + state.total + ')';
-        if (state.answered >= state.total) finishWorksheet();
+        if (state.answered >= state.total) finish();
       }
       input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
       input.addEventListener('blur', check);
@@ -151,14 +162,15 @@
       timerInterval = setInterval(function () {
         var left = Math.max(0, totalMs - (Date.now() - startT));
         if (fill) fill.style.width = (left / totalMs * 100) + '%';
-        if (left <= 0) finishWorksheet();
+        if (left <= 0) finish();
       }, 150);
     }
 
-    document.getElementById('ws-finish').onclick = finishWorksheet;
+    document.getElementById('ws-finish').onclick = finish;
     document.getElementById('ws-back').onclick = closeStage;
+    extraButtons.forEach(function (b) { document.getElementById(b.id).onclick = b.onClick; });
 
-    function finishWorksheet() {
+    function finish() {
       if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
       grid.querySelectorAll('.ws-item').forEach(function (card, i) {
         var input = card.querySelector('.ws-input'), mark = card.querySelector('.ws-mark');
@@ -171,98 +183,66 @@
       var pct = state.answered ? Math.round((state.correct / state.answered) * 100) : 0;
       var summary = document.createElement('div');
       summary.className = 'ws-summary';
-      summary.innerHTML = '<h3>Session complete</h3><div class="pq-score">' + state.correct + ' / ' + state.total + '</div>' +
+      summary.innerHTML = '<h3>' + config.summaryTitle + '</h3><div class="pq-score">' + state.correct + ' / ' + state.total + '</div>' +
         '<p class="muted" style="color:var(--ink-soft)">' + pct + '% correct of the ' + state.answered + ' you answered</p>' +
-        '<div class="mode-row" style="justify-content:center"><button class="btn primary" id="ws-again">New set</button><button class="btn" id="ws-menu">Back to menu</button></div>';
+        '<div class="mode-row" style="justify-content:center"><button class="btn primary" id="ws-again">' + config.restartLabel + '</button><button class="btn" id="ws-menu">Back to menu</button></div>';
       stage.appendChild(summary);
       document.getElementById('ws-finish').disabled = true;
-      document.getElementById('ws-again').onclick = function () { renderWorksheet(area, modeKey, opts); };
+      extraButtons.forEach(function (b) { document.getElementById(b.id).disabled = true; });
+      document.getElementById('ws-again').onclick = config.onRestart;
       document.getElementById('ws-menu').onclick = closeStage;
       summary.scrollIntoView({ block: 'nearest' });
     }
   }
 
-  // ============================================================
+  function renderWorksheet(area, modeKey, opts) {
+    opts = opts || {};
+    var n = WORKSHEET_COUNT[modeKey] || 12;
+    var questions = area === 'squares' ? uniqueSquares(n) : uniqueTableFacts(n, opts.table);
+    renderFactsGrid({
+      questions: questions,
+      seconds: WORKSHEET_SECONDS[modeKey] || 0,
+      title: (area === 'squares' ? 'Squares' : 'Tables') + ' &mdash; ' + (modeKey === 'timed' ? 'Timed' : 'Practice'),
+      summaryTitle: 'Session complete',
+      restartLabel: 'New set',
+      onRestart: function () { renderWorksheet(area, modeKey, opts); }
+    });
+  }
+
   // Dodging (Squares, Tables): every fact of ONE table (or all 30 squares) shown at once, but in a
   // shuffled, non-sequential order — unlike Learn (in order, answers shown) or Practice/Timed (a
   // random subset mixed across all tables/squares). "Shuffle again" re-draws a fresh random order of
   // the same full fact set for repeat drilling, without touching anything outside this worksheet.
-  // ============================================================
-
   function renderDodging(area, opts) {
-    stage.classList.add('ws-mode');
     opts = opts || {};
     var questions = area === 'squares' ? uniqueSquares(30) : uniqueTableFacts(10, opts.table);
-    var title = area === 'squares' ? 'Squares &mdash; Dodging' : (opts.table + ' times table &mdash; Dodging');
-    var state = { answered: 0, correct: 0, total: questions.length };
-
-    stage.innerHTML =
-      '<div class="ws-head"><h3>' + title + '</h3>' +
-      '<span class="ws-score" id="ws-score">0 / ' + state.total + ' answered</span></div>' +
-      '<p class="muted" style="color:var(--ink-soft);margin:-8px 0 14px">All facts, shuffled out of order &mdash; a true test of recall, not counting.</p>' +
-      '<div class="ws-grid" id="ws-grid"></div>' +
-      '<div class="mode-row" style="margin-top:18px"><button class="btn primary" id="ws-finish">Finish</button><button class="btn" id="ws-shuffle">Shuffle again</button><button class="btn" id="ws-back">Back to menu</button></div>';
-
-    var grid = document.getElementById('ws-grid');
-    var scoreEl = document.getElementById('ws-score');
-
-    questions.forEach(function (q, i) {
-      var card = document.createElement('div');
-      card.className = 'ws-item';
-      card.innerHTML =
-        '<span class="ws-prompt">' + q.prompt + '</span>' +
-        '<input class="ws-input" type="number" inputmode="decimal" autocomplete="off" aria-label="Answer for ' + q.prompt.replace(/&[a-z]+;/g, ' ') + '">' +
-        '<span class="ws-mark" aria-live="polite"></span>';
-      grid.appendChild(card);
-
-      var input = card.querySelector('.ws-input'), mark = card.querySelector('.ws-mark');
-      var checked = false;
-      function check() {
-        if (checked || !input.value.trim()) return;
-        checked = true;
-        var v = parseFloat(input.value);
-        var ok = !isNaN(v) && Math.abs(v - q.answer) < 0.001;
-        input.readOnly = true;
-        card.classList.add(ok ? 'ok' : 'no');
-        mark.innerHTML = ok ? '&#10003;' : ('&#10007; ' + q.answer);
-        state.answered++; if (ok) state.correct++;
-        recordGymResult(q.area, ok);
-        scoreEl.textContent = state.correct + ' / ' + state.answered + ' answered (of ' + state.total + ')';
-        if (state.answered >= state.total) finishDodging();
-      }
-      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
-      input.addEventListener('blur', check);
+    renderFactsGrid({
+      questions: questions,
+      seconds: 0,
+      title: (area === 'squares' ? 'Squares' : (opts.table + ' times table')) + ' &mdash; Dodging',
+      subtitle: 'All facts, shuffled out of order &mdash; a true test of recall, not counting.',
+      summaryTitle: 'Dodging complete',
+      restartLabel: 'Shuffle again',
+      extraButtons: [{ id: 'ws-shuffle', label: 'Shuffle again', onClick: function () { renderDodging(area, opts); } }],
+      onRestart: function () { renderDodging(area, opts); }
     });
-
-    document.getElementById('ws-finish').onclick = finishDodging;
-    document.getElementById('ws-shuffle').onclick = function () { renderDodging(area, opts); };
-    document.getElementById('ws-back').onclick = closeStage;
-
-    function finishDodging() {
-      grid.querySelectorAll('.ws-item').forEach(function (card, i) {
-        var input = card.querySelector('.ws-input'), mark = card.querySelector('.ws-mark');
-        if (!input.readOnly) {
-          input.readOnly = true;
-          card.classList.add('skip');
-          mark.innerHTML = 'Answer: ' + questions[i].answer;
-        }
-      });
-      var pct = state.answered ? Math.round((state.correct / state.answered) * 100) : 0;
-      var summary = document.createElement('div');
-      summary.className = 'ws-summary';
-      summary.innerHTML = '<h3>Dodging complete</h3><div class="pq-score">' + state.correct + ' / ' + state.total + '</div>' +
-        '<p class="muted" style="color:var(--ink-soft)">' + pct + '% correct of the ' + state.answered + ' you answered</p>' +
-        '<div class="mode-row" style="justify-content:center"><button class="btn primary" id="ws-again">Shuffle again</button><button class="btn" id="ws-menu">Back to menu</button></div>';
-      stage.appendChild(summary);
-      document.getElementById('ws-finish').disabled = true;
-      document.getElementById('ws-shuffle').disabled = true;
-      document.getElementById('ws-again').onclick = function () { renderDodging(area, opts); };
-      document.getElementById('ws-menu').onclick = closeStage;
-      summary.scrollIntoView({ block: 'nearest' });
-    }
   }
 
-  function closeStage() { stage.innerHTML = ''; stage.classList.remove('ws-mode'); stage.scrollIntoView({ block: 'start' }); }
+  // Hides the whole stage (not just clearing its content) so a finished session doesn't leave an
+  // empty bordered box sitting on the page — the wrapper (not #pq-stage itself, which every render
+  // function overwrites via innerHTML) also hosts the fixed "x" close button.
+  // Fires whenever the stage closes (any "Back to menu" button, or the page's own "x" close
+  // button), regardless of which one triggered it — lets practice.html refresh its accuracy pills
+  // and hero stats without polling, via onClose() below.
+  var onCloseCallback = null;
+  function closeStage() {
+    stage.innerHTML = ''; stage.classList.remove('ws-mode');
+    var wrap = document.getElementById('stage-wrap');
+    if (wrap) wrap.style.display = 'none';
+    var anchor = document.querySelector('.inner');
+    if (anchor) anchor.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    if (onCloseCallback) onCloseCallback();
+  }
 
   // ============================================================
   // One-at-a-time quiz (Mental Maths, Mixed, Weak Area) — unchanged flow.
@@ -358,6 +338,27 @@
     PS.save();
   }
 
+  // Returns { attempts, correct, pct } for a gym area, or null if it has no attempts yet — used by
+  // the practice-card accuracy pills and by weakestArea() below, instead of each computing its own
+  // copy of this from PS.load().gym.
+  function computeGymStat(area) {
+    var g = PS.load().gym[area] || { attempts: 0, correct: 0 };
+    if (!g.attempts) return null;
+    return { attempts: g.attempts, correct: g.correct, pct: Math.round((g.correct / g.attempts) * 100) };
+  }
+
+  // The gym area with the most wrong answers so far (an area with no attempts counts as 0 wrong) —
+  // used both to actually start Weak Area Practice and to show which area it would pick, and why,
+  // before the button is even clicked.
+  function weakestArea() {
+    var areas = ['tables', 'squares', 'mental'];
+    return areas.reduce(function (best, a) {
+      var g = computeGymStat(a) || { attempts: 0, correct: 0 };
+      var bg = computeGymStat(best) || { attempts: 0, correct: 0 };
+      return (g.attempts - g.correct) > (bg.attempts - bg.correct) ? a : best;
+    }, 'tables');
+  }
+
   // Public entry point used by practice.html. Squares and Tables route to the worksheet view;
   // everything else keeps the original one-at-a-time quiz.
   function start(area, modeKey, opts) {
@@ -367,5 +368,8 @@
     if (area === 'squares' || area === 'tables') { renderWorksheet(area, modeKey, opts); return; }
     startQuiz(area, modeKey, opts);
   }
-  window.PracticeBook = { start: start };
+  window.PracticeBook = {
+    start: start, close: closeStage, computeGymStat: computeGymStat, weakestArea: weakestArea,
+    onClose: function (fn) { onCloseCallback = fn; }
+  };
 })();

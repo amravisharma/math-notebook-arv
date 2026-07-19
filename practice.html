@@ -28,55 +28,95 @@
       <h1 style="font-family:'Bricolage Grotesque';font-size:28px;margin:0 0 4px">Practice Book</h1>
       <p class="hero p" style="margin-bottom:6px">Quick-fire fluency practice, separate from the chapters. Questions are generated fresh every time.</p>
 
-      <div class="practice-menu">
-        <div class="practice-tile">
-          <h4>Multiplication Tables</h4>
-          <p>Tables 2&ndash;20 (up to &times;10). Learn shows the chosen table in full; Practice and Timed give a randomised worksheet across all tables, all at once; Dodging shuffles just the chosen table's own facts out of order.</p>
-          <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px">
-            <select id="table-pick" style="font:inherit;padding:6px;border-radius:8px;border:1.5px solid var(--line)"></select>
-          </label>
-          <div class="mode-row">
-            <button class="btn" data-area="tables" data-mode="learn" data-pick="1">Learn this table</button>
-            <button class="btn" data-area="tables" data-mode="practice">Random Practice</button>
-            <button class="btn" data-area="tables" data-mode="timed">Timed Practice</button>
-            <button class="btn" data-area="tables" data-mode="dodging" data-pick="1">Dodge this table</button>
+      <div class="stat-grid" id="hero-stats"></div>
+
+      <div class="practice-grid">
+        <div class="practice-card">
+          <div class="practice-card-head">
+            <div class="area-icon">&times;</div>
+            <h4>Multiplication Tables</h4>
+            <span class="accuracy-pill" id="acc-tables"></span>
+          </div>
+          <p class="desc">Tables 2&ndash;20, up to &times;10.</p>
+          <label class="table-pick-row">Table&nbsp;<select id="table-pick"></select></label>
+          <div class="mode-grid">
+            <button class="mode-card" type="button" data-area="tables" data-mode="learn" data-pick="1">
+              <span class="m-label">&#128214; Learn</span><span class="m-cap">See this table in full</span>
+            </button>
+            <button class="mode-card" type="button" data-area="tables" data-mode="practice">
+              <span class="m-label">&#127919; Practice</span><span class="m-cap">Untimed, mixed tables</span>
+            </button>
+            <button class="mode-card" type="button" data-area="tables" data-mode="timed">
+              <span class="m-label">&#9201; Timed</span><span class="m-cap">Beat the 90s clock</span>
+            </button>
+            <button class="mode-card dodge" type="button" data-area="tables" data-mode="dodging" data-pick="1">
+              <span class="m-label">&#128257; Dodge</span><span class="m-cap">This table, shuffled order</span>
+            </button>
           </div>
         </div>
-        <div class="practice-tile">
-          <h4>Squares</h4>
-          <p>Squares 1&sup2;&ndash;30&sup2;. Learn shows the full list; Practice and Timed give a randomised worksheet you fill in all at once; Dodging shuffles all 30 squares out of order.</p>
-          <div class="mode-row">
-            <button class="btn" data-area="squares" data-mode="learn">Learn Squares</button>
-            <button class="btn" data-area="squares" data-mode="practice">Random Practice</button>
-            <button class="btn" data-area="squares" data-mode="timed">Timed Practice</button>
-            <button class="btn" data-area="squares" data-mode="dodging">Dodge Squares</button>
+
+        <div class="practice-card">
+          <div class="practice-card-head">
+            <div class="area-icon squares">&sup2;</div>
+            <h4>Squares</h4>
+            <span class="accuracy-pill" id="acc-squares"></span>
+          </div>
+          <p class="desc">Squares 1&sup2; to 30&sup2;. Always asks for n&sup2; &mdash; never the square root.</p>
+          <div class="mode-grid">
+            <button class="mode-card" type="button" data-area="squares" data-mode="learn">
+              <span class="m-label">&#128214; Learn</span><span class="m-cap">See the full list 1&ndash;30</span>
+            </button>
+            <button class="mode-card" type="button" data-area="squares" data-mode="practice">
+              <span class="m-label">&#127919; Practice</span><span class="m-cap">Untimed, random subset</span>
+            </button>
+            <button class="mode-card" type="button" data-area="squares" data-mode="timed">
+              <span class="m-label">&#9201; Timed</span><span class="m-cap">Beat the 90s clock</span>
+            </button>
+            <button class="mode-card dodge" type="button" data-area="squares" data-mode="dodging">
+              <span class="m-label">&#128257; Dodge</span><span class="m-cap">All 30, shuffled order</span>
+            </button>
           </div>
         </div>
-        <div class="practice-tile">
-          <h4>Mental Maths</h4>
-          <p>Mixed addition, subtraction, multiplication, division, percentages.</p>
-          <div class="mode-row">
-            <button class="btn" data-area="mental" data-mode="practice">Random Practice</button>
-            <button class="btn" data-area="mental" data-mode="timed">Timed Practice</button>
+
+        <div class="practice-card">
+          <div class="practice-card-head">
+            <div class="area-icon mental">&sum;</div>
+            <h4>Mental Maths</h4>
+            <span class="accuracy-pill" id="acc-mental"></span>
           </div>
-        </div>
-        <div class="practice-tile">
-          <h4>Mixed Practice</h4>
-          <p>A blend of tables, squares and mental maths in one session.</p>
-          <div class="mode-row">
-            <button class="btn" data-area="mixed" data-mode="practice">Start</button>
-          </div>
-        </div>
-        <div class="practice-tile">
-          <h4>Weak Area Practice</h4>
-          <p>Extra reps on whichever area has the most wrong answers so far.</p>
-          <div class="mode-row">
-            <button class="btn" id="weak-btn">Start</button>
+          <p class="desc">Mixed addition, subtraction, multiplication, division, percentages.</p>
+          <div class="mode-grid">
+            <button class="mode-card" type="button" data-area="mental" data-mode="practice">
+              <span class="m-label">&#127919; Practice</span><span class="m-cap">Untimed, one at a time</span>
+            </button>
+            <button class="mode-card" type="button" data-area="mental" data-mode="timed">
+              <span class="m-label">&#9201; Timed</span><span class="m-cap">8 seconds per question</span>
+            </button>
           </div>
         </div>
       </div>
 
-      <div id="pq-stage" class="pq-stage" style="display:none"></div>
+      <div class="smart-practice">
+        <h3>Smart Practice</h3>
+        <p>Adaptive sessions based on how you're doing so far.</p>
+        <div class="smart-grid">
+          <div class="smart-card">
+            <h5>Mixed Practice</h5>
+            <p>A blend of tables, squares and mental maths in one session.</p>
+            <button class="btn" type="button" data-area="mixed" data-mode="practice">Start mixed session</button>
+          </div>
+          <div class="smart-card">
+            <h5>Weak Area Practice</h5>
+            <p id="weak-desc">Extra reps on whichever area has the most wrong answers so far.</p>
+            <button class="btn" type="button" id="weak-btn">Start</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-wrap" id="stage-wrap" style="display:none">
+        <button class="stage-close" id="stage-close" type="button" aria-label="Close and return to menu">&#10005;</button>
+        <div id="pq-stage" class="pq-stage"></div>
+      </div>
     </div>
   </main>
 </div>
@@ -86,33 +126,61 @@
 <script src="js/practice-book.js"></script>
 <script>
 (function () {
+  var PS = window.ProgressStore, PB = window.PracticeBook;
+
   var pick = document.getElementById('table-pick');
   for (var n = 2; n <= 20; n++) { var o = document.createElement('option'); o.value = n; o.textContent = n + ' times table'; pick.appendChild(o); }
 
-  var stage = document.getElementById('pq-stage');
-  function showStage() { stage.style.display = 'block'; stage.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
+  var wrap = document.getElementById('stage-wrap');
+  function showStage() { wrap.style.display = 'block'; wrap.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
+  document.getElementById('stage-close').addEventListener('click', function () { PB.close(); });
+  PB.onClose(render); // refresh hero stats + accuracy pills whenever the stage closes, from any exit path
 
-  document.querySelectorAll('.practice-menu [data-area]').forEach(function (btn) {
+  // Overall practice accuracy across all three gym areas, for the hero stats strip.
+  function overallAccuracy() {
+    var gym = PS.load().gym, areas = ['tables', 'squares', 'mental'], attempts = 0, correct = 0;
+    areas.forEach(function (a) { var g = gym[a] || { attempts: 0, correct: 0 }; attempts += g.attempts; correct += g.correct; });
+    return attempts ? Math.round((correct / attempts) * 100) + '%' : '&mdash;';
+  }
+
+  function renderAccuracyPill(area) {
+    var el = document.getElementById('acc-' + area), s = PB.computeGymStat(area);
+    if (!s) { el.className = 'accuracy-pill'; el.textContent = 'Not started yet'; return; }
+    el.className = 'accuracy-pill' + (s.pct >= 70 ? ' good' : (s.pct < 50 ? ' weak' : ''));
+    el.innerHTML = s.pct + '% &middot; ' + s.attempts + ' attempt' + (s.attempts === 1 ? '' : 's');
+  }
+
+  var AREA_LABEL = { tables: 'Tables', squares: 'Squares', mental: 'Mental Maths' };
+
+  function render() {
+    var stats = PS.globalStats();
+    document.getElementById('hero-stats').innerHTML = [
+      ['XP', stats.xp], ['Streak', stats.streak + ' day' + (stats.streak === 1 ? '' : 's')], ['Practice accuracy', overallAccuracy()]
+    ].map(function (s) { return '<div class="stat-card"><div class="big">' + s[1] + '</div><div class="lbl">' + s[0] + '</div></div>'; }).join('');
+
+    ['tables', 'squares', 'mental'].forEach(renderAccuracyPill);
+
+    var worst = PB.weakestArea(), worstStat = PB.computeGymStat(worst);
+    document.getElementById('weak-desc').textContent = worstStat
+      ? 'Right now that\'s ' + AREA_LABEL[worst] + ', at ' + worstStat.pct + '% correct so far.'
+      : 'Extra reps on whichever area has the most wrong answers so far.';
+  }
+  render();
+
+  document.querySelectorAll('[data-area]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var area = btn.dataset.area, mode = btn.dataset.mode;
       var opts = {};
       if (area === 'tables' && btn.dataset.pick) opts.table = Number(pick.value);
       if (area === 'mixed') { area = 'mental'; opts.gymArea = 'mixed'; opts.kind = null; }
-      window.PracticeBook.start(area, mode, opts);
+      PB.start(area, mode, opts);
       showStage();
     });
   });
 
   document.getElementById('weak-btn').addEventListener('click', function () {
-    var s = window.ProgressStore.load();
-    var areas = ['tables', 'squares', 'mental'];
-    var worst = areas.reduce(function (best, a) {
-      var g = s.gym[a] || { attempts: 0, correct: 0 };
-      var wrong = g.attempts - g.correct;
-      var bg = s.gym[best] || { attempts: 0, correct: 0 };
-      return wrong > (bg.attempts - bg.correct) ? a : best;
-    }, 'tables');
-    window.PracticeBook.start(worst, 'practice', { gymArea: worst });
+    var worst = PB.weakestArea();
+    PB.start(worst, 'practice', { gymArea: worst });
     showStage();
   });
 })();

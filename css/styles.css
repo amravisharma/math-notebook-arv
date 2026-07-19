@@ -396,14 +396,45 @@ body.revise .ex.attempted{display:none}
 .toc-name{font-weight:800;font-size:14.5px;line-height:1.3}
 .toc-year{font-family:"Space Mono",monospace;font-size:11px;color:var(--ink-soft);font-weight:700}
 
-/* ---- new: practice book ---- */
-.practice-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin:20px 0}
-.practice-tile{border:1.5px solid var(--line);border-radius:16px;background:var(--panel);padding:18px;box-shadow:var(--shadow);text-align:left}
-.practice-tile h4{margin:0 0 6px;font-family:"Bricolage Grotesque";font-size:16px}
-.practice-tile p{margin:0 0 12px;font-size:13.5px;color:var(--ink-soft)}
+/* ---- practice book: area cards ---- */
+.practice-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin:20px 0}
+.practice-card{border:1.5px solid var(--line);border-radius:16px;background:var(--panel);padding:18px;box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;gap:12px}
+.practice-card-head{display:flex;align-items:center;gap:12px}
+.area-icon{width:42px;height:42px;border-radius:12px;flex:none;display:grid;place-items:center;font-family:"Bricolage Grotesque";font-weight:800;font-size:19px;color:#fff;background:var(--brand)}
+.area-icon.squares{background:var(--medium)}
+.area-icon.mental{background:var(--easy)}
+.practice-card-head h4{margin:0;font-family:"Bricolage Grotesque";font-size:16.5px}
+.practice-card .desc{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+.accuracy-pill{margin-left:auto;font-family:"Space Mono",monospace;font-size:11.5px;font-weight:700;color:var(--ink-soft);
+  background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:4px 10px;white-space:nowrap;flex:none}
+.accuracy-pill.good{color:var(--easy);border-color:var(--easy-line);background:var(--easy-bg)}
+.accuracy-pill.weak{color:var(--hard);border-color:var(--hard-line);background:var(--hard-bg)}
+.table-pick-row{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.table-pick-row select{font:inherit;font-size:13px;padding:6px 8px;border-radius:8px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink)}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
+.mode-card{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1.5px solid var(--line);
+  border-radius:11px;background:var(--panel);padding:9px 11px;cursor:pointer;font:inherit;transition:.12s}
+.mode-card:hover{border-color:var(--brand);background:var(--brand-tint)}
+.mode-card .m-label{font-weight:800;font-size:13px;color:var(--ink)}
+.mode-card .m-cap{font-size:11px;color:var(--ink-soft);font-weight:600;line-height:1.3}
+.mode-card.dodge{border-color:var(--marigold);background:#FFFCF3}
+.mode-card.dodge:hover{background:#FFF6DE}
+.mode-card.dodge .m-label{color:var(--brand-deep)}
+
+.smart-practice{margin:26px 0 6px;padding:18px 20px;border-radius:16px;background:var(--brand-tint);border:1px solid #DEE2F6}
+.smart-practice h3{margin:0 0 4px;font-family:"Bricolage Grotesque";font-size:17px}
+.smart-practice>p{margin:0 0 14px;font-size:13.5px;color:var(--ink-soft)}
+.smart-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.smart-card{background:var(--panel);border:1.5px solid var(--line);border-radius:13px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.smart-card h5{margin:0;font-family:"Bricolage Grotesque";font-size:14px}
+.smart-card p{margin:0;font-size:12.5px;color:var(--ink-soft);flex:1;line-height:1.5}
+
 .mode-row{display:flex;flex-wrap:wrap;gap:8px}
-.pq-stage{max-width:520px;margin:20px auto;text-align:center;padding:26px;border:1.5px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:var(--shadow)}
+.pq-stage{position:relative;max-width:520px;margin:20px auto;text-align:center;padding:26px;border:1.5px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:var(--shadow)}
 .pq-stage.ws-mode{max-width:760px;text-align:left}
+.stage-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:9px;border:1.5px solid var(--line);
+  background:var(--panel);color:var(--ink-soft);cursor:pointer;display:grid;place-items:center;font-size:13px;line-height:1;padding:0}
+.stage-close:hover{border-color:var(--hard);color:var(--hard)}
 .pq-meta{display:flex;justify-content:space-between;font-family:"Space Mono",monospace;font-size:12px;color:var(--ink-soft);font-weight:700;margin-bottom:14px}
 .pq-prompt{font-family:"Bricolage Grotesque";font-size:clamp(26px,5vw,38px);font-weight:800;margin:10px 0 20px}
 .pq-input{width:100%;font:inherit;font-size:20px;text-align:center;padding:10px;border-radius:10px;border:1.5px solid var(--line);margin-bottom:14px}
@@ -414,6 +445,7 @@ body.revise .ex.attempted{display:none}
 .pq-timerfill{display:block;height:100%;background:var(--marigold);transition:width .1s linear}
 .pq-summary{text-align:center}
 .pq-score{font-family:"Bricolage Grotesque";font-size:32px;font-weight:800;margin:10px 0}
+@media(max-width:480px){.mode-grid{grid-template-columns:1fr}.practice-card-head{flex-wrap:wrap}.accuracy-pill{margin-left:0}}
 
 /* ---- worksheet view: Squares & Tables show every question at once ---- */
 .ws-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px}
