@@ -1,13 +1,18 @@
 // tools/format-hint.mjs
 //
 // Derives a short "Format: e.g. ..." hint from an authored accept[] value, so a learner sees the
-// SHAPE of an expected answer without ever seeing the real one. Every placeholder below is a
-// fixed constant, never derived from the real answer's magnitude — the only real information ever
-// reflected back is a structural fact (which variable letter is used, whether a $ sign or a colon
-// belongs), never a number that could coincide with the actual answer. Since this curriculum's real
-// answers are still small integers, a fixed placeholder CAN coincidentally equal one by chance (e.g.
-// equations|hard|5's real answer happens to be "x = 12") — formatHint()'s outer wrapper detects that
-// exact coincidence and retries with a different placeholder rotation rather than silently leaking.
+// SHAPE of an expected answer without ever seeing the real one. EVERY accept value gets a hint, no
+// exceptions -- even a bare number or a bare word ("31", "equilateral") falls through to a generic
+// structural fallback (genericFallback()) rather than showing nothing, so the hint line is always
+// present for visual/pedagogical consistency across every practice item.
+//
+// Every placeholder below is a fixed constant, never derived from the real answer's magnitude — the
+// only real information ever reflected back is a structural fact (which variable letter is used,
+// whether a $ sign or a colon belongs), never a number that could coincide with the actual answer.
+// Since this curriculum's real answers are still small integers, a fixed placeholder CAN
+// coincidentally equal one by chance (e.g. equations|hard|5's real answer happens to be "x = 12") —
+// formatHint()'s outer wrapper detects that exact coincidence and retries with a different
+// placeholder rotation rather than silently leaking.
 //
 // This file is the Node/build-time copy, used by generate-book.mjs for the 18 static topics (whose
 // accept[] is known at build time). js/quiz-engine.js carries a second, ES5 copy of the same two
@@ -170,13 +175,57 @@ function formatHintCore(raw, index) {
     return `${n} h ${N[(index + 1) % N.length]} min`;
   }
 
-  return null;   // bare plain number or a bare word answer -> the generic placeholder is enough
+  // Degree-2 (two-term) expression "3x² + 2x" — out of the linear-expr classifier's scope (marking
+  // is exact-match-only here, see marking.test.mjs), but still needs a shape-preserving hint: same
+  // letter, same power, fixed placeholder coefficients.
+  if ((m = raw.match(/^-?\d*([a-z])²\s*([+\-−])\s*-?\d*([a-z])$/i)) && m[1].toLowerCase() === m[3].toLowerCase()) {
+    return `4${m[1]}² + 3${m[1]}`;
+  }
+
+  // Factored linear expression "3(2x + 3)" — same reasoning as above.
+  if ((m = raw.match(/^-?\d+\(\s*-?\d*([a-z])\s*[+\-−]\s*\d+\s*\)$/i))) {
+    return `4(3${m[1]} + 2)`;
+  }
+
+  return genericFallback(raw, index);
 }
 
-// Returns a hint string (no leading "e.g."/"Format:" — callers add that framing) or null if the
-// accept value's shape doesn't warrant one (a bare plain number needs no format hint; the generic
-// "Write your answer here…" placeholder already covers it). `index` (default 0) is only used
-// internally when recursing over a compound answer's parts.
+// Last-resort fallback so EVERY item shows a hint, even ones with no real format ambiguity: a bare
+// number gets a placeholder number (consistent with every numeric shape above); "yes"/"no" gets the
+// opposite (impossible to coincide, by construction); a single letter (a statistics "A or B" style
+// answer) gets a different letter (same reasoning). Anything else that's just prose (a single word
+// like "median", or a short phrase like "not prime") gets a STRUCTURAL description rather than a
+// fabricated word — a fake concrete word could read as a specific (wrong) suggested answer in a way
+// a generic phrase never does.
+function genericFallback(raw, index) {
+  const n = N[index % N.length];
+  // Tolerates digit-grouping ("49 000") the same way the number+unit branch above does, so a bare
+  // grouped number falls into the number placeholder, not the word/phrase fallback below.
+  if (/^-?(?:\d{1,3}(?:[ ,]\d{3})+|\d+)(\.\d+)?$/.test(raw)) return String(n);
+  if (/^yes$/i.test(raw)) return 'no';
+  if (/^no$/i.test(raw)) return 'yes';
+  if (/^[a-z]$/i.test(raw)) {
+    const LETTERS = ['A', 'B', 'C', 'D'];
+    return LETTERS.find((l) => l.toLowerCase() !== raw.toLowerCase());
+  }
+  return raw.trim().split(/\s+/).length === 1 ? 'one word' : 'a few words';
+}
+
+// Joins hint parts the way natural English lists would ("A and B"; "A, B and C"), regardless of
+// which separator the real compound answer used — normAns/normParts treat comma, semicolon and
+// "and" as equivalent separators for marking purposes, so the hint doesn't need to reproduce the
+// real one exactly.
+function naturalJoin(parts) {
+  if (parts.length === 1) return parts[0];
+  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
+  return `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
+}
+
+// Returns a hint string (no leading "e.g."/"Format:" — callers add that framing). Every accept value
+// gets one, no exceptions — a bare number or bare word falls all the way through to
+// genericFallback(), so the "Format: e.g. ..." line is always present rather than only for shapes
+// with obvious format ambiguity. `index` (default 0) is only used internally when recursing over a
+// compound answer's parts. Only returns null if acceptRaw itself is falsy (no real answer to hint at all).
 export function formatHint(acceptRaw, index = 0) {
   if (!acceptRaw) return null;
   const raw = String(acceptRaw).trim().replace(/[−–—]/g, '-');   // normalise minus/en/em dash to ASCII "-"
@@ -185,25 +234,14 @@ export function formatHint(acceptRaw, index = 0) {
   // separator — checked first, before any compound splitting, so it's never torn in two.
   if (/^\(\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*\)$/.test(raw)) return '(1, 2)';
 
-  // Compound "A and B" / "A; B" / "A, B" (matching the marking engine's own normParts separators,
-  // so a comma-joined answer like "P = 16 cm, A = 16 cm²" is recognised as two parts, not one).
-  // Hint each part with the SAME index only if it needs no numeric distinction from its sibling
-  // (algebra/equation parts already differ by their own letter); numeric-only leaf hints (currency,
-  // unit, fraction, ratio) get a distinct index per position so two same-shaped parts don't render
-  // an identical, misleadingly-equal placeholder. If EVERY part is a bare plain number (e.g. "18
-  // and 27", "9 and −9") skip the hint entirely — a plain number pair has no format ambiguity
-  // beyond the separator, which the word "and"/"," already shows.
+  // Compound "A and B" / "A; B" / "A, B" (matching the marking engine's own normParts separators, so
+  // a comma-joined answer like "P = 16 cm, A = 16 cm²" is recognised as two parts, not one). Each
+  // part is hinted independently with its own position index (so two same-shaped parts, e.g. two
+  // currency values, don't render an identical, misleadingly-equal placeholder) and then joined --
+  // every part always gets SOME hint now (down to genericFallback), so there's nothing to bail out of.
   const compoundParts = raw.split(/\s+and\s+|[,;]\s*/i);
   if (compoundParts.length > 1) {
-    const hints = compoundParts.map((p, i) => formatHint(p, i));
-    if (hints.every((h) => !h)) return null;   // no part has real structure (e.g. "18 and 27") -> skip
-    // A still-unhinted part gets a generic placeholder ONLY if it's itself purely numeric — a word
-    // answer like "not prime" (from "10 factors, not prime") must never be replaced by a number,
-    // since that would misrepresent the answer's TYPE, not just its magnitude. If any part is both
-    // unhinted AND non-numeric, bail the whole hint rather than show a misleading substitution.
-    const filled = hints.map((h, i) => h || (/^-?\d+(\.\d+)?$/.test(compoundParts[i].trim()) ? String(N[i % N.length]) : null));
-    if (filled.some((h) => h === null)) return null;
-    return filled.join(' and ');
+    return naturalJoin(compoundParts.map((p, i) => formatHint(p, i)));
   }
 
   // Single (non-compound) shape: try up to N.length placeholder rotations, only retrying if the

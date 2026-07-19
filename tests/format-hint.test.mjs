@@ -7,6 +7,9 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { formatHint, parseLinearExpr } from '../tools/format-hint.mjs';
 
 test('parseLinearExpr: basic shapes', () => {
@@ -40,17 +43,24 @@ test('single-value shapes', () => {
   assert.equal(formatHint('SA = 96 cm²'), 'SA = 12'); // short multi-letter label
 });
 
-test('bare plain numbers and word answers get no hint (generic placeholder is enough)', () => {
-  assert.equal(formatHint('20'), null);
-  assert.equal(formatHint('equilateral'), null);
-  assert.equal(formatHint('yes'), null);
+test('bare plain numbers, single letters, and word answers still get a hint (generic fallback, no exceptions)', () => {
+  // These have no real FORMAT ambiguity, but every practice item shows a hint line for visual and
+  // pedagogical consistency -- a bare number gets a placeholder number, "yes"/"no" gets the
+  // opposite (can never coincide, by construction), a single letter gets a different letter, and a
+  // word/phrase answer gets a structural description rather than a fabricated (possibly misleading) word.
+  assert.equal(formatHint('20'), '12');
+  assert.equal(formatHint('equilateral'), 'one word');
+  assert.equal(formatHint('yes'), 'no');
+  assert.equal(formatHint('no'), 'yes');
+  assert.equal(formatHint('B'), 'A');
+  assert.equal(formatHint('not prime'), 'a few words');
 });
 
 test('regression: single letters and unit-suffixed values are never mistaken for algebra', () => {
   // "B" (a statistics "which is more spread out, A or B" answer) and "−10 m" (a depth in metres)
   // both parsed as a valid 1-term linear expression before termCount>=2 was required, producing a
   // nonsensical "4b + 1" / "−4m + 1" hint for an answer that isn't algebra at all.
-  assert.equal(formatHint('B'), null);
+  assert.equal(formatHint('B'), 'A');
   assert.equal(formatHint('−10 m'), '12 m');
 });
 
@@ -65,9 +75,14 @@ test('regression: a coordinate pair\'s internal comma must not be split as a com
   assert.equal(formatHint('(−3, 5)'), '(1, 2)');
 });
 
-test('all-bare-number compounds get no hint (no ambiguity beyond the separator)', () => {
-  assert.equal(formatHint('18 and 27'), null);
-  assert.equal(formatHint('9 and −9'), null);
+test('all-bare-number compounds still hint, with a distinct placeholder per position', () => {
+  assert.equal(formatHint('18 and 27'), '12 and 9');
+  assert.equal(formatHint('9 and −9'), '12 and 9');
+});
+
+test('a bare-number LIST (3+ items) joins naturally, Oxford-comma style', () => {
+  assert.equal(formatHint('2, 5, 10'), '12, 9 and 15');
+  assert.equal(formatHint('15, 21'), '12 and 9');
 });
 
 test('regression: "label number" compounds (statistics mode/range, mean/median) now hint correctly', () => {
@@ -76,10 +91,10 @@ test('regression: "label number" compounds (statistics mode/range, mean/median) 
   // identical to "mode 7, range 5" -- so a learner had no way to know the label was optional.
   assert.equal(formatHint('mode 7, range 5'), 'mode 12 and range 9');
   assert.equal(formatHint('mean 6, median 6'), 'mean 12 and median 9');
-  // A bare word with no trailing number (the answer itself, e.g. "mode"/"median" alone) must still
-  // get no hint -- there's no numeric ambiguity to clarify.
-  assert.equal(formatHint('mode'), null);
-  assert.equal(formatHint('median'), null);
+  // A bare word with no trailing number (the answer itself, e.g. "mode"/"median" alone) still gets
+  // the generic word fallback -- there's no numeric ambiguity, but every item shows a hint now.
+  assert.equal(formatHint('mode'), 'one word');
+  assert.equal(formatHint('median'), 'one word');
 });
 
 test('regression: a compound with one hintable and one bare-number part fills the number distinctly', () => {
@@ -90,17 +105,18 @@ test('regression: a compound with one hintable and one bare-number part fills th
 
 test('regression: a compound word part is never replaced by a misleading bare number', () => {
   // "10 factors, not prime": the numeric part hints fine ("12 factors"), but "not prime" is a
-  // genuine word answer — substituting a number for it would misrepresent the answer's TYPE, not
-  // just its magnitude, so the whole hint is suppressed rather than showing "12 factors and 9".
-  assert.equal(formatHint('10 factors, not prime'), null);
+  // genuine word answer — substituting a NUMBER for it would misrepresent the answer's TYPE, not
+  // just its magnitude, so it gets the generic word/phrase fallback instead ("a few words"), never a number.
+  assert.equal(formatHint('10 factors, not prime'), '12 factors and a few words');
 });
 
-test('degree-2 expressions get no hint (matches marking\'s exact-match-only scope)', () => {
-  assert.equal(formatHint('3x² + 2x'), null);
+test('degree-2 expressions get a shape-preserving hint (same letter/power, fixed placeholder coefficients)', () => {
+  assert.equal(formatHint('3x² + 2x'), '4x² + 3x');
+  assert.equal(formatHint('2n² - 3n'), '4n² + 3n');
 });
 
-test('factored expressions get no hint (same out-of-scope reasoning as degree-2)', () => {
-  assert.equal(formatHint('3(2x + 3)'), null);
+test('factored expressions get a shape-preserving hint (same out-of-scope reasoning as degree-2)', () => {
+  assert.equal(formatHint('3(2x + 3)'), '4(3x + 2)');
 });
 
 test('regression: a fixed placeholder that coincidentally equals the real answer retries instead of leaking', () => {
@@ -154,10 +170,10 @@ test('ordinal + word and "quantity unit for $price" shapes hint', () => {
   assert.equal(formatHint('750 g for $6.30'), '12 g for $9');
 });
 
-test('digit-grouped large numbers with a unit hint; bare grouped numbers stay unhinted', () => {
+test('digit-grouped large numbers hint, with or without a unit', () => {
   assert.equal(formatHint('100 000 L'), '12 L');
-  assert.equal(formatHint('49 000'), null);       // bare grouped number, no unit -- no real ambiguity
-  assert.equal(formatHint('9600 and 10 000'), null); // compound of bare (grouped) numbers
+  assert.equal(formatHint('49 000'), '12');          // bare grouped number, no unit -- still gets the generic number fallback
+  assert.equal(formatHint('9600 and 10 000'), '12 and 9'); // compound of bare (grouped) numbers
 });
 
 test('regression: plain (non-grouped) large numbers with a unit still hint (the digit-grouping fix must not narrow this)', () => {
@@ -176,4 +192,27 @@ test('regression: a fixed-string shape (fraction/ratio/mixed/scientific/letter-e
   // no hint at all (verified against real content: 3 fractions|easy answers are literally "3/4").
   assert.equal(formatHint('3/4'), '2/5');
   assert.equal(formatHint('1/2 and 3/4'), '3/4 and 2/5');
+});
+
+test('every accept value across all 24 topics gets SOME hint, no exceptions, and it never leaks', () => {
+  // Every real static accept[0] plus a wide seeded sweep of every dynamic-topic generator: formatHint
+  // must never return null (every practice item shows a "Format: e.g. ..." line) and must never
+  // exactly equal the real answer (case/whitespace-insensitively).
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+  const files = fs.readdirSync(path.join(root, 'topics')).filter((f) => f.endsWith('.html'));
+  let checked = 0;
+  files.forEach((f) => {
+    const h = fs.readFileSync(path.join(root, 'topics', f), 'utf-8');
+    const m = h.match(/window\.TOPIC_CHECK=Object\.assign\(window\.TOPIC_CHECK\|\|\{\}, (\{.*?\})\);/s);
+    if (!m) return;
+    const obj = JSON.parse(m[1]);
+    Object.keys(obj).forEach((k) => {
+      const accept = obj[k][0];
+      const hint = formatHint(accept);
+      checked++;
+      assert.ok(hint, `${f} ${k}: expected a hint for ${JSON.stringify(accept)}, got null`);
+      assert.notEqual(hint.toLowerCase(), accept.trim().toLowerCase(), `${f} ${k}: hint leaks the real answer`);
+    });
+  });
+  assert.ok(checked > 400, `expected to check well over 400 static items, checked ${checked}`);
 });

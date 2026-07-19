@@ -513,7 +513,28 @@
     if (/^[a-z][⁰¹²³⁴⁵⁶⁷⁸⁹]+$/i.test(raw)) return LETEXP[index % LETEXP.length];
     if ((m = raw.match(/^-?\d+(\.\d+)?\s*([a-zA-Z]+)\s+for\s+\$-?\d+(\.\d+)?$/i))) return n + ' ' + m[2] + ' for $' + FHINT_N[(index + 1) % FHINT_N.length];
     if ((m = raw.match(/^-?\d+(\.\d+)?\s*h\s+-?\d+(\.\d+)?\s*min$/i))) return n + ' h ' + FHINT_N[(index + 1) % FHINT_N.length] + ' min';
-    return null;
+    if ((m = raw.match(/^-?\d*([a-z])²\s*([+\-−])\s*-?\d*([a-z])$/i)) && m[1].toLowerCase() === m[3].toLowerCase()) return '4' + m[1] + '² + 3' + m[1];
+    if ((m = raw.match(/^-?\d+\(\s*-?\d*([a-z])\s*[+\-−]\s*\d+\s*\)$/i))) return '4(3' + m[1] + ' + 2)';
+    return genericFallback(raw, index);
+  }
+  // Last-resort fallback so EVERY item shows a hint -- mirrors tools/format-hint.mjs's
+  // genericFallback(). See that file's comment for the reasoning (never a fabricated word).
+  function genericFallback(raw, index) {
+    var n = FHINT_N[((index % FHINT_N.length) + FHINT_N.length) % FHINT_N.length];
+    if (/^-?(?:\d{1,3}(?:[ ,]\d{3})+|\d+)(\.\d+)?$/.test(raw)) return String(n);
+    if (/^yes$/i.test(raw)) return 'no';
+    if (/^no$/i.test(raw)) return 'yes';
+    if (/^[a-z]$/i.test(raw)) {
+      var LETTERS = ['A', 'B', 'C', 'D'];
+      for (var li = 0; li < LETTERS.length; li++) if (LETTERS[li].toLowerCase() !== raw.toLowerCase()) return LETTERS[li];
+    }
+    return raw.replace(/^\s+|\s+$/g, '').split(/\s+/).length === 1 ? 'one word' : 'a few words';
+  }
+  // Joins hint parts the way natural English lists would -- mirrors tools/format-hint.mjs's naturalJoin().
+  function naturalJoin(parts) {
+    if (parts.length === 1) return parts[0];
+    if (parts.length === 2) return parts[0] + ' and ' + parts[1];
+    return parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
   }
   function formatHint(acceptRaw, index) {
     index = index || 0;
@@ -522,11 +543,7 @@
     if (/^\(\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*\)$/.test(raw)) return '(1, 2)';
     var compoundParts = raw.split(/\s+and\s+|[,;]\s*/i);
     if (compoundParts.length > 1) {
-      var hints = compoundParts.map(function (p, i) { return formatHint(p, i); });
-      if (hints.every(function (h) { return !h; })) return null;
-      var filled = hints.map(function (h, i) { return h || (/^-?\d+(\.\d+)?$/.test(compoundParts[i].trim()) ? String(FHINT_N[i % FHINT_N.length]) : null); });
-      if (filled.some(function (h) { return h === null; })) return null;
-      return filled.join(' and ');
+      return naturalJoin(compoundParts.map(function (p, i) { return formatHint(p, i); }));
     }
     for (var attempt = 0; attempt < FHINT_N.length; attempt++) {
       var hint = formatHintCore(raw, index + attempt);
