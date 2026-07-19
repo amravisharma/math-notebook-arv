@@ -17,6 +17,7 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { LESSON_EXPANSIONS } from './lesson-content.mjs';
 import { NOTICE_WONDER, GO_FURTHER, MENTAL_TIPS, CPA_PANELS } from './enrichment-content.mjs';
+import { formatHint } from './format-hint.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, '_source', 'original-single-page.html');
@@ -781,7 +782,12 @@ function renderChapterBody(t, group, prev, next) {
         // term") need an accept phrasing a learner would actually type, distinct from the
         // English-sentence `ans` shown in the worked solution — those items carry an explicit
         // `accept` array (see the Round-4 patches in applyContentFixes) which overrides here.
-        staticCheck[kkey] = (e.accept || [e.ans]).map(stripTags);
+        const accept = (e.accept || [e.ans]).map(stripTags);
+        staticCheck[kkey] = accept;
+        // Format hint: derived from the accept value itself (never the real magnitude — see
+        // format-hint.mjs), shown next to the input so a learner isn't left guessing whether
+        // "3n+2" or "the rule is 3n + 2" is the expected shape.
+        const hint = formatHint(accept[0]);
         return `<div class="ex" data-key="${kkey}" data-tid="${t.id}">
           <div class="ex-top"><span class="num">${idx + 1}</span><div class="q">${e.q}</div></div>
           ${e.fig ? `<div class="figwrap">${e.fig}</div>` : ''}
@@ -790,6 +796,7 @@ function renderChapterBody(t, group, prev, next) {
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          ${hint ? `<p class="fhint">Format: e.g. <span class="fhint-ex">${hint}</span></p>` : ''}
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
