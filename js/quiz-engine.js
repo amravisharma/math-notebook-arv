@@ -438,6 +438,64 @@
     pythagoras: 'In a right-angled triangle, a² + b² = c², where c is the hypotenuse (opposite the right angle).',
     circles: 'r = radius, d = 2r. Circumference = 2πr, Area = πr².' };
 
+  // ---- format-hint generator (ES5 port of tools/format-hint.mjs) ----
+  // Same algorithm as the Node/build-time copy used for the 18 static topics, needed here in
+  // ES5/browser form because a dynamic topic's accept[] is only known at RUNTIME, after the seeded
+  // generator has produced the question. tests/format-hint.test.mjs checks the two copies agree on
+  // a shared fixture list so they can't silently drift apart — keep them in lock-step by hand.
+  function parseLinearExpr(raw) {
+    var s = String(raw).toLowerCase().replace(/[−–—]/g, '-').replace(/\s+/g, '');
+    if (!s || /[²³]/.test(s)) return null;
+    if (s[0] !== '+' && s[0] !== '-') s = '+' + s;
+    var terms = s.match(/[+-][^+-]+/g);
+    if (!terms) return null;
+    var coeff = 0, cons = 0, letter = null;
+    for (var i = 0; i < terms.length; i++) {
+      var t = terms[i], sign = t[0] === '-' ? -1 : 1, body = t.slice(1);
+      var mv = body.match(/^(\d*\.?\d*)([a-z])$/);
+      if (mv) {
+        if (letter && letter !== mv[2]) return null;
+        letter = mv[2];
+        coeff += sign * (mv[1] === '' ? 1 : parseFloat(mv[1]));
+        continue;
+      }
+      var mn = body.match(/^\d*\.?\d+$/);
+      if (mn) { cons += sign * parseFloat(body); continue; }
+      return null;
+    }
+    return { coeff: coeff, cons: cons, letter: letter, termCount: terms.length };
+  }
+  var FHINT_N = [12, 9, 15, 6];
+  function formatHint(acceptRaw, index) {
+    index = index || 0;
+    if (!acceptRaw) return null;
+    var raw = String(acceptRaw).trim().replace(/[−–—]/g, '-');
+    var n = FHINT_N[index % FHINT_N.length];
+    if (/^\(\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*\)$/.test(raw)) return '(1, 2)';
+    var compoundParts = raw.split(/\s+and\s+|[,;]\s*/i);
+    if (compoundParts.length > 1) {
+      var hints = compoundParts.map(function (p, i) { return formatHint(p, i); });
+      if (hints.every(function (h) { return !h; })) return null;
+      var filled = hints.map(function (h, i) { return h || (/^-?\d+(\.\d+)?$/.test(compoundParts[i].trim()) ? String(FHINT_N[i % FHINT_N.length]) : null); });
+      if (filled.some(function (h) { return h === null; })) return null;
+      return filled.join(' and ');
+    }
+    var m;
+    if ((m = raw.match(/^([a-z]{1,3})\s*=\s*-?\d/i))) return m[1] + ' = 7';
+    if (/^\d+(\.\d+)?\s*:\s*\d+(\.\d+)?$/.test(raw)) return '5 : 2';
+    if (/^\d+\s+\d+\/\d+$/.test(raw)) return '2 1/3';
+    if (/^\d+\/\d+$/.test(raw)) return '3/4';
+    if (/^\$\d/.test(raw)) return '$' + n;
+    var lin = parseLinearExpr(raw);
+    if (lin && lin.letter && lin.termCount >= 2) {
+      var coeffPart = (lin.coeff < 0 ? ('−4' + lin.letter) : ('4' + lin.letter));
+      var consPart = lin.cons < 0 ? ' − 1' : ' + 1';
+      return coeffPart + consPart;
+    }
+    if ((m = raw.match(/^-?\d+(\.\d+)?(\s*)([a-zA-Z°²³\/]+)$/))) return n + m[2] + m[3];
+    return null;
+  }
+
   var LEVELS = [['Easy', 'easy'], ['Medium', 'medium'], ['Hard', 'hard']];
 
   // A small pool of misconceptions per dynamic topic, so the Mistake Detective rotates with the
@@ -491,6 +549,7 @@
 
   window.QuizEngine = {
     GEN: GEN, INTRO_FIG: INTRO_FIG, INTRO_CAP: INTRO_CAP,
+    formatHint: formatHint, parseLinearExpr: parseLinearExpr,
 
     // Renders the practice tabs/panes, worked-examples sample grid, and assignment grid for a
     // dynamic topic, and registers each item's accept[] into window.TOPIC_CHECK for grading.
@@ -504,11 +563,13 @@
         var cards = t[key].map(function (e, idx) {
           var kkey = topicId + '|' + key + '|' + idx;
           if (e.accept) window.TOPIC_CHECK[kkey] = e.accept;
+          var hint = e.accept ? formatHint(e.accept[0]) : null;
           return '<div class="ex" data-key="' + kkey + '" data-tid="' + topicId + '">' +
             '<div class="ex-top"><span class="num">' + (idx + 1) + '</span><div class="q">' + e.q + '</div></div>' +
             (e.fig ? '<div class="figwrap">' + e.fig + '</div>' : '') +
             '<div class="attempt"><input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">' +
             '<button class="markbtn">✓ Mark answer</button><button class="reveal locked">🔒 Show solution</button></div>' +
+            (hint ? '<p class="fhint">Format: e.g. <span class="fhint-ex">' + hint + '</span></p>' : '') +
             '<div class="sol"><div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>' +
             '<div class="lead">Approach</div><p class="approach">' + approach + '</p>' +
             '<div class="lead">Working, step by step</div><ol class="steps">' + e.steps.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol>' +

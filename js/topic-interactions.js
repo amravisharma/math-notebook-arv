@@ -42,7 +42,15 @@
     x = x.replace(/[−–—]/g, '-');
     x = x.replace(/[°º²³()]/g, '').replace(/\$/g, '').replace(/π/g, 'pi');
     x = x.replace(/(\d)[ ,](?=\d\d\d(\D|$))/g, '$1');
-    return x.split(/(?:and|[,;&\s])+/).filter(function (p) { return p && !/^[a-z%]+$/.test(p); });
+    // Collapse whitespace around +/- BEFORE splitting on whitespace, so an algebraic term like
+    // "3n + 2" survives as one part ("3n+2") instead of being torn into "3n", "+", "2" by the
+    // "whitespace is a separator" rule below.
+    x = x.replace(/\s*([+\-])\s*/g, '$1');
+    return x.split(/(?:and|[,;&\s])+/).filter(function (p) {
+      // Drop letters/%/=// filler tokens with no digit at all (stray units like "km/h", or an
+      // "=" left over from "HCF = 6, LCM = 72") — a genuine part always carries a digit.
+      return p && !/^[a-z%=\/]+$/.test(p);
+    });
   }
   function partsMatch(iParts, aParts) {
     if (aParts.length < 2 || iParts.length !== aParts.length) return false;
@@ -51,11 +59,55 @@
       if (a === b) continue;
       // Exact numeric equality only (handles "376.80" vs "376.8"). No rounding tolerance here:
       // ordering questions have neighbouring parts as close as 0.02 apart, so any slack would
-      // accept a wrongly-ordered list.
-      var fa = parseFloat(a), fb = parseFloat(b);
-      if (isNaN(fa) || isNaN(fb) || Math.abs(fa - fb) > 1e-9) return false;
+      // accept a wrongly-ordered list. Gated on BOTH parts being STRICTLY numeric strings (not
+      // just "parseFloat doesn't return NaN") — parseFloat silently truncates at the first
+      // non-numeric character, so without this guard "3n-2" and "3n+2" both read as the bare
+      // number 3 and would falsely compare equal, defeating the sign check on an algebra part.
+      if (/^-?\d*\.?\d+$/.test(a) && /^-?\d*\.?\d+$/.test(b)) {
+        var fa = parseFloat(a), fb = parseFloat(b);
+        if (Math.abs(fa - fb) <= 1e-9) continue;
+      }
+      // Fall back to algebraic-expression equivalence for this part (e.g. one part of a "rule and
+      // term" compound answer, such as "2+3n" vs the authored "3n + 2").
+      var pa = parseLinearExpr(a), pb = parseLinearExpr(b);
+      if (pa && pb && pa.letter && pb.letter && pa.letter === pb.letter &&
+          Math.abs(pa.coeff - pb.coeff) < 1e-9 && Math.abs(pa.cons - pb.cons) < 1e-9) continue;
+      return false;
     }
     return true;
+  }
+
+  // Parses a SIMPLE linear expression "±A·letter ±B" (degree ≤ 1, one variable) into
+  // {coeff, cons, letter}, tolerant of term order, spacing, and sign style — e.g. "3x + 12",
+  // "12+3x" and "12 - (-3x)"-style inputs all resolve to the same {coeff:3, cons:12, letter:'x'}.
+  // Deliberately not a full CAS:
+  //  - runs on the RAW string (before normAns strips ²/³) so it can detect and bail out on
+  //    degree-2+ terms like "3x² + 2x" rather than silently mis-parsing them as "3x + 2x".
+  //  - only ever recognises ONE variable letter; a second, different letter fails the parse.
+  //  - returns null (not a linear expression) for anything else, so callers can safely try it as
+  //    a fallback without an "is this expression-shaped?" pre-check — coordinates, ratios,
+  //    equations and fractions all fail to parse here and fall through untouched.
+  function parseLinearExpr(raw) {
+    var s = String(raw).toLowerCase().replace(/[−–—]/g, '-').replace(/\s+/g, '');
+    if (!s || /[²³]/.test(s)) return null;
+    if (s[0] !== '+' && s[0] !== '-') s = '+' + s;
+    var terms = s.match(/[+-][^+-]+/g);
+    if (!terms) return null;
+    var coeff = 0, cons = 0, letter = null;
+    for (var i = 0; i < terms.length; i++) {
+      var t = terms[i], sign = t[0] === '-' ? -1 : 1, body = t.slice(1);
+      var mv = body.match(/^(\d*\.?\d*)([a-z])$/);
+      if (mv) {
+        if (letter && letter !== mv[2]) return null;
+        letter = mv[2];
+        coeff += sign * (mv[1] === '' ? 1 : parseFloat(mv[1]));
+        continue;
+      }
+      var mn = body.match(/^\d*\.?\d+$/);
+      if (mn) { cons += sign * parseFloat(body); continue; }
+      return null;
+    }
+    return { coeff: coeff, cons: cons, letter: letter };
   }
 
   function isCorrect(input, acceptRaw) {
@@ -66,18 +118,45 @@
       var f = parseFloat(n);
       for (var i = 0; i < acc.length; i++) { var af = parseFloat(acc[i]); if (!isNaN(af) && Math.abs(af - f) < 0.06) return true; }
     }
+    // Linear-expression equivalence: "12 + 3x" and "3x + 12" are the same answer regardless of
+    // term order or sign placement. Gated on the input actually parsing as an expression WITH a
+    // variable, so plain numbers, coordinates, ratios and equations never enter this branch.
+    var pIn = parseLinearExpr(input);
+    if (pIn && pIn.letter) {
+      for (var k = 0; k < acceptRaw.length; k++) {
+        var pAcc = parseLinearExpr(acceptRaw[k]);
+        if (pAcc && pAcc.letter === pIn.letter &&
+            Math.abs(pAcc.coeff - pIn.coeff) < 1e-9 && Math.abs(pAcc.cons - pIn.cons) < 1e-9) return true;
+      }
+    }
     var ip = normParts(input);
     for (var j = 0; j < acceptRaw.length; j++) { if (partsMatch(ip, normParts(acceptRaw[j]))) return true; }
     return false;
   }
-  window.TopicEngine = { normAns: normAns, isCorrect: isCorrect, getCheckMap: CHECK };
+  window.TopicEngine = { normAns: normAns, isCorrect: isCorrect, getCheckMap: CHECK, parseLinearExpr: parseLinearExpr, fractionHtml: fractionHtml };
+
+  // If a typed answer is CLEANLY a fraction or mixed number ("2/3", "1 5/12"), redisplay it with
+  // the same stacked-fraction styling the worked-solution "Answer" box already uses, instead of a
+  // flat "2/3" that reads as a division. Gated on the WHOLE trimmed string matching this narrow
+  // digits/space/slash pattern — since that's the only character set the regex can ever match, the
+  // built HTML can never contain anything unsafe, however the raw typed text was constructed.
+  // Anything not shaped exactly like this (words, coordinates, algebra, decimals, …) falls through
+  // to the plain, always-safe textContent path untouched.
+  function fractionHtml(v) {
+    var mixed = v.match(/^(\d+)\s+(\d+)\/(\d+)$/);
+    if (mixed) return '<span class="m">' + mixed[1] + ' <span class="frac"><span class="n">' + mixed[2] + '</span><span class="d">' + mixed[3] + '</span></span></span>';
+    var simple = v.match(/^(\d+)\/(\d+)$/);
+    if (simple) return '<span class="m"><span class="frac"><span class="n">' + simple[1] + '</span><span class="d">' + simple[2] + '</span></span></span>';
+    return null;
+  }
 
   function applyMark(ex, v, verdict) {
     ex.classList.add('attempted');
     ex.classList.toggle('correct', verdict === 'correct');
     ex.classList.toggle('wrong', verdict === 'wrong');
     var input = ex.querySelector('.ans-input'); input.value = v; input.readOnly = true;
-    ex.querySelector('.your-answer .txt').textContent = v;
+    var yourAnsEl = ex.querySelector('.your-answer .txt'), asFraction = fractionHtml(v);
+    if (asFraction) { yourAnsEl.innerHTML = asFraction; } else { yourAnsEl.textContent = v; }
     var mb = ex.querySelector('.markbtn'); mb.disabled = true;
     mb.innerHTML = verdict === 'correct' ? '✓ Correct' : verdict === 'wrong' ? '✗ Incorrect' : '✓ Answer marked';
     var rev = ex.querySelector('.reveal'); rev.classList.remove('locked');

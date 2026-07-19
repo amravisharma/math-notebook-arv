@@ -17,6 +17,7 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { LESSON_EXPANSIONS } from './lesson-content.mjs';
 import { NOTICE_WONDER, GO_FURTHER, MENTAL_TIPS, CPA_PANELS } from './enrichment-content.mjs';
+import { formatHint, parseLinearExpr } from './format-hint.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, '_source', 'original-single-page.html');
@@ -241,7 +242,7 @@ const STATIC_MODELS = {
   patterns: `<div class="cap">Position &rarr; term, common difference +4</div>
     <svg class="viz" viewBox="0 0 260 90" width="260" role="img" aria-label="Table of sequence positions 1 to 4 against terms 3, 7, 11, 15 with a plus 4 arrow between each">
       ${[3, 7, 11, 15].map((v, i) => `<rect class="fig-shape" x="${10 + i * 62}" y="30" width="46" height="34" rx="6"/><text class="fig-txt" x="${33 + i * 62}" y="52" text-anchor="middle">${v}</text><text class="fig-txt soft" x="${33 + i * 62}" y="20" text-anchor="middle">n=${i + 1}</text>`).join('')}
-      ${[0, 1, 2].map(i => `<text class="fig-txt ang" x="${68 + i * 62}" y="52" text-anchor="middle">+4</text>`).join('')}
+      ${[0, 1, 2].map(i => `<text class="fig-txt ang" x="${64 + i * 62}" y="52" text-anchor="middle">+4</text>`).join('')}
     </svg>`,
 
   expressions: `<div class="cap">Algebra tiles for 3x + 2</div>
@@ -284,7 +285,7 @@ const STATIC_MODELS = {
   conversions: `<div class="cap">Metric ladder &mdash; each step is a power of ten</div>
     <svg class="viz" viewBox="0 0 260 70" width="260" role="img" aria-label="km to m to cm to mm, connected by times 1000, times 100 and times 10 arrows">
       ${['km', 'm', 'cm', 'mm'].map((u, i) => `<rect class="fig-shape" x="${10 + i * 62}" y="15" width="46" height="30" rx="7"/><text class="fig-txt" x="${33 + i * 62}" y="35" text-anchor="middle">${u}</text>`).join('')}
-      ${['&times;1000', '&times;100', '&times;10'].map((lab, i) => `<line class="fig-arr" x1="${58 + i * 62}" y1="30" x2="${68 + i * 62}" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="${63 + i * 62}" y="18" text-anchor="middle" style="font-size:9px">${lab}</text>`).join('')}
+      ${['&times;1000', '&times;100', '&times;10'].map((lab, i) => `<line class="fig-arr" x1="${58 + i * 62}" y1="30" x2="${68 + i * 62}" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="${64 + i * 62}" y="11" text-anchor="middle" style="font-size:9px">${lab}</text>`).join('')}
       <defs><marker id="cArrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--ink-soft)"/></marker></defs>
     </svg>`,
 
@@ -652,6 +653,24 @@ function applyContentFixes(CURRICULUM, CH) {
       `At least one head, counted directly (HH, HT, TH) is 3/4. Or by the complement: 1 − P(no heads) = 1 − P(TT) = 1 − 1/4 = <span class="m">3/4</span> — the same answer, the easy way.`
     ];
   }
+
+  // --- Round-4 follow-up: answer-format fix for "rule + Nth term" compound answers ---
+  // These items had no authored `accept`, so generate-book.mjs derived one straight from `ans` —
+  // producing a single rigid magic string ("Rule 3n + 2; 10th = 32") that only matched typed
+  // verbatim, punctuation included. A learner answering "3n+2, 32" or "2+3n, 32" (mathematically
+  // identical) was marked wrong. Author an explicit accept phrased as "<rule> and <value>" instead:
+  // this reuses the EXISTING normParts()/partsMatch() "A and B" compound machinery (already used
+  // by ratios' "$18 and $27" items) rather than inventing a new parsing pathway, and composes with
+  // the new parseLinearExpr() equivalence so a reordered rule ("2+3n") still matches. `ans` (the
+  // displayed worked solution) is untouched — only the accepted typed form changes.
+  const patterns = byId.patterns;
+  const ruleAndTerm = [
+    ['3n + 2', '32'], ['4n − 2', '38'], ['5n + 2', '52'], ['6n − 5', '55'], ['2n + 2', '22'],
+    ['7n − 4', '66'], ['3n + 7', '37'], ['4n + 2', '42'], ['5n − 5', '45'], ['2n + 6', '26']
+  ];
+  ruleAndTerm.forEach(([rule, term], i) => { if (patterns.medium[i]) patterns.medium[i].accept = [`${rule} and ${term}`]; });
+  if (patterns.hard[0]) patterns.hard[0].accept = ['3n + 1 and 61', '3n + 1 and 61 sticks'];
+  if (patterns.hard[8]) patterns.hard[8].accept = ['3n + 3 and 39'];
 }
 
 // --- 3. Shared page shell ---
@@ -700,6 +719,32 @@ ${extraScripts.map(s => `<script src="${root}${s}"></script>`).join('\n')}
 }
 
 // --- 4. Chapter (topic) page body, mirroring the original sectionInner() ---
+
+// --- 3b. Graded drag-and-drop pilot: js/tile-builder.js, applied to Patterns' Medium tier ---
+//
+// These 10 "find the rule and the 10th term" items (see the Round-4 accept redesign above) were
+// the clearest case of a free-text answer format a learner had to guess — building it from tiles
+// removes the guessing entirely. Derives the tile pool straight from the same accept[0] string
+// (via parseLinearExpr, the same parser the marking engine and format-hint share), so the tiles
+// can never drift out of sync with what's actually graded.
+function patternsTileSpec(rule, term) {
+  const lin = parseLinearExpr(rule);
+  const coeff = lin.coeff, sign = lin.cons < 0 ? '−' : '+', constMag = Math.abs(lin.cons), termNum = parseInt(term, 10);
+  const uniq = (nums) => [...new Set(nums.filter((n) => n > 0))];
+  const coeffTiles = uniq([coeff, coeff + 1, Math.max(1, coeff - 1)]).map((v) => ({ id: 'c' + v, label: String(v), value: String(v), kind: 'coeff' }));
+  const constTiles = uniq([constMag, constMag + 1, constMag + 3]).map((v) => ({ id: 'k' + v, label: String(v), value: String(v), kind: 'const' }));
+  const termTiles = uniq([termNum, termNum + 1, Math.max(1, termNum - 10)]).map((v) => ({ id: 't' + v, label: String(v), value: String(v), kind: 'term' }));
+  return {
+    slots: [{ id: 'coeff', kind: 'coeff' }, { id: 'sign', kind: 'sign' }, { id: 'const', kind: 'const' }, { id: 'term', kind: 'term' }],
+    tiles: [
+      ...coeffTiles,
+      { id: 'sp', label: '+', value: '+', kind: 'sign' }, { id: 'sm', label: '−', value: '−', kind: 'sign' },
+      ...constTiles,
+      ...termTiles,
+    ],
+    template: [{ slot: 'coeff' }, { text: 'n ' }, { slot: 'sign' }, { text: ' ' }, { slot: 'const' }, { text: ' and ' }, { slot: 'term' }],
+  };
+}
 
 function renderChapterBody(t, group, prev, next) {
   const c = t.__ch || {};
@@ -758,15 +803,40 @@ function renderChapterBody(t, group, prev, next) {
     const panes = LEVELS.map(([lbl, key], i) => {
       const cards = (t[key] || []).map((e, idx) => {
         const kkey = `${t.id}|${key}|${idx}`;
-        staticCheck[kkey] = [stripTags(e.ans)];
+        // Almost every item's accept[] is derived straight from its displayed `ans` text (see
+        // stripTags above). A handful of compound answers (e.g. "find the rule AND the 10th
+        // term") need an accept phrasing a learner would actually type, distinct from the
+        // English-sentence `ans` shown in the worked solution — those items carry an explicit
+        // `accept` array (see the Round-4 patches in applyContentFixes) which overrides here.
+        const accept = (e.accept || [e.ans]).map(stripTags);
+        staticCheck[kkey] = accept;
+        // Format hint: derived from the accept value itself (never the real magnitude — see
+        // format-hint.mjs), shown next to the input so a learner isn't left guessing whether
+        // "3n+2" or "the rule is 3n + 2" is the expected shape.
+        const hint = formatHint(accept[0]);
+        // Graded drag-and-drop pilot (see patternsTileSpec above): only Patterns' Medium tier, the
+        // clearest case of a free-text format a learner had to guess. The tile widget writes into
+        // the SAME <input>, so it's a drop-in alternative UI, not a different marking path — a
+        // "prefer to type?" toggle swaps to the plain input for anyone who'd rather not use tiles.
+        const useTiles = t.id === 'patterns' && key === 'medium';
+        let tileWidget = '', tileToggle = '';
+        if (useTiles) {
+          const [rule, term] = accept[0].split(' and ');
+          const spec = patternsTileSpec(rule, term);
+          tileWidget = `<div class="tile-builder" data-spec='${JSON.stringify(spec)}'></div>`;
+          tileToggle = `<button class="tb-toggle" type="button">&#8987; Prefer to type your answer?</button>`;
+        }
         return `<div class="ex" data-key="${kkey}" data-tid="${t.id}">
           <div class="ex-top"><span class="num">${idx + 1}</span><div class="q">${e.q}</div></div>
           ${e.fig ? `<div class="figwrap">${e.fig}</div>` : ''}
           <div class="attempt">
-            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
+            ${tileWidget}
+            <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer"${useTiles ? ' hidden' : ''}>
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          ${tileToggle}
+          ${hint ? `<p class="fhint">Format: e.g. <span class="fhint-ex">${hint}</span></p>` : ''}
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -945,6 +1015,10 @@ function run() {
       const scripts = DYNAMIC_IDS.has(t.id)
         ? ['js/quiz-engine.js', 'js/topic-interactions.js', 'js/explore.js']
         : ['js/topic-interactions.js', 'js/explore.js'];
+      // Graded drag-and-drop pilot (patternsTileSpec, above): loaded AFTER topic-interactions.js
+      // so its own DOMContentLoaded bootstrap runs after restoreAnswers() has already set
+      // .ans-input's value for any previously-answered question (see tile-builder.js's comment).
+      if (t.id === 'patterns') scripts.push('js/tile-builder.js');
       const html = pageShell({ title: t.name, active: t.id, root: '../', bodyHtml: body, extraScripts: scripts });
       // Static topics' answers get an accept[] derived from their authored `ans` text (see
       // stripTags/staticCheck above), merged into the same window.TOPIC_CHECK the dynamic topics'

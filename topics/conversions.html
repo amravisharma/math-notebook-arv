@@ -76,7 +76,7 @@
   <section class="hf-sec visual" data-section="visual"><div class="hf-tag">&#128202; Visual model</div><p class="hf-sub">Use the diagram before calculating. The visual should make the structure easier to see.</p><div class="model"><div class="cap">Metric ladder &mdash; each step is a power of ten</div>
     <svg class="viz" viewBox="0 0 260 70" width="260" role="img" aria-label="km to m to cm to mm, connected by times 1000, times 100 and times 10 arrows">
       <rect class="fig-shape" x="10" y="15" width="46" height="30" rx="7"/><text class="fig-txt" x="33" y="35" text-anchor="middle">km</text><rect class="fig-shape" x="72" y="15" width="46" height="30" rx="7"/><text class="fig-txt" x="95" y="35" text-anchor="middle">m</text><rect class="fig-shape" x="134" y="15" width="46" height="30" rx="7"/><text class="fig-txt" x="157" y="35" text-anchor="middle">cm</text><rect class="fig-shape" x="196" y="15" width="46" height="30" rx="7"/><text class="fig-txt" x="219" y="35" text-anchor="middle">mm</text>
-      <line class="fig-arr" x1="58" y1="30" x2="68" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="63" y="18" text-anchor="middle" style="font-size:9px">&times;1000</text><line class="fig-arr" x1="120" y1="30" x2="130" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="125" y="18" text-anchor="middle" style="font-size:9px">&times;100</text><line class="fig-arr" x1="182" y1="30" x2="192" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="187" y="18" text-anchor="middle" style="font-size:9px">&times;10</text>
+      <line class="fig-arr" x1="58" y1="30" x2="68" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="64" y="11" text-anchor="middle" style="font-size:9px">&times;1000</text><line class="fig-arr" x1="120" y1="30" x2="130" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="126" y="11" text-anchor="middle" style="font-size:9px">&times;100</text><line class="fig-arr" x1="182" y1="30" x2="192" y2="30" marker-end="url(#cArrow)"/><text class="fig-txt soft" x="188" y="11" text-anchor="middle" style="font-size:9px">&times;10</text>
       <defs><marker id="cArrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--ink-soft)"/></marker></defs>
     </svg></div></section>
   <section class="hf-sec explore" data-section="explore"><div class="hf-tag">&#127899;&#65039; Explore &mdash; play with the maths</div><p class="hf-sub">Predict what will happen first, then drag &mdash; the diagram responds instantly.</p><div id="explore-widget" class="explore-widget"></div></section>
@@ -102,10 +102,13 @@
           <div class="ex-top"><span class="num">1</span><div class="q">Convert <span class="m">3 km</span> to m.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 m</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -119,10 +122,13 @@
           <div class="ex-top"><span class="num">2</span><div class="q">Convert <span class="m">2.5 kg</span> to g.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 g</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -136,10 +142,13 @@
           <div class="ex-top"><span class="num">3</span><div class="q">Convert <span class="m">1.5 L</span> to mL.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 mL</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -153,10 +162,13 @@
           <div class="ex-top"><span class="num">4</span><div class="q">Convert <span class="m">400 cm</span> to m.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 m</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -170,10 +182,13 @@
           <div class="ex-top"><span class="num">5</span><div class="q">Convert <span class="m">5000 g</span> to kg.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 kg</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -187,10 +202,13 @@
           <div class="ex-top"><span class="num">6</span><div class="q">Convert <span class="m">250 cm</span> to m.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 m</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -204,10 +222,13 @@
           <div class="ex-top"><span class="num">7</span><div class="q">Convert <span class="m">7 km</span> to m.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 m</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -221,10 +242,13 @@
           <div class="ex-top"><span class="num">8</span><div class="q">Convert <span class="m">3000 mL</span> to L.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 L</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -238,10 +262,13 @@
           <div class="ex-top"><span class="num">9</span><div class="q">Convert <span class="m">6 m</span> to cm.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 cm</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -255,10 +282,13 @@
           <div class="ex-top"><span class="num">10</span><div class="q">Convert <span class="m">0.5 kg</span> to g.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 g</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -272,10 +302,13 @@
           <div class="ex-top"><span class="num">1</span><div class="q">A car travels <span class="m">150 km</span> in <span class="m">2 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -289,10 +322,13 @@
           <div class="ex-top"><span class="num">2</span><div class="q">A car travels <span class="m">120 km</span> in <span class="m">3 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -306,10 +342,13 @@
           <div class="ex-top"><span class="num">3</span><div class="q">A car travels <span class="m">200 km</span> in <span class="m">4 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -323,10 +362,13 @@
           <div class="ex-top"><span class="num">4</span><div class="q">A car travels <span class="m">90 km</span> in <span class="m">2 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -340,10 +382,13 @@
           <div class="ex-top"><span class="num">5</span><div class="q">A car travels <span class="m">300 km</span> in <span class="m">5 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -357,10 +402,13 @@
           <div class="ex-top"><span class="num">6</span><div class="q">A car travels <span class="m">60 km</span> in <span class="m">1 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -374,10 +422,13 @@
           <div class="ex-top"><span class="num">7</span><div class="q">A car travels <span class="m">240 km</span> in <span class="m">3 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -391,10 +442,13 @@
           <div class="ex-top"><span class="num">8</span><div class="q">A car travels <span class="m">80 km</span> in <span class="m">2 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -408,10 +462,13 @@
           <div class="ex-top"><span class="num">9</span><div class="q">A car travels <span class="m">180 km</span> in <span class="m">3 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -425,10 +482,13 @@
           <div class="ex-top"><span class="num">10</span><div class="q">A car travels <span class="m">100 km</span> in <span class="m">4 h</span>. Find its average speed.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -442,10 +502,13 @@
           <div class="ex-top"><span class="num">1</span><div class="q">A cyclist rides <span class="m">45 km</span> in <span class="m">1 h 30 min</span>. Speed, then time for <span class="m">100 km</span>?</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -459,10 +522,13 @@
           <div class="ex-top"><span class="num">2</span><div class="q">A tap fills <span class="m">12 L</span> in <span class="m">4 min</span>. How long to fill <span class="m">30 L</span>?</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 min</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -476,10 +542,13 @@
           <div class="ex-top"><span class="num">3</span><div class="q">A runner covers <span class="m">400 m</span> in <span class="m">50 s</span>. Speed in m/s?</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 m/s</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -493,10 +562,13 @@
           <div class="ex-top"><span class="num">4</span><div class="q">Convert <span class="m">72 km/h</span> to m/s. (÷ 3.6)</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 m/s</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -510,10 +582,13 @@
           <div class="ex-top"><span class="num">5</span><div class="q">A car uses <span class="m">6 L</span> per <span class="m">100 km</span>. Fuel for <span class="m">250 km</span>?</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 L</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -527,10 +602,13 @@
           <div class="ex-top"><span class="num">6</span><div class="q">A recipe needs <span class="m">750 g</span> for 6 people. How much per person?</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 g</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -544,10 +622,13 @@
           <div class="ex-top"><span class="num">7</span><div class="q">A plane flies <span class="m">900 km</span> at <span class="m">600 km/h</span>. How long?</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -561,10 +642,13 @@
           <div class="ex-top"><span class="num">8</span><div class="q">A hose delivers <span class="m">20 L/min</span>. How many litres in <span class="m">2.5 min</span>?</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 L</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -578,10 +662,13 @@
           <div class="ex-top"><span class="num">9</span><div class="q">Convert <span class="m">2.4 m</span> to mm.</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 mm</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
@@ -595,10 +682,13 @@
           <div class="ex-top"><span class="num">10</span><div class="q">A train travels <span class="m">180 km</span> in <span class="m">2 h 30 min</span>. Average speed?</div></div>
           
           <div class="attempt">
+            
             <input class="ans-input" type="text" placeholder="Write your answer here&hellip;" aria-label="Your answer">
             <button class="markbtn">&#10003; Mark answer</button>
             <button class="reveal locked">&#128274; Show solution</button>
           </div>
+          
+          <p class="fhint">Format: e.g. <span class="fhint-ex">12 km/h</span></p>
           <div class="sol">
             <div class="your-answer"><span class="lbl">Your answer</span><span class="txt"></span></div>
             <div class="lead">Approach</div>
