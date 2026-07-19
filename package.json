@@ -1,0 +1,10 @@
+{
+  "name": "math-notebook-arv",
+  "private": true,
+  "description": "The Maths Notebook — static-site generator and runtime for an interactive NZ Years 6-8 maths book. No external dependencies; tests run on Node's built-in test runner.",
+  "scripts": {
+    "build": "node tools/generate-book.mjs",
+    "validate": "node tools/validate-book.mjs",
+    "test": "node --test tests/*.test.mjs"
+  }
+}
